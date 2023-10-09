@@ -21,11 +21,6 @@ public static class BruteForce
         List<int[]> permutations = GenerateNumbersPermutations(0, map.GetCitiesAmount - 1);
         var best = FindBestPath(permutations, map);
 
-        if(best != null)
-        {
-            Array.Reverse(best.Value.path);
-        }
-
         return best;
     }
 
@@ -91,9 +86,9 @@ public static class BruteForce
     private static int? CalculatePathCost(int[] path, WorldMap map)
     {
         int sum = 0;
-        for (int i = 0; i < path.Length; i++)
+        for (int i = 0; i < path.Length - 1; i++)
         {
-            int endIndex = (i + 1 == path.Length) ?  0 : i + 1;
+            int endIndex = i + 1;
 
             if (map.TryGetDistance(path[i], path[endIndex], out int dis))
             {
@@ -117,7 +112,13 @@ public static class BruteForce
     {
         if(numbersIn.Count == 0)
         {
-            result.Add(numbersOut.ToArray());
+            if(numbersOut.Count > 0)
+            {
+                numbersOut.Add(numbersOut[0]);
+                result.Add(numbersOut.ToArray());
+                numbersOut.RemoveAt(numbersOut.Count - 1);
+            }
+            
         }
         else
         {

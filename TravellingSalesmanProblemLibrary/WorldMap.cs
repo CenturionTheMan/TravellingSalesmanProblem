@@ -21,6 +21,18 @@ public class WorldMap
     }
 
 
+    public WorldMap(int?[,] matrix)
+    {
+        if (matrix.GetLength(0) != matrix.GetLength(1))
+            throw new ArgumentException("Both dimensions must be equal in lenght!");
+
+        this.matrix = matrix;
+        this.size = matrix.GetLength(0);
+    }
+
+
+
+
     /// <summary>
     /// Sets the distance value between two cities in the world map.
     /// </summary>
