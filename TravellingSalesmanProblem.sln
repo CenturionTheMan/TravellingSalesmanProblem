@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravellingSalesmanProblemLi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravellingSalesmanProblemConsole", "TravellingSalesmanProblemConsole\TravellingSalesmanProblemConsole.csproj", "{11F20C01-DE76-40AF-94C1-AC522832F48C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravellingSalesmanProblemUnitTest", "TravellingSalesmanProblemUnitTest\TravellingSalesmanProblemUnitTest.csproj", "{14C41E7F-91C1-4D4D-9498-FD5566231753}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravellingSalesmanProblemUnitTest", "TravellingSalesmanProblemUnitTest\TravellingSalesmanProblemUnitTest.csproj", "{14C41E7F-91C1-4D4D-9498-FD5566231753}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{19DB6719-D55D-4C82-9AB2-505A71C4E9E8}"
+	ProjectSection(SolutionItems) = preProject
+		TestExamples\ftv47.atsp = TestExamples\ftv47.atsp
+		TestExamples\rbg403.atsp = TestExamples\rbg403.atsp
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
