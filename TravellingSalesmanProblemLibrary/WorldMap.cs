@@ -106,6 +106,17 @@ public class WorldMap
 		return stringBuilder.ToString();
 	}
 
+    public void FillMapRandom(int min, int max)
+    {
+        Random r = new Random();
+        for (int i = 0; i < GetCitiesAmount; i++)
+        {
+            for (int j = 0; j < GetCitiesAmount; j++)
+            {
+                matrix[i,j] = r.Next(min, max);
+            }
+        }
+    }
 
     /// <summary>
     /// Checks if the given indexes are valid for the world map matrix.

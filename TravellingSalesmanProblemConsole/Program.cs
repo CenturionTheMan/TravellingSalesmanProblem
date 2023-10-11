@@ -1,14 +1,13 @@
-﻿using TravellingSalesmanProblemLibrary;
+﻿using System.Diagnostics;
+using TravellingSalesmanProblemLibrary;
 
-WorldMap map = new(4);
+WorldMap map = new WorldMap(7);
+map.FillMapRandom(1, 100);
 
-map.SetDistance(0, 1, 12);
-map.SetDistance(0, 2, 14);
-map.SetDistance(0, 3, 17);
-map.SetDistance(1, 2, 15);
-map.SetDistance(1, 3, 18);
-map.SetDistance(2, 3, 29);
+Stopwatch sw = Stopwatch.StartNew();
 
+sw.Start();
 var bestPath = BruteForce.GetBestPath(map);
+sw.Stop();
 
-Console.WriteLine(bestPath.ToStringCustom());
+Console.WriteLine(sw.Elapsed);
