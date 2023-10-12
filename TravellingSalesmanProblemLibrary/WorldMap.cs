@@ -60,6 +60,14 @@ public class WorldMap
 		return false;
 	}
 
+    public int GetDistance(int begin, int end)
+    {
+        if (CheckIndexes(begin, end) == false) throw new ArgumentOutOfRangeException();
+        var tmp = matrix[begin, end];
+        if (tmp.HasValue == false) throw new ArgumentNullException();
+        return tmp.Value;
+    }
+
     /// <summary>
     /// Attempts to retrieve the distance between two cities in the world map.
     /// </summary>

@@ -10,6 +10,6 @@ using TravellingSalesmanProblemLibrary;
 //var bestPath = BruteForce.GetBestPath(map);
 //sw.Stop();
 
-var res = FilesHandler.LoadWorldMapFromFile("G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\rbg403.atsp");
+//var res = FilesHandler.LoadWorldMapFromFile("G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\rbg403.atsp");
 
-Console.WriteLine(res);
+//Console.WriteLine(res);
