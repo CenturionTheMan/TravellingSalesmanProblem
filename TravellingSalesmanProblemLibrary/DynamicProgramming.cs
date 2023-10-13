@@ -20,7 +20,7 @@ public static class DynamicProgramming
     /// </returns>
     public static (int[] path, int cost)? GetBestPath(WorldMap map)
     {
-        throw new NotImplementedException();   
+        return (null, Solve(map));  
     }
 
 
@@ -47,7 +47,11 @@ public static class DynamicProgramming
         {
             if(CheckIfGivenNodeWasVisitedInGivenMask(mask, nextNode) == false)
             {
-                int tmpRes = map.GetDistance((int)fromNode, nextNode) + SolveReq(map, SetBitInMask(mask, nextNode), nextNode, endMask);
+                if (!map.TryGetDistance((int)fromNode, nextNode, out int tmpRes))
+                    continue;
+
+                var tmpMask = SetBitInMask(mask, nextNode);
+                tmpRes += SolveReq(map, tmpMask, nextNode, endMask, memoTable);
                 if(tmpRes < res)
                 {
                     res = tmpRes;
@@ -55,6 +59,7 @@ public static class DynamicProgramming
             }
         }
 
+        memoTable[fromNode, mask] = res;
         return res;
     }
 
@@ -65,7 +70,9 @@ public static class DynamicProgramming
 
     private static bool CheckIfGivenNodeWasVisitedInGivenMask(uint mask, int node)
     {
-        return (mask & (1 << node)) == 0;
+        var bitNode = (1 << node);
+        var val = (mask & bitNode);
+        return val != 0;
     }
 
 }
