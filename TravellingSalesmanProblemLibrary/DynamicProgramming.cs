@@ -6,72 +6,89 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public static class DynamicProgramming
+public static class DynamicProgrammingTSP
 {
     private const int START_NODE = 0;
 
     /// <summary>
-    /// Finds the best solution for Sales Map Problem withon given WorldMap using a dynamic programming approach.
+    /// Calculates the best path cost using the traveling salesman algorithm for a given adjacency matrix.
     /// </summary>
-    /// <param name="map">The WorldMap (adjency matrix) containing cities and distances.</param>
-    /// <returns>
-    /// A tuple containing the best path as an array of city indices and the total cost of the path.
-    /// Returns null if no valid path is found.
-    /// </returns>
-    public static (int[] path, int cost)? GetBestPath(WorldMap map)
+    /// <param name="map">The adjacency matrix representing the graph.</param>
+    /// <returns>The best path cost or null if it exceeds the limit of int.MaxValue.</returns>
+    public static int? GetBestPathCost(AdjMatrix map)
     {
-        return (null, Solve(map));  
-    }
+        var maxMask = (ulong)Math.Pow(2, map.GetMatrixSize);
 
+        if (maxMask > int.MaxValue) return null;
 
-    public static int Solve(WorldMap map)
-    {
-        var memoTable = new int?[map.GetCitiesAmount, (uint)Math.Pow(2, map.GetCitiesAmount)];
-        uint endMask = (uint)(1 << map.GetCitiesAmount) - 1;
+        var memoTable = new int?[map.GetMatrixSize, maxMask];
+        uint endMask = (uint)(1 << map.GetMatrixSize) - 1;
         var result = SolveReq(map, 1, START_NODE, endMask, memoTable);
         return result;
     }
 
-    private static int SolveReq(WorldMap map, uint mask, int fromNode, uint endMask, int?[,] memoTable)
+    /// <summary>
+    /// Recursively solves the traveling salesman problem to find the shortest path.
+    /// </summary>
+    /// <param name="map">The adjacency matrix representing the graph.</param>
+    /// <param name="mask">Visited vertexs as a bitmask.</param>
+    /// <param name="fromVertex">The starting vertex for the current path segment.</param>
+    /// <param name="endMask">The bitmask representing all vertexs visited.</param>
+    /// <param name="memoTable">A memoization table to store intermediate results.</param>
+    /// <returns>The shortest distance to complete the traveling salesman tour.</returns>
+    private static int SolveReq(AdjMatrix map, uint mask, int fromVertex, uint endMask, int?[,] memoTable)
     {
-        if (mask == endMask) return map.GetDistance((int)fromNode, START_NODE);
+        //If mask idicates that all vertices were visited in current path, if so add cost for returning to start vertex  
+        if (mask == endMask) return map.GetDistance((int)fromVertex, START_NODE);
 
-        if (memoTable[fromNode, mask].HasValue)
+        //Check if given scenario was not already sloved, if so take result from table
+        if (memoTable[fromVertex, mask].HasValue)
         {
-            return memoTable[fromNode, mask].Value;
+            return memoTable[fromVertex, mask].Value;
         }
 
         int res = int.MaxValue;
 
-        for (int nextNode = 0; nextNode < map.GetCitiesAmount; nextNode++)
+        for (int nextVertex = 0; nextVertex < map.GetMatrixSize; nextVertex++)
         {
-            if(CheckIfGivenNodeWasVisitedInGivenMask(mask, nextNode) == false)
-            {
-                if (!map.TryGetDistance((int)fromNode, nextNode, out int tmpRes))
-                    continue;
+            //check if given vertex was already visited in given path
+            if (CheckIfGivenVertexWasVisitedInGivenMask(mask, nextVertex)) continue;
+            if (!map.TryGetDistance((int)fromVertex, nextVertex, out int tmpRes)) continue;
 
-                var tmpMask = SetBitInMask(mask, nextNode);
-                tmpRes += SolveReq(map, tmpMask, nextNode, endMask, memoTable);
-                if(tmpRes < res)
-                {
-                    res = tmpRes;
-                }
+            //create new bitmask for path where nextVertex is included
+            var tmpMask = SetBitInMask(mask, nextVertex);
+            tmpRes += SolveReq(map, tmpMask, nextVertex, endMask, memoTable);
+            if(tmpRes < res)
+            {
+                res = tmpRes;
             }
         }
 
-        memoTable[fromNode, mask] = res;
+        memoTable[fromVertex, mask] = res;
         return res;
     }
 
-    private static uint SetBitInMask(uint mask, int bitIdex)
+    /// <summary>
+    /// Sets a specific bit at the given index in a bitmask.
+    /// </summary>
+    /// <param name="mask">The original bitmask where the bit will be set.</param>
+    /// <param name="bitIndex">The index of the bit to set (0-based).</param>
+    /// <returns>The bitmask with the specified bit set to 1 at the given index.</returns>
+    private static uint SetBitInMask(uint mask, int bitIndex)
     {
-        return (mask | (uint)(1 << bitIdex));
+        return (mask | (uint)(1 << bitIndex));
     }
 
-    private static bool CheckIfGivenNodeWasVisitedInGivenMask(uint mask, int node)
+    /// <summary>
+    /// Checks if a specific vertex is visited in a given bitmask.
+    /// </summary>
+    /// <param name="mask">The bitmask representing visited vertices.</param>
+    /// <param name="vertex">The vertex to check for in the bitmask.</param>
+    /// <returns>True if the vertex is visited in the bitmask, otherwise false.</returns>
+    private static bool CheckIfGivenVertexWasVisitedInGivenMask(uint mask, int vertex)
     {
-        var bitNode = (1 << node);
-        var val = (mask & bitNode);
+        var bitVertex = (1 << vertex);
+        var val = (mask & bitVertex);
         return val != 0;
     }
 

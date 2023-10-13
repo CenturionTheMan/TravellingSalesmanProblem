@@ -3,25 +3,42 @@ using System.Xml;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public class WorldMap
+public class AdjMatrix
 {
-	public int GetCitiesAmount { get { return size; } }
+	public int GetMatrixSize { get { return size; } }
 
     private int?[,] matrix;
 	private int size;
 
+
     /// <summary>
-    /// Initializes a new instance of the WorldMap class with the specified number of cities.
+    /// Initializes a new instance of the AdjMatrix class with the specified number of vertices.
     /// </summary>
-    /// <param name="citiesAmount">The number of cities in the world map.</param>
-    public WorldMap(int citiesAmount)
+    /// <param name="verticesAmount">The number of vertices in the world map.</param>
+    /// <param name="fillRandom">If true matrix will be filled with random values</param>
+    public AdjMatrix(int verticesAmount)
     {
-        matrix = new int?[citiesAmount, citiesAmount];
-        size = citiesAmount;
+        matrix = new int?[verticesAmount, verticesAmount];
+        size = verticesAmount;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="verticesAmount"></param>
+    /// <param name="minDistance"></param>
+    /// <param name="maxDistance"></param>
+    public AdjMatrix(int verticesAmount, int minDistance, int maxDistance) : this(verticesAmount)
+    {
+        FillMapWithRandomValues(minDistance, maxDistance);
+    }
 
-    public WorldMap(int?[,] matrix)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="matrix"></param>
+    /// <exception cref="ArgumentException"></exception>
+    public AdjMatrix(int?[,] matrix)
     {
         if (matrix.GetLength(0) != matrix.GetLength(1))
             throw new ArgumentException("Both dimensions must be equal in lenght!");
@@ -31,14 +48,12 @@ public class WorldMap
     }
 
 
-
-
     /// <summary>
-    /// Sets the distance value between two cities in the world map.
+    /// Sets the distance value between two vertices in the world map.
     /// </summary>
-    /// <param name="begin">The index of the starting city.</param>
-    /// <param name="end">The index of the ending city.</param>
-    /// <param name="value">The distance value between the two cities.</param>
+    /// <param name="begin">The index of the starting vertex.</param>
+    /// <param name="end">The index of the ending vertex.</param>
+    /// <param name="value">The distance value between the two vertices.</param>
     /// <param name="isDoubleDirection">Indicates whether the distance should be set in both directions (from begin to end and from end to begin).</param>
     /// <returns>True if the distance is successfully set, false otherwise.</returns>
     public bool SetDistance(int begin, int end, int value, bool isDoubleDirection = true)
@@ -60,6 +75,14 @@ public class WorldMap
 		return false;
 	}
 
+    /// <summary>
+    /// Method retrieve the distance between two vertices in the world map.
+    /// </summary>
+    /// <param name="begin">The index of the starting vertex.</param>
+    /// <param name="end">The index of the ending vertex.</param>
+    /// <returns>The distance between the two vertices</returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="ArgumentNullException"></exception>
     public int GetDistance(int begin, int end)
     {
         if (CheckIndexes(begin, end) == false) throw new ArgumentOutOfRangeException();
@@ -69,11 +92,11 @@ public class WorldMap
     }
 
     /// <summary>
-    /// Attempts to retrieve the distance between two cities in the world map.
+    /// Attempts to retrieve the distance between two vertices in the world map.
     /// </summary>
-    /// <param name="begin">The index of the starting city.</param>
-    /// <param name="end">The index of the ending city.</param>
-    /// <param name="distance">The distance between the two cities (output).</param>
+    /// <param name="begin">The index of the starting vertex.</param>
+    /// <param name="end">The index of the ending vertex.</param>
+    /// <param name="distance">The distance between the two vertices.</param>
     /// <returns>True if the distance is successfully retrieved, false otherwise.</returns>
     public bool TryGetDistance(int begin, int end, out int distance)
 	{
@@ -94,7 +117,7 @@ public class WorldMap
     /// <summary>
     /// Returns a string representation of the world map matrix.
     /// </summary>
-    /// <returns>A formatted string displaying the matrix of distances between cities.</returns>
+    /// <returns>A formatted string displaying the matrix of distances between vertices.</returns>
     public override string ToString()
 	{
 		if(matrix == null) return "";
@@ -114,14 +137,20 @@ public class WorldMap
 		return stringBuilder.ToString();
 	}
 
-    public void FillMapRandom(int min, int max)
+
+    /// <summary>
+    /// Method will randomly fill adjeancy matrix with numbers
+    /// </summary>
+    /// <param name="min">min distance</param>
+    /// <param name="max">max distance</param>
+    public void FillMapWithRandomValues(int min, int max)
     {
-        Random r = new Random();
-        for (int i = 0; i < GetCitiesAmount; i++)
+        Random random = new Random();
+        for (int i = 0; i < GetMatrixSize; i++)
         {
-            for (int j = 0; j < GetCitiesAmount; j++)
+            for (int j = 0; j < GetMatrixSize; j++)
             {
-                matrix[i,j] = r.Next(min, max);
+                matrix[i, j] = random.Next(min, max + 1);
             }
         }
     }
@@ -140,4 +169,5 @@ public class WorldMap
         }
         return true;
     }
+
 }

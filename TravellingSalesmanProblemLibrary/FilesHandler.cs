@@ -8,11 +8,16 @@ namespace TravellingSalesmanProblemLibrary
 {
     public static class FilesHandler
     {
-        public static WorldMap? LoadWorldMapFromFile(string filePath)
+        /// <summary>
+        /// Loads an adjacency matrix from a file with a specific format and creates an AdjMatrix object.
+        /// </summary>
+        /// <param name="filePath">The path to the file containing the adjacency matrix data.</param>
+        /// <returns>An AdjMatrix object representing the graph, or null if loading fails.</returns>
+        public static AdjMatrix? LoadAdjMatrixFromFile(string filePath)
         {
             string fileCon = File.ReadAllText(filePath);
-            var nodesAmout = GetNodesAmount(fileCon);
-            if (!nodesAmout.HasValue) return null;
+            var vertexsAmout = GetVertexsAmount(fileCon);
+            if (!vertexsAmout.HasValue) return null;
 
             const string endOfEntry = "EDGE_WEIGHT_SECTION";
             int entryEndIndex = fileCon.IndexOf(endOfEntry) + endOfEntry.Length;
@@ -21,14 +26,14 @@ namespace TravellingSalesmanProblemLibrary
 
             var numbers = numbersSingleStr.Replace("\n", " ").Split(" ").ToList().FindAll(e => e != "").Select(e => int.Parse(e));
 
-            WorldMap worldMap = new(nodesAmout.Value);
+            AdjMatrix worldMap = new(vertexsAmout.Value);
 
             int column = 0;
             int row = 0;
             foreach (var number in numbers)
             {
 
-                if (column == nodesAmout)
+                if (column == vertexsAmout)
                 {
                     column = 0;
                     row++;
@@ -43,8 +48,12 @@ namespace TravellingSalesmanProblemLibrary
         }
 
 
-
-        private static int? GetNodesAmount(string fileCon)
+        /// <summary>
+        /// Extracts the number of vertices from the file content based on a specific keyword.
+        /// </summary>
+        /// <param name="fileCon">The content of the file.</param>
+        /// <returns>The number of vertices if found, or null if not found or unable to parse.</returns>
+        private static int? GetVertexsAmount(string fileCon)
         {
             const string keyWord = "DIMENSION:";
 

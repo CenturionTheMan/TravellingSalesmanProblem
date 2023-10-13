@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public static class BruteForce
+public static class BruteForceTSP
 {
     /// <summary>
-    /// Finds the best solution for Sales Map Problem withon given WorldMap using a brute-force approach.
+    /// Finds the best solution for Sales Map Problem withon given AdjMatrix using a brute-force approach.
     /// </summary>
-    /// <param name="map">The WorldMap (adjency matrix) containing cities and distances.</param>
+    /// <param name="map">The AdjMatrix (adjency matrix) containing vertices and distances.</param>
     /// <returns>
-    /// A tuple containing the best path as an array of city indices and the total cost of the path.
+    /// A tuple containing the best path as an array of vertex indices and the total cost of the path.
     /// Returns null if no valid path is found.
     /// </returns>
-    public static (int[] path, int cost)? GetBestPath(WorldMap map)
+    public static (int[] path, int cost)? GetBestPath(AdjMatrix map)
     {
-        List<int[]> permutations = GenerateNumbersPermutations(0, map.GetCitiesAmount - 1);
+        List<int[]> permutations = GenerateNumbersPermutations(0, map.GetMatrixSize - 1);
         var best = FindBestPath(permutations, map);
 
         return best;
@@ -47,15 +47,15 @@ public static class BruteForce
     }
 
     /// <summary>
-    /// Finds the best path among a list of paths in a given WorldMap.
+    /// Finds the best path among a list of paths in a given AdjMatrix.
     /// </summary>
     /// <param name="paths">A list of integer arrays representing different paths.</param>
-    /// <param name="map">The WorldMap representing the cities and distances between them (Adjency Matrix).</param>
+    /// <param name="map">The AdjMatrix representing the vertices and distances between them (Adjency Matrix).</param>
     /// <returns>
-    /// A tuple containing the best path (as an array of city indices) and its cost.
+    /// A tuple containing the best path (as an array of vertex indices) and its cost.
     /// If no valid path is found, returns null.
     /// </returns>
-    private static (int[] path, int cost)? FindBestPath(List<int[]> paths, WorldMap map)
+    private static (int[] path, int cost)? FindBestPath(List<int[]> paths, AdjMatrix map)
     {
         int bestCost = int.MaxValue;
         int[]? bestPath = null;
@@ -76,14 +76,14 @@ public static class BruteForce
     }
 
     /// <summary>
-    /// Calculates the cost of a given path in a WorldMap.
+    /// Calculates the cost of a given path in a AdjMatrix.
     /// </summary>
-    /// <param name="path">An array of city indices representing the path to calculate the cost for.</param>
-    /// <param name="map">The WorldMap representing the cities and distances between them.</param>
+    /// <param name="path">An array of vertex indices representing the path to calculate the cost for.</param>
+    /// <param name="map">The AdjMatrix representing the vertices and distances between them.</param>
     /// <returns>
-    /// The total cost of the path if it's valid, or null if the path contains invalid city index.
+    /// The total cost of the path if it's valid, or null if the path contains invalid vertex index.
     /// </returns>
-    private static int? CalculatePathCost(int[] path, WorldMap map)
+    private static int? CalculatePathCost(int[] path, AdjMatrix map)
     {
         int sum = 0;
         for (int i = 0; i < path.Length - 1; i++)
