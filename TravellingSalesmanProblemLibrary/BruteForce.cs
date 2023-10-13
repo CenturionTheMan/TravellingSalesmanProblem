@@ -8,8 +8,22 @@ namespace TravellingSalesmanProblemLibrary;
 
 public static class BruteForceTSP
 {
+
     /// <summary>
-    /// Finds the best solution for Sales Map Problem withon given AdjMatrix using a brute-force approach.
+    /// Calculates the best path cost using the brute-force algorithm for a given adjacency matrix.
+    /// </summary>
+    /// <param name="map">The adjacency matrix representing the graph.</param>
+    /// <returns>The best path cost or null if no valid path is found.</returns>
+    public static int? GetBestPathCost(AdjMatrix map)
+    {
+        var res = GetBestPath(map);
+        if (res == null) return null;
+        return res.Value.cost;
+    }
+
+
+    /// <summary>
+    /// Calculates the best path cost using the brute-force algorithm for a given adjacency matrix.
     /// </summary>
     /// <param name="map">The AdjMatrix (adjency matrix) containing vertices and distances.</param>
     /// <returns>
