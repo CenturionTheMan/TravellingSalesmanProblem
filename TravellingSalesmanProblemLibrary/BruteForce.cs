@@ -8,7 +8,7 @@ namespace TravellingSalesmanProblemLibrary;
 
 public class BruteForceTSP : ITSPAlgorithm
 {
-    public string AlgorithName { get { return "Brute Force"; } }
+    public string AlgorithName { get { return "BruteForce"; } }
 
     /// <summary>
     /// Calculates the best path cost using the brute-force algorithm for a given adjacency matrix.

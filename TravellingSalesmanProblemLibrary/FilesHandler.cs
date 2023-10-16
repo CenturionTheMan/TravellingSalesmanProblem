@@ -67,5 +67,84 @@ namespace TravellingSalesmanProblemLibrary
 
             return null;
         }
+
+
+        public static bool RemoveFile(string filePath)
+        {
+            if(File.Exists(filePath))
+            {
+                try
+                {
+                    File.Delete(filePath);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Changes file path extension
+        /// </summary>
+        /// <param name="str"> base string </param>
+        /// <param name="extension"> needed extension </param>
+        /// <returns> new string with wanted extension </returns>
+        public static string ChangeFileExtension(this string str, string extension)
+        {
+            int beg = str.LastIndexOf(".");
+            int safe = str.LastIndexOf(@"\");
+
+            if (beg >= 0 && beg > safe) str = str.Remove(beg);
+
+            str = str.Insert(str.Length, extension);
+
+            return str;
+        }
+
+        /// <summary>
+        /// Creates or appends data to a CSV file from a list of object arrays.
+        /// </summary>
+        /// <param name="data">A list of object arrays where each array represents a row of data.</param>
+        /// <param name="fileOutputPath">The path to the CSV file to create or append to.</param>
+        /// <param name="shouldReplace">Optional. If true, the file will be replaced with the new data; if false, the data will be appended to the existing file.</param>
+        /// <param name="separator">Optional. The character used to separate values within each row (default is ';').</param>
+        /// <returns>
+        /// True if the operation was successful, false if an error occurred.
+        /// </returns>
+        public static bool CreateCsvFile(List<object[]> data, string fileOutputPath, bool shouldReplace = true, char separator = ';')
+        {
+            fileOutputPath = fileOutputPath.ChangeFileExtension(".csv");
+
+            var csv = new StringBuilder();
+
+            foreach (var line in data)
+            {
+                string strLine = "";
+                foreach (var word in line)
+                {
+                    strLine += word.ToString() + separator;
+                }
+                strLine = strLine.Remove(strLine.LastIndexOf(separator));
+                csv.AppendLine(strLine);
+            }
+
+
+            try
+            {
+                if (shouldReplace)
+                    File.WriteAllText(fileOutputPath, csv.ToString());
+                else
+                    File.AppendAllText(fileOutputPath, csv.ToString());
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

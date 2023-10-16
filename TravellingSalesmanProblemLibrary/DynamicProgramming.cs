@@ -10,7 +10,7 @@ public class DynamicProgrammingTSP : ITSPAlgorithm
 {
     private const int START_NODE = 0;
 
-    public string AlgorithName { get { return "Dynamic Programming"; } }
+    public string AlgorithName { get { return "DynamicProgramming"; } }
 
     /// <summary>
     /// Calculates the best path cost using the traveling salesman algorithm for a given adjacency matrix.
