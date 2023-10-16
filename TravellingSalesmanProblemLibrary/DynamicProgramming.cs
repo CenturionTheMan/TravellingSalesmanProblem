@@ -6,26 +6,30 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public static class DynamicProgrammingTSP
+public class DynamicProgrammingTSP : ITSPAlgorithm
 {
     private const int START_NODE = 0;
+
+    public string AlgorithName { get { return "Dynamic Programming"; } }
 
     /// <summary>
     /// Calculates the best path cost using the traveling salesman algorithm for a given adjacency matrix.
     /// </summary>
-    /// <param name="map">The adjacency matrix representing the graph.</param>
+    /// <param name="matrix">The adjacency matrix representing the graph.</param>
     /// <returns>The best path cost or null if it exceeds the limit of int.MaxValue.</returns>
-    public static int? GetBestPathCost(AdjMatrix map)
+    public int? CalculateBestPathCost(AdjMatrix matrix)
     {
-        var maxMask = (ulong)Math.Pow(2, map.GetMatrixSize);
+        var maxMask = (ulong)Math.Pow(2, matrix.GetMatrixSize);
 
         if (maxMask > int.MaxValue) return null;
 
-        var memoTable = new int?[map.GetMatrixSize, maxMask];
-        uint endMask = (uint)(1 << map.GetMatrixSize) - 1;
-        var result = SolveReq(map, 1, START_NODE, endMask, memoTable);
+        var memoTable = new int?[matrix.GetMatrixSize, maxMask];
+        uint endMask = (uint)(1 << matrix.GetMatrixSize) - 1;
+        var result = SolveReq(matrix, 1, START_NODE, endMask, memoTable);
         return result;
     }
+
+    
 
     /// <summary>
     /// Recursively solves the traveling salesman problem to find the shortest path.
@@ -36,7 +40,7 @@ public static class DynamicProgrammingTSP
     /// <param name="endMask">The bitmask representing all vertexs visited.</param>
     /// <param name="memoTable">A memoization table to store intermediate results.</param>
     /// <returns>The shortest distance to complete the traveling salesman tour.</returns>
-    private static int SolveReq(AdjMatrix map, uint mask, int fromVertex, uint endMask, int?[,] memoTable)
+    private int SolveReq(AdjMatrix map, uint mask, int fromVertex, uint endMask, int?[,] memoTable)
     {
         //If mask idicates that all vertices were visited in current path, if so add cost for returning to start vertex  
         if (mask == endMask) return map.GetDistance((int)fromVertex, START_NODE);
@@ -74,7 +78,7 @@ public static class DynamicProgrammingTSP
     /// <param name="mask">The original bitmask where the bit will be set.</param>
     /// <param name="bitIndex">The index of the bit to set (0-based).</param>
     /// <returns>The bitmask with the specified bit set to 1 at the given index.</returns>
-    private static uint SetBitInMask(uint mask, int bitIndex)
+    private uint SetBitInMask(uint mask, int bitIndex)
     {
         return (mask | (uint)(1 << bitIndex));
     }
@@ -85,11 +89,12 @@ public static class DynamicProgrammingTSP
     /// <param name="mask">The bitmask representing visited vertices.</param>
     /// <param name="vertex">The vertex to check for in the bitmask.</param>
     /// <returns>True if the vertex is visited in the bitmask, otherwise false.</returns>
-    private static bool CheckIfGivenVertexWasVisitedInGivenMask(uint mask, int vertex)
+    private bool CheckIfGivenVertexWasVisitedInGivenMask(uint mask, int vertex)
     {
         var bitVertex = (1 << vertex);
         var val = (mask & bitVertex);
         return val != 0;
     }
 
+   
 }

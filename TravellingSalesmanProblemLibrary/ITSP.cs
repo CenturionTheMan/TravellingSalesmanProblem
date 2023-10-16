@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary
 {
-    public interface ITSP
+    public interface ITSPAlgorithm
     {
+        public string AlgorithName { get; }
 
         /// <summary>
         /// Finds the best solution for Sales Map Problem.
