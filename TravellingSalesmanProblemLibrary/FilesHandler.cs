@@ -8,6 +8,7 @@ namespace TravellingSalesmanProblemLibrary
 {
     public static class FilesHandler
     {
+
         /// <summary>
         /// Loads an adjacency matrix from a file with a specific format and creates an AdjMatrix object.
         /// </summary>
@@ -45,30 +46,39 @@ namespace TravellingSalesmanProblemLibrary
             }
 
             return worldMap;
+
+
+
+
+            /// <summary>
+            /// Extracts the number of vertices from the file content based on a specific keyword.
+            /// </summary>
+            /// <param name="fileCon">The content of the file.</param>
+            /// <returns>The number of vertices if found, or null if not found or unable to parse.</returns>
+            int? GetVertexsAmount(string fileCon)
+            {
+                const string keyWord = "DIMENSION:";
+
+                int tmpBeg = fileCon.IndexOf(keyWord);
+                int tmpEnd = fileCon.IndexOf("\n", tmpBeg + keyWord.Length);
+
+                string tmpStr = fileCon.Substring(tmpBeg + keyWord.Length, tmpEnd - tmpBeg - keyWord.Length).Trim();
+
+                if (int.TryParse(tmpStr, out int result))
+                    return result;
+
+                return null;
+            }
         }
 
 
         /// <summary>
-        /// Extracts the number of vertices from the file content based on a specific keyword.
+        /// Removes a file at the specified file path.
         /// </summary>
-        /// <param name="fileCon">The content of the file.</param>
-        /// <returns>The number of vertices if found, or null if not found or unable to parse.</returns>
-        private static int? GetVertexsAmount(string fileCon)
-        {
-            const string keyWord = "DIMENSION:";
-
-            int tmpBeg = fileCon.IndexOf(keyWord);
-            int tmpEnd = fileCon.IndexOf("\n", tmpBeg + keyWord.Length);
-
-            string tmpStr = fileCon.Substring(tmpBeg + keyWord.Length, tmpEnd - tmpBeg - keyWord.Length).Trim();
-
-            if(int.TryParse(tmpStr, out int result))
-                return result;
-
-            return null;
-        }
-
-
+        /// <param name="filePath">The path to the file to be removed.</param>
+        /// <returns>
+        /// True if the file was successfully removed; otherwise, false. 
+        /// </returns>
         public static bool RemoveFile(string filePath)
         {
             if(File.Exists(filePath))

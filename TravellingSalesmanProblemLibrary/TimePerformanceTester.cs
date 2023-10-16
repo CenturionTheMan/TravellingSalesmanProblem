@@ -25,11 +25,22 @@ public class TimePerformanceTester
     private int repPerMatrix = 1;
     private int repPerSize = 100;
 
+    /// <summary>
+    /// Initializes a new instance of the TimePerformanceTester class.
+    /// </summary>
+    /// <param name="algorithm">The TSP algorithm to test.</param>
     public TimePerformanceTester(ITSPAlgorithm algorithm)
     {
         this.algorithm = algorithm;
     }
 
+    /// <summary>
+    /// Sets the matrix size range for testing.
+    /// </summary>
+    /// <param name="minMatrixSize">The minimum matrix size.</param>
+    /// <param name="maxMatrixSize">The maximum matrix size.</param>
+    /// <param name="stepMatrixSize">The step size for increasing the matrix size.</param>
+    /// <returns>The current TimePerformanceTester instance.</returns>
     public TimePerformanceTester SetMatrixSizeForTest(int minMatrixSize, int maxMatrixSize, int stepMatrixSize)
     {
         this.minMatrixSize = minMatrixSize;
@@ -38,6 +49,12 @@ public class TimePerformanceTester
         return this;
     }
 
+    /// <summary>
+    /// Sets the distance range for matrix generation.
+    /// </summary>
+    /// <param name="matrixMinDistance">The minimum distance value.</param>
+    /// <param name="matrixMaxDistance">The maximum distance value.</param>
+    /// <returns>The current TimePerformanceTester instance.</returns>
     public TimePerformanceTester SetMatrixDistances(int matrixMinDistance, int matrixMaxDistance)
     {
         this.matrixMinDistance = matrixMinDistance;
@@ -45,6 +62,12 @@ public class TimePerformanceTester
         return this;
     }
 
+    /// <summary>
+    /// Sets the repetition amount for testing.
+    /// </summary>
+    /// <param name="repPerMatrix">The number of repetitions per matrix.</param>
+    /// <param name="repPerSize">The number of repetitions per matrix size.</param>
+    /// <returns>The current TimePerformanceTester instance.</returns>
     public TimePerformanceTester SetRepeatAmount(int repPerMatrix, int repPerSize)
     {
         this.repPerMatrix = repPerMatrix;
@@ -52,7 +75,10 @@ public class TimePerformanceTester
         return this;
     }
 
-
+    /// <summary>
+    /// Performs time performance testing and saves results to CSV files.
+    /// </summary>
+    /// <param name="fileDir">The directory to save CSV files in.</param>
     public void PerformTimeTest(string fileDir)
     {
         fileDir = fileDir.ChangeFileExtension("");
@@ -64,7 +90,7 @@ public class TimePerformanceTester
 
 
         List<object[]> tmp = new();
-        tmp.Add(new object[] { "MatrixSize", "TimeInMs"});
+        tmp.Add(new object[] { "Algorithm", "RepsPerSize", "MatrixSize", "TimeInMs"});
         FilesHandler.CreateCsvFile(tmp, detailedPath, true);
         FilesHandler.CreateCsvFile(tmp, meanPath, true);
 
@@ -88,13 +114,13 @@ public class TimePerformanceTester
                 }
                 timePerSize += timePerMatrix / repPerMatrix;
 
-                dataForDetailed.Add(new object[] { matrixSize, timePerMatrix / repPerMatrix });
+                dataForDetailed.Add(new object[] { algorithm.AlgorithName, repPerSize, matrixSize, timePerMatrix / repPerMatrix });
 
                 if(repSize % 10 == 0)
                     Console.WriteLine($"{algorithm.AlgorithName} | Size: {matrixSize} | RepPerSize: {repSize} | Time: {timePerMatrix / repPerMatrix}");
             }
             double meanTime = timePerSize / repPerSize;
-            dataForMean.Add(new object[] { matrixSize, meanTime });
+            dataForMean.Add(new object[] { algorithm.AlgorithName, repPerSize, matrixSize, meanTime });
 
 
             FilesHandler.CreateCsvFile(dataForDetailed, detailedPath, false);
