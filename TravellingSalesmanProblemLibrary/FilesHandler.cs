@@ -16,6 +16,8 @@ namespace TravellingSalesmanProblemLibrary
         /// <returns>An AdjMatrix object representing the graph, or null if loading fails.</returns>
         public static AdjMatrix? LoadAdjMatrixFromFile(string filePath)
         {
+            if(filePath == null || File.Exists(filePath) == false) return null;
+
             string fileCon = File.ReadAllText(filePath);
             var vertexsAmout = GetVertexsAmount(fileCon);
             if (!vertexsAmout.HasValue) return null;

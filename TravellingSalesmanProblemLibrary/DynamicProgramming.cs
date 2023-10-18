@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public class DynamicProgrammingTSP : ITSPAlgorithm
+public class DynamicProgramming : ITSPAlgorithm
 {
     private const int START_NODE = 0;
 

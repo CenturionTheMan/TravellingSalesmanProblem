@@ -9,12 +9,13 @@ public class Program
     {
         //AdjMatrix matrix = new(15, 1, 100);
 
-        //var matrix = FilesHandler.LoadAdjMatrixFromFile("G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\ftv47.atsp");
-        //DynamicProgrammingTSP dynamicProgramming = new DynamicProgrammingTSP();
-        //var bestPath = dynamicProgramming.CalculateBestPathCost(matrix);
+        var matrix = FilesHandler.LoadAdjMatrixFromFile("G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\br17.atsp");
+        DynamicProgramming dynamicProgramming = new();
+        var bestPath = dynamicProgramming.CalculateBestPathCost(matrix);
 
+        Console.WriteLine(bestPath);
 
-        Test();
+        //Test();
 
         Console.WriteLine("DONE");
     }
@@ -22,10 +23,10 @@ public class Program
 
     public static void Test()
     {
-        TimePerformanceTester ptBruteForce = new(new BruteForceTSP());
-        ptBruteForce.PerformTimeTest("G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestResults\\");
+        //TimePerformanceTester ptBruteForce = new(new BruteForce());
+        //ptBruteForce.PerformTimeTest("G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestResults\\");
 
-        TimePerformanceTester ptDynamicProgramming = new(new DynamicProgrammingTSP());
+        TimePerformanceTester ptDynamicProgramming = new(new DynamicProgramming());
         ptDynamicProgramming.SetMatrixSizeForTest(10, 20, 1);
         ptDynamicProgramming.PerformTimeTest("G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestResults\\");
     }

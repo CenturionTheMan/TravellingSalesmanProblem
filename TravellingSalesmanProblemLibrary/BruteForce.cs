@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public class BruteForceTSP : ITSPAlgorithm
+public class BruteForce : ITSPAlgorithm
 {
     public string AlgorithName { get { return "BruteForce"; } }
 
