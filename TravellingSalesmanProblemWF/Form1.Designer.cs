@@ -198,13 +198,16 @@
             // 
             this.messageLogTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.messageLogTextBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.messageLogTextBox.HideSelection = false;
             this.messageLogTextBox.Location = new System.Drawing.Point(634, 12);
             this.messageLogTextBox.Name = "messageLogTextBox";
             this.messageLogTextBox.ReadOnly = true;
             this.messageLogTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.messageLogTextBox.ShortcutsEnabled = false;
             this.messageLogTextBox.Size = new System.Drawing.Size(504, 507);
             this.messageLogTextBox.TabIndex = 6;
             this.messageLogTextBox.Text = "";
+            this.messageLogTextBox.VisibleChanged += new System.EventHandler(this.messageLogTextBox_VisibleChanged);
             // 
             // SolvaButton
             // 

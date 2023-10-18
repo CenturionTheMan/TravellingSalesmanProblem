@@ -51,11 +51,11 @@ public partial class Form1 : Form
     /// <param name="message">Message to write</param>
     private void AddTextToMessageLog(string message)
     {
-        this.Invoke(new MethodInvoker(() =>
-        {
+        //this.Invoke(new MethodInvoker(() =>
+        //{
             messageLogTextBox.AppendText(message);
             messageLogTextBox.AppendText(Environment.NewLine);
-        }));
+        //}));
     }
 
     private void BruteForceRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -115,5 +115,11 @@ public partial class Form1 : Form
             }
         }
 
+    }
+
+    private void messageLogTextBox_VisibleChanged(object sender, EventArgs e)
+    {
+        messageLogTextBox.SelectionStart = messageLogTextBox.TextLength;
+        messageLogTextBox.ScrollToCaret();
     }
 }
