@@ -11,11 +11,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravellingSalesmanProblemUn
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{19DB6719-D55D-4C82-9AB2-505A71C4E9E8}"
 	ProjectSection(SolutionItems) = preProject
+		TestExamples\br17.atsp = TestExamples\br17.atsp
+		TestExamples\ftv170.atsp = TestExamples\ftv170.atsp
 		TestExamples\ftv47.atsp = TestExamples\ftv47.atsp
+		TestExamples\matrix_11x11.txt = TestExamples\matrix_11x11.txt
+		TestExamples\matrix_6x6.txt = TestExamples\matrix_6x6.txt
+		TestExamples\matrix_8x8.txt = TestExamples\matrix_8x8.txt
 		TestExamples\rbg403.atsp = TestExamples\rbg403.atsp
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravellingSalesmanProblemWF", "TravellingSalesmanProblemWF\TravellingSalesmanProblemWF.csproj", "{DD3812D1-60A5-415F-A576-4EE32C9F28DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravellingSalesmanProblemWF", "TravellingSalesmanProblemWF\TravellingSalesmanProblemWF.csproj", "{DD3812D1-60A5-415F-A576-4EE32C9F28DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

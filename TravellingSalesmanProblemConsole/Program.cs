@@ -8,8 +8,11 @@ public class Program
     public static void Main()
     {
         //AdjMatrix matrix = new(15, 1, 100);
+        AdjMatrix? matrix = FilesHandler.LoadAdjMatrixFromFile("G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\matrix_8x8.txt");
 
-        var matrix = FilesHandler.LoadAdjMatrixFromFile("G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\br17.atsp");
+        Console.WriteLine(matrix);
+
+        //var matrix = FilesHandler.LoadAdjMatrixFromFile("G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\br17.atsp");
         DynamicProgramming dynamicProgramming = new();
         var bestPath = dynamicProgramming.CalculateBestPathCost(matrix);
 

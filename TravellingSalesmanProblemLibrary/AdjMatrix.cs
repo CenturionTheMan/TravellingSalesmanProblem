@@ -14,8 +14,7 @@ public class AdjMatrix
     /// <summary>
     /// Initializes a new instance of the AdjMatrix class with the specified number of vertices.
     /// </summary>
-    /// <param name="verticesAmount">The number of vertices in the world map.</param>
-    /// <param name="fillRandom">If true matrix will be filled with random values</param>
+    /// <param name="verticesAmount">The number of vertices in matrix.</param>
     public AdjMatrix(int verticesAmount)
     {
         matrix = new int?[verticesAmount, verticesAmount];
@@ -23,21 +22,22 @@ public class AdjMatrix
     }
 
     /// <summary>
-    /// 
+    /// Initializes a new instance of the AdjMatrix class with the specified number of vertices.
+    /// Matrix is filled with random values from given range.
     /// </summary>
-    /// <param name="verticesAmount"></param>
-    /// <param name="minDistance"></param>
-    /// <param name="maxDistance"></param>
+    /// <param name="verticesAmount">The number of vertices in matrix</param>
+    /// <param name="minDistance">Min range (inclusive)</param>
+    /// <param name="maxDistance">Max range (inclusive)</param>
     public AdjMatrix(int verticesAmount, int minDistance, int maxDistance) : this(verticesAmount)
     {
         FillMapWithRandomValues(minDistance, maxDistance);
     }
 
     /// <summary>
-    /// 
+    /// Initializes a new instance of the AdjMatrix class with the specified double dimension array of values
     /// </summary>
-    /// <param name="matrix"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="matrix">Values to fill matrix with</param>
+    /// <exception cref="ArgumentException">Dimentions of array must be equal</exception>
     public AdjMatrix(int?[,] matrix)
     {
         if (matrix.GetLength(0) != matrix.GetLength(1))
@@ -45,6 +45,38 @@ public class AdjMatrix
 
         this.matrix = matrix;
         this.size = matrix.GetLength(0);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the AdjMatrix class with the specified single dimenstion array which is "joined" double dimension array
+    /// </summary>
+    /// <param name="verticesAmount">Amount of vertices in matrix</param>
+    /// <param name="distances">Values to fill matrix with</param>
+    /// <exception cref="ArgumentException">Will be thrown of length of <paramref name="distances"/> will not be equal to
+    /// <paramref name="verticesAmount"/> times <paramref name="verticesAmount"/> </exception>
+    public AdjMatrix(int verticesAmount, int[] distances) : this(verticesAmount)
+    {
+        if(verticesAmount * verticesAmount != distances.Length)
+        {
+            throw new ArgumentException();
+        }
+
+        int column = 0;
+        int row = 0;
+        foreach (var dis in distances)
+        {
+
+            if (column == verticesAmount)
+            {
+                column = 0;
+                row++;
+            }
+
+            if (dis != -1)
+                SetDistance(column, row, dis, false);
+
+            column++;
+        }
     }
 
 
