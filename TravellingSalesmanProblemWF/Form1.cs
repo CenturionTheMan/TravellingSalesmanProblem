@@ -134,9 +134,9 @@ public partial class Form1 : Form
         {
             SetupAlgorithmParams();
 
-            AddTextToMessageLog("Solving example...");
+            AddTextToMessageLog($"Solving example using {algorithm.AlgorithName}...");
 
-            stopwatch.Start();
+            stopwatch.Restart();
             var res = algorithm.CalculateBestPathCost(matrix);
             stopwatch.Stop();
 
