@@ -15,57 +15,194 @@ namespace TravellingSalesmanProblemLibrary
         /// <returns>An AdjMatrix object representing the graph, or null if loading fails.</returns>
         public static AdjMatrix? LoadAdjMatrixFromFile(string filePath)
         {
+            if (filePath == null || File.Exists(filePath) == false) return null;
             string fileCon = File.ReadAllText(filePath);
+
+            if(fileCon.Contains("TYPE: ATSP"))
+            {
+                return LoadAdjMatrixFromATSPFile(fileCon);
+            }
+            else
+            {
+                return LoadAdjMatrixFromTxtFile(fileCon);
+            }
+        }
+
+        /// <summary>
+        /// Loads an adjacency matrix from a TXT file content.
+        /// </summary>
+        /// <param name="fileCon">The content of the TXT file.</param>
+        /// <returns>An AdjMatrix instance if successful, or null if there was an error.</returns>
+        private static AdjMatrix? LoadAdjMatrixFromTxtFile(string fileCon)
+        {
+            var lines = fileCon.Split("\n");
+            try
+            {
+                int vertexAmount = int.Parse(lines.First());
+                var linesList = lines.ToList();
+                linesList.RemoveAt(0);
+                linesList.RemoveRange(lines.Length -4, 3);
+
+
+                var numbers = new List<int>();
+
+                foreach (var line in linesList)
+                {
+                    var strNum = line.Split(" ").Where(e => e != "");
+                    var intNum = strNum.Select(e => int.Parse(e));
+                    numbers.AddRange(intNum);
+                }
+
+                AdjMatrix? adjMatrix = new AdjMatrix(vertexAmount, numbers.ToArray());
+                return adjMatrix;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Loads an adjacency matrix from a ATSP file content.
+        /// </summary>
+        /// <param name="fileCon">The content of the ATSP file.</param>
+        /// <returns>An AdjMatrix instance if successful, or null if there was an error.</returns>
+        private static AdjMatrix? LoadAdjMatrixFromATSPFile(string fileCon)
+        {
             var vertexsAmout = GetVertexsAmount(fileCon);
             if (!vertexsAmout.HasValue) return null;
 
             const string endOfEntry = "EDGE_WEIGHT_SECTION";
             int entryEndIndex = fileCon.IndexOf(endOfEntry) + endOfEntry.Length;
 
-            var numbersSingleStr = fileCon.Substring(entryEndIndex, fileCon.Length - entryEndIndex - "\nEOF".Length);
+            if (entryEndIndex < 0) return null;
 
-            var numbers = numbersSingleStr.Replace("\n", " ").Split(" ").ToList().FindAll(e => e != "").Select(e => int.Parse(e));
-
-            AdjMatrix worldMap = new(vertexsAmout.Value);
-
-            int column = 0;
-            int row = 0;
-            foreach (var number in numbers)
+            try
             {
+                var numbersSingleStr = fileCon.Substring(entryEndIndex, fileCon.Length - entryEndIndex - "\nEOF".Length);
 
-                if (column == vertexsAmout)
-                {
-                    column = 0;
-                    row++;
-                }
+                var numbers = numbersSingleStr.Replace("\n", " ").Split(" ").ToList().FindAll(e => e != "").Select(e => int.Parse(e));
 
-                worldMap.SetDistance(column, row, number);
+                AdjMatrix worldMap = new(vertexsAmout.Value, numbers.ToArray());
 
-                column++;
+                return worldMap;
             }
+            catch
+            {
+                return null;
+            }
+            
 
-            return worldMap;
+
+            /// <summary>
+            /// Extracts the number of vertices from the file content based on a specific keyword.
+            /// </summary>
+            /// <param name="fileCon">The content of the file.</param>
+            /// <returns>The number of vertices if found, or null if not found or unable to parse.</returns>
+            int? GetVertexsAmount(string fileCon)
+            {
+                const string keyWord = "DIMENSION:";
+
+                int tmpBeg = fileCon.IndexOf(keyWord);
+                int tmpEnd = fileCon.IndexOf("\n", tmpBeg + keyWord.Length);
+
+                string tmpStr = fileCon.Substring(tmpBeg + keyWord.Length, tmpEnd - tmpBeg - keyWord.Length).Trim();
+
+                if (int.TryParse(tmpStr, out int result))
+                    return result;
+
+                return null;
+            }
         }
 
 
+
+
+
+
         /// <summary>
-        /// Extracts the number of vertices from the file content based on a specific keyword.
+        /// Removes a file at the specified file path.
         /// </summary>
-        /// <param name="fileCon">The content of the file.</param>
-        /// <returns>The number of vertices if found, or null if not found or unable to parse.</returns>
-        private static int? GetVertexsAmount(string fileCon)
+        /// <param name="filePath">The path to the file to be removed.</param>
+        /// <returns>
+        /// True if the file was successfully removed; otherwise, false. 
+        /// </returns>
+        public static bool RemoveFile(string filePath)
         {
-            const string keyWord = "DIMENSION:";
+            if(File.Exists(filePath))
+            {
+                try
+                {
+                    File.Delete(filePath);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
 
-            int tmpBeg = fileCon.IndexOf(keyWord);
-            int tmpEnd = fileCon.IndexOf("\n", tmpBeg + keyWord.Length);
+            }
+            return false;
+        }
 
-            string tmpStr = fileCon.Substring(tmpBeg + keyWord.Length, tmpEnd - tmpBeg - keyWord.Length).Trim();
+        /// <summary>
+        /// Changes file path extension
+        /// </summary>
+        /// <param name="str"> base string </param>
+        /// <param name="extension"> needed extension </param>
+        /// <returns> new string with wanted extension </returns>
+        public static string ChangeFileExtension(this string str, string extension)
+        {
+            int beg = str.LastIndexOf(".");
+            int safe = str.LastIndexOf(@"\");
 
-            if(int.TryParse(tmpStr, out int result))
-                return result;
+            if (beg >= 0 && beg > safe) str = str.Remove(beg);
 
-            return null;
+            str = str.Insert(str.Length, extension);
+
+            return str;
+        }
+
+        /// <summary>
+        /// Creates or appends data to a CSV file from a list of object arrays.
+        /// </summary>
+        /// <param name="data">A list of object arrays where each array represents a row of data.</param>
+        /// <param name="fileOutputPath">The path to the CSV file to create or append to.</param>
+        /// <param name="shouldReplace">Optional. If true, the file will be replaced with the new data; if false, the data will be appended to the existing file.</param>
+        /// <param name="separator">Optional. The character used to separate values within each row (default is ';').</param>
+        /// <returns>
+        /// True if the operation was successful, false if an error occurred.
+        /// </returns>
+        public static bool CreateCsvFile(List<object[]> data, string fileOutputPath, bool shouldReplace = true, char separator = ';')
+        {
+            fileOutputPath = fileOutputPath.ChangeFileExtension(".csv");
+
+            var csv = new StringBuilder();
+
+            foreach (var line in data)
+            {
+                string strLine = "";
+                foreach (var word in line)
+                {
+                    strLine += word.ToString() + separator;
+                }
+                strLine = strLine.Remove(strLine.LastIndexOf(separator));
+                csv.AppendLine(strLine);
+            }
+
+
+            try
+            {
+                if (shouldReplace)
+                    File.WriteAllText(fileOutputPath, csv.ToString());
+                else
+                    File.AppendAllText(fileOutputPath, csv.ToString());
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

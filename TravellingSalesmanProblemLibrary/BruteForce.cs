@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public static class BruteForceTSP
+public class BruteForce : ITSPAlgorithm
 {
+    public string AlgorithName { get { return "BruteForce"; } }
 
     /// <summary>
     /// Calculates the best path cost using the brute-force algorithm for a given adjacency matrix.
     /// </summary>
     /// <param name="map">The adjacency matrix representing the graph.</param>
     /// <returns>The best path cost or null if no valid path is found.</returns>
-    public static int? GetBestPathCost(AdjMatrix map)
+    public int? CalculateBestPathCost(AdjMatrix map)
     {
         var res = GetBestPath(map);
         if (res == null) return null;
@@ -30,7 +31,7 @@ public static class BruteForceTSP
     /// A tuple containing the best path as an array of vertex indices and the total cost of the path.
     /// Returns null if no valid path is found.
     /// </returns>
-    public static (int[] path, int cost)? GetBestPath(AdjMatrix map)
+    public (int[] path, int cost)? GetBestPath(AdjMatrix map)
     {
         List<int[]> permutations = GenerateNumbersPermutations(0, map.GetMatrixSize - 1);
         var best = FindBestPath(permutations, map);
@@ -46,7 +47,7 @@ public static class BruteForceTSP
     /// <returns>
     /// A list of integer arrays, each representing a unique permutation of numbers.
     /// </returns>
-    private static List<int[]> GenerateNumbersPermutations(int minNumber, int maxNumber)
+    private List<int[]> GenerateNumbersPermutations(int minNumber, int maxNumber)
     {
         List<int> numbers = new();
         for (int i = minNumber; i <= maxNumber; i++)
@@ -69,7 +70,7 @@ public static class BruteForceTSP
     /// A tuple containing the best path (as an array of vertex indices) and its cost.
     /// If no valid path is found, returns null.
     /// </returns>
-    private static (int[] path, int cost)? FindBestPath(List<int[]> paths, AdjMatrix map)
+    private (int[] path, int cost)? FindBestPath(List<int[]> paths, AdjMatrix map)
     {
         int bestCost = int.MaxValue;
         int[]? bestPath = null;
@@ -97,7 +98,7 @@ public static class BruteForceTSP
     /// <returns>
     /// The total cost of the path if it's valid, or null if the path contains invalid vertex index.
     /// </returns>
-    private static int? CalculatePathCost(int[] path, AdjMatrix map)
+    private int? CalculatePathCost(int[] path, AdjMatrix map)
     {
         int sum = 0;
         for (int i = 0; i < path.Length - 1; i++)
@@ -122,7 +123,7 @@ public static class BruteForceTSP
     /// <param name="numbersOut">The list of numbers in the current permutation being constructed.</param>
     /// <param name="numbersIn">The list of available numbers to choose from.</param>
     /// <param name="result">The list where permutations are stored.</param>
-    private static void GenerateNumberPermutationsRecursively(List<int> numbersOut, List<int> numbersIn, ref List<int[]> result)
+    private void GenerateNumberPermutationsRecursively(List<int> numbersOut, List<int> numbersIn, ref List<int[]> result)
     {
         if(numbersIn.Count == 0)
         {
@@ -146,4 +147,5 @@ public static class BruteForceTSP
         }
     }
 
+    
 }
