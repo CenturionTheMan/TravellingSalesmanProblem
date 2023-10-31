@@ -1,23 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public class DynamicProgramming : ITSPAlgorithm
+public class DynamicProgramming : TSPAlgorithm
 {
     private const int START_NODE = 0;
 
-    public string AlgorithName { get { return "DynamicProgramming"; } }
+    public DynamicProgramming(ref CancellationToken cancellationToken) : base(ref cancellationToken)
+    {
+    }
 
-    /// <summary>
-    /// Calculates the best path cost using the traveling salesman algorithm for a given adjacency matrix.
-    /// </summary>
-    /// <param name="matrix">The adjacency matrix representing the graph.</param>
-    /// <returns>The best path cost or null if it exceeds the limit of int.MaxValue.</returns>
-    public int? CalculateBestPathCost(AdjMatrix matrix)
+    public override string AlgorithmName => "DynamicProgramming";
+
+    public override (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override int? CalculateBestPathCost(AdjMatrix matrix)
     {
         var maxMask = (ulong)Math.Pow(2, matrix.GetMatrixSize);
 
@@ -26,10 +31,11 @@ public class DynamicProgramming : ITSPAlgorithm
         var memoTable = new int?[matrix.GetMatrixSize, maxMask];
         uint endMask = (uint)(1 << matrix.GetMatrixSize) - 1;
         var result = SolveReq(matrix, 1, START_NODE, endMask, memoTable);
+
+        memoTable = null;
+        GC.Collect();
         return result;
     }
-
-    
 
     /// <summary>
     /// Recursively solves the traveling salesman problem to find the shortest path.
@@ -42,6 +48,12 @@ public class DynamicProgramming : ITSPAlgorithm
     /// <returns>The shortest distance to complete the traveling salesman tour.</returns>
     private int SolveReq(AdjMatrix map, uint mask, int fromVertex, uint endMask, int?[,] memoTable)
     {
+        if (CancellationToken.IsCancellationRequested)
+        {
+            Debug.WriteLine("STOP");
+            return int.MaxValue;
+        }
+
         //If mask idicates that all vertices were visited in current path, if so add cost for returning to start vertex  
         if (mask == endMask) return map.GetDistance((int)fromVertex, START_NODE);
 
@@ -55,6 +67,11 @@ public class DynamicProgramming : ITSPAlgorithm
 
         for (int nextVertex = 0; nextVertex < map.GetMatrixSize; nextVertex++)
         {
+            if (CancellationToken.IsCancellationRequested)
+            {
+                return int.MaxValue;
+            }
+
             //check if given vertex was already visited in given path
             if (CheckIfGivenVertexWasVisitedInGivenMask(mask, nextVertex)) continue;
             if (!map.TryGetDistance((int)fromVertex, nextVertex, out int tmpRes)) continue;

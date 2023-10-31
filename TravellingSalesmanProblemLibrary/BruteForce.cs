@@ -1,43 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public class BruteForce : ITSPAlgorithm
+public class BruteForce : TSPAlgorithm
 {
-    public string AlgorithName { get { return "BruteForce"; } }
-
-    /// <summary>
-    /// Calculates the best path cost using the brute-force algorithm for a given adjacency matrix.
-    /// </summary>
-    /// <param name="map">The adjacency matrix representing the graph.</param>
-    /// <returns>The best path cost or null if no valid path is found.</returns>
-    public int? CalculateBestPathCost(AdjMatrix map)
+    public BruteForce(ref CancellationToken cancellationToken) : base(ref cancellationToken)
     {
-        var res = GetBestPath(map);
-        if (res == null) return null;
-        return res.Value.cost;
     }
 
+    public override string AlgorithmName => "BruteForce";
+
 
     /// <summary>
     /// Calculates the best path cost using the brute-force algorithm for a given adjacency matrix.
     /// </summary>
-    /// <param name="map">The AdjMatrix (adjency matrix) containing vertices and distances.</param>
+    /// <param name="matrix">The AdjMatrix (adjency matrix) containing vertices and distances.</param>
+    /// <param name="cancellationToken">Token for task cancellation</param>
     /// <returns>
     /// A tuple containing the best path as an array of vertex indices and the total cost of the path.
     /// Returns null if no valid path is found.
     /// </returns>
-    public (int[] path, int cost)? GetBestPath(AdjMatrix map)
+    public override (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
     {
-        List<int[]> permutations = GenerateNumbersPermutations(0, map.GetMatrixSize - 1);
-        var best = FindBestPath(permutations, map);
+        List<int[]> permutations = GenerateNumbersPermutations(0, matrix.GetMatrixSize - 1);
+        var best = FindBestPath(permutations, matrix);
 
         return best;
     }
+
 
     /// <summary>
     /// Generates all possible permutations of numbers within the specified range.
@@ -77,6 +72,9 @@ public class BruteForce : ITSPAlgorithm
 
         foreach (var path in paths)
         {
+            if (CancellationToken.IsCancellationRequested) return null;
+
+
             var cost = CalculatePathCost(path, map);
             if (cost == null) continue;
 
@@ -125,20 +123,28 @@ public class BruteForce : ITSPAlgorithm
     /// <param name="result">The list where permutations are stored.</param>
     private void GenerateNumberPermutationsRecursively(List<int> numbersOut, List<int> numbersIn, ref List<int[]> result)
     {
-        if(numbersIn.Count == 0)
+        if (CancellationToken.IsCancellationRequested)
         {
+            return;
+        }
+        if (numbersIn.Count == 0)
+        {
+
             if(numbersOut.Count > 0)
             {
                 numbersOut.Add(numbersOut[0]);
                 result.Add(numbersOut.ToArray());
                 numbersOut.RemoveAt(numbersOut.Count - 1);
             }
-            
         }
         else
         {
             foreach (var number in numbersIn)
             {
+                if (CancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
                 numbersOut.Add(number);
                 List<int> newNumbersIn = numbersIn.FindAll(x => x != number);
                 GenerateNumberPermutationsRecursively(numbersOut, newNumbersIn, ref result);

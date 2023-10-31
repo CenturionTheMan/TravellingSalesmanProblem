@@ -6,11 +6,20 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary
 {
-    internal class BranchAndBound : ITSPAlgorithm
+    public class BranchAndBound : TSPAlgorithm
     {
-        public string AlgorithName => "BranchAndBound";
+        public BranchAndBound(ref CancellationToken cancellationToken) : base(ref cancellationToken)
+        {
+        }
 
-        public int? CalculateBestPathCost(AdjMatrix matrix)
+        public override string AlgorithmName => "BranchAndBound";
+
+        public override (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+        {
+            throw new NotImplementedException();
+        }
+
+        public new int? CalculateBestPathCost(AdjMatrix matrix)
         {
             throw new NotImplementedException();
         }

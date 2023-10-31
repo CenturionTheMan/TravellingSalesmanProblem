@@ -16,7 +16,7 @@ public class Program
     public static void Test()
     {
         TimePerformanceTester ptBruteForce = new(new BruteForce());
-        ptBruteForce.SetMatrixDistances(10, 1000).SetMatrixSizeForTest(2, 11, 1).SetRepeatAmount(1, 100);
+        ptBruteForce.SetMatrixDistances(10, 1000).SetMatrixSizeForTest(2, 12, 1).SetRepeatAmount(1, 100);
         ptBruteForce.PerformTimeTest("G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestResults\\");
 
         //TimePerformanceTester ptDynamicProgramming = new(new DynamicProgramming());

@@ -17,7 +17,7 @@ public class BruteForceTest
         map.SetDistance(2, 3, 30);
 
 
-        var bestPath = new BruteForce().GetBestPath(map);
+        var bestPath = new BruteForce().CalculateBestPath(map);
 
         Assert.NotNull(bestPath);
 
@@ -43,7 +43,7 @@ public class BruteForceTest
         map.SetDistance(5, 2, 7, false);
 
 
-        var bestPath = new BruteForce().GetBestPath(map);
+        var bestPath = new BruteForce().CalculateBestPath(map);
 
         Assert.NotNull(bestPath);
 
@@ -66,7 +66,7 @@ public class BruteForceTest
         map.SetDistance(1, 3, 18);
         map.SetDistance(2, 3, 29);
 
-        var bestPath = new BruteForce().GetBestPath(map);
+        var bestPath = new BruteForce().CalculateBestPath(map);
 
         Assert.NotNull(bestPath);
 
@@ -86,7 +86,7 @@ public class BruteForceTest
                        { 20, 25, 30, 0 } };
         AdjMatrix map = new(grid);
        
-        var bestPath = new BruteForce().GetBestPath(map);
+        var bestPath = new BruteForce().CalculateBestPath(map);
 
         Assert.NotNull(bestPath);
 

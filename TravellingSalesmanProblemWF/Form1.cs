@@ -5,19 +5,33 @@ namespace TravellingSalesmanProblemWF;
 
 public partial class Form1 : Form
 {
-    ITSPAlgorithm? algorithm;
+    AlgorithmKind? algorithmKind = null;
     AdjMatrix? matrix;
     Stopwatch stopwatch = new();
+    CancellationTokenSource? algorithmTaskCTS = null;
 
     public Form1()
     {
-        algorithm = null;
         matrix = null;
 
         InitializeComponent();
 
         BruteForceRadioButton.Checked = true;
     }
+
+    /// <summary>
+    /// Method will stop currently working algorithm task
+    /// </summary>
+    private void FreeCancellationToken()
+    {
+        if(algorithmTaskCTS != null)
+        {
+            algorithmTaskCTS.Cancel();
+            AddTextToMessageLog("Currently working algorithm is being stopped...");
+        }
+        algorithmTaskCTS = null;
+    }
+
 
     /// <summary>
     /// Hides settings panels for different algorithms.
@@ -48,9 +62,32 @@ public partial class Form1 : Form
     /// <summary>
     /// Method will be used for settings params for different algh
     /// </summary>
-    private void SetupAlgorithmParams()
+    /// <returns>New tsp algorithm</returns>
+    /// <exception cref="Exception"></exception>
+    private TSPAlgorithm CreateAlgorithm()
     {
+        TSPAlgorithm alg;
+        FreeCancellationToken();
+        algorithmTaskCTS = new CancellationTokenSource();
+        CancellationToken token = algorithmTaskCTS.Token;
+        switch (algorithmKind)
+        {
+            case AlgorithmKind.BRUTE_FORCE:
+                alg = new BruteForce(ref token);
+                break;
 
+            case AlgorithmKind.DYNAMIC_PROGRAMMING:
+                alg = new DynamicProgramming(ref token);
+                break;
+
+            case AlgorithmKind.BRANCH_AND_BOUND:
+                alg = new BranchAndBound(ref token);
+                break;
+
+            default:
+                throw new Exception("Algorithm was not choosen!");
+        }
+        return alg;
     }
 
     /// <summary>
@@ -75,7 +112,7 @@ public partial class Form1 : Form
     private void BruteForceRadioButton_CheckedChanged(object sender, EventArgs e)
     {
         HideAllSettings();
-        algorithm = new BruteForce();
+        algorithmKind = AlgorithmKind.BRUTE_FORCE;
         BruteForcepanel.Visible = true;
     }
 
@@ -87,7 +124,7 @@ public partial class Form1 : Form
     private void DynamicProgrammingRadioButton_CheckedChanged(object sender, EventArgs e)
     {
         HideAllSettings();
-        algorithm = new DynamicProgramming();
+        algorithmKind = AlgorithmKind.DYNAMIC_PROGRAMMING;
         DynamicProgrammingPanel.Visible = true;
     }
 
@@ -122,7 +159,7 @@ public partial class Form1 : Form
     /// <param name="e"></param>
     private void SolvaButton_Click(object sender, EventArgs e)
     {
-        if (algorithm == null)
+        if (algorithmKind == null)
         {
             AddTextToMessageLog("Can not solve example without choosen algorithm");
         }
@@ -132,23 +169,34 @@ public partial class Form1 : Form
         }
         else
         {
-            SetupAlgorithmParams();
+            var algorithm = CreateAlgorithm();
 
-            AddTextToMessageLog($"Solving example using {algorithm.AlgorithName}...");
+            AddTextToMessageLog($"Solving example using {algorithm.AlgorithmName}...");
 
-            stopwatch.Restart();
-            var res = algorithm.CalculateBestPathCost(matrix);
-            stopwatch.Stop();
+            
+            Task.Factory.StartNew(() => {
+                stopwatch.Restart();
+                var res = algorithm.CalculateBestPathCost(matrix);
+                stopwatch.Stop();
 
-            if(res == null)
-            {
-                AddTextToMessageLog($"Solution could not be found!");
-            }
-            else
-            {
-                AddTextToMessageLog($"Solution found!");
-                AddTextToMessageLog($"Best Cost: {res.Value} || Time taken: {stopwatch.Elapsed} [s]");
-            }
+                if(algorithm.CancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                algorithmTaskCTS = null;
+
+                if (res == null)
+                {
+                    AddTextToMessageLog($"Solution could not be found!");
+                }
+                else
+                {
+                    AddTextToMessageLog($"Solution found!");
+                    AddTextToMessageLog($"Best Cost: {res.Value} || Time taken: {stopwatch.Elapsed} [s]");
+                }
+
+            }, algorithm.CancellationToken);
         }
 
     }
@@ -214,5 +262,15 @@ public partial class Form1 : Form
         matrix = new AdjMatrix(vertexAmount, minDis, maxDis);
         AddTextToMessageLog($"Matrix {vertexAmount}x{vertexAmount} generated.");
 
+    }
+
+    private void stopButton_Click(object sender, EventArgs e)
+    {
+        if(algorithmTaskCTS != null)
+        {
+            algorithmTaskCTS.Cancel();
+            algorithmTaskCTS = null;
+            AddTextToMessageLog("Currently working algorithm is being stopped...");
+        }
     }
 }

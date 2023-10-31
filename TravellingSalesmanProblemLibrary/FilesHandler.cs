@@ -173,7 +173,7 @@ namespace TravellingSalesmanProblemLibrary
         /// <returns>
         /// True if the operation was successful, false if an error occurred.
         /// </returns>
-        public static bool CreateCsvFile(List<object[]> data, string fileOutputPath, bool shouldReplace = true, char separator = ';')
+        public static bool CreateCsvFile(List<object[]> data, string fileOutputPath, bool shouldReplace = true, char separator = ',')
         {
             fileOutputPath = fileOutputPath.ChangeFileExtension(".csv");
 

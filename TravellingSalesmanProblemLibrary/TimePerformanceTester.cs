@@ -13,7 +13,7 @@ public class TimePerformanceTester
     const string MEAN_PATH_SUFFIX = "Mean";
 
 
-    private ITSPAlgorithm algorithm;
+    private TSPAlgorithm algorithm;
 
     private int minMatrixSize = 2;
     private int maxMatrixSize = 10;
@@ -29,7 +29,7 @@ public class TimePerformanceTester
     /// Initializes a new instance of the TimePerformanceTester class.
     /// </summary>
     /// <param name="algorithm">The TSP algorithm to test.</param>
-    public TimePerformanceTester(ITSPAlgorithm algorithm)
+    public TimePerformanceTester(TSPAlgorithm algorithm)
     {
         this.algorithm = algorithm;
     }
@@ -85,8 +85,8 @@ public class TimePerformanceTester
 
         Stopwatch stopWatch = new Stopwatch();
 
-        string detailedPath = fileDir + algorithm.AlgorithName + DETAILED_PATH_SUFFIX + ".csv";
-        string meanPath = fileDir + algorithm.AlgorithName + MEAN_PATH_SUFFIX + ".csv";
+        string detailedPath = fileDir + algorithm.AlgorithmName + DETAILED_PATH_SUFFIX + ".csv";
+        string meanPath = fileDir + algorithm.AlgorithmName + MEAN_PATH_SUFFIX + ".csv";
 
 
         List<object[]> tmp = new();
@@ -107,20 +107,20 @@ public class TimePerformanceTester
                 long timePerMatrix = 0;
                 for (int j = 0; j < repPerMatrix; j++)
                 {
-                    stopWatch.Start();
+                    stopWatch.Restart();
                     _ = algorithm.CalculateBestPathCost(matrix);
                     stopWatch.Stop();
                     timePerMatrix += stopWatch.ElapsedMilliseconds;
                 }
                 timePerSize += timePerMatrix / repPerMatrix;
 
-                dataForDetailed.Add(new object[] { algorithm.AlgorithName, repPerSize, matrixSize, timePerMatrix / repPerMatrix });
+                dataForDetailed.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, timePerMatrix / repPerMatrix });
 
-                if(repSize % 10 == 0)
-                    Console.WriteLine($"{algorithm.AlgorithName} | Size: {matrixSize} | RepPerSize: {repSize} | Time: {timePerMatrix / repPerMatrix}");
+                if (repSize % 10 == 1 || repSize % 10 == 0)
+                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | Time: {timePerMatrix / repPerMatrix}");
             }
             double meanTime = timePerSize / repPerSize;
-            dataForMean.Add(new object[] { algorithm.AlgorithName, repPerSize, matrixSize, meanTime });
+            dataForMean.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanTime });
 
 
             FilesHandler.CreateCsvFile(dataForDetailed, detailedPath, false);
