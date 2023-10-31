@@ -30,6 +30,9 @@ public class BruteForce : TSPAlgorithm
         List<int[]> permutations = GenerateNumbersPermutations(0, matrix.GetMatrixSize - 1);
         var best = FindBestPath(permutations, matrix);
 
+        permutations = null;
+        GC.Collect();
+
         return best;
     }
 

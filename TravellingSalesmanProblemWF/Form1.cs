@@ -169,7 +169,10 @@ public partial class Form1 : Form
         }
         else
         {
+
             var algorithm = CreateAlgorithm();
+
+            GC.Collect();
 
             AddTextToMessageLog($"Solving example using {algorithm.AlgorithmName}...");
 
@@ -195,6 +198,7 @@ public partial class Form1 : Form
                     AddTextToMessageLog($"Solution found!");
                     AddTextToMessageLog($"Best Cost: {res.Value} || Time taken: {stopwatch.Elapsed} [s]");
                 }
+
 
             }, algorithm.CancellationToken);
         }
