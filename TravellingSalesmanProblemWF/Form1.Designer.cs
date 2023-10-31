@@ -374,6 +374,7 @@
             // 
             // stopButton
             // 
+            this.stopButton.Enabled = false;
             this.stopButton.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.stopButton.Location = new System.Drawing.Point(634, 525);
             this.stopButton.Name = "stopButton";
@@ -387,7 +388,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.BackColor = System.Drawing.Color.Gainsboro;
             this.ClientSize = new System.Drawing.Size(1148, 586);
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.SolvaButton);

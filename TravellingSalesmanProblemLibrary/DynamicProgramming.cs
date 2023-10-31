@@ -32,8 +32,6 @@ public class DynamicProgramming : TSPAlgorithm
         uint endMask = (uint)(1 << matrix.GetMatrixSize) - 1;
         var result = SolveReq(matrix, 1, START_NODE, endMask, memoTable);
 
-        memoTable = null;
-        GC.Collect();
         return result;
     }
 

@@ -1,10 +1,19 @@
 using System.Diagnostics;
+using System.Windows.Forms;
 using TravellingSalesmanProblemLibrary;
 
 namespace TravellingSalesmanProblemWF;
 
 public partial class Form1 : Form
 {
+    private const string BREAK_LINE = "================================================";
+    private readonly Color WARNING = Color.Red;
+    private readonly Color DEFAULT = Color.Black;
+    private readonly Color HIGHLIGHT = Color.BlueViolet;
+    private readonly Color RESULT = Color.MediumSeaGreen;
+
+
+
     AlgorithmKind? algorithmKind = null;
     AdjMatrix? matrix;
     Stopwatch stopwatch = new();
@@ -27,7 +36,8 @@ public partial class Form1 : Form
         if(algorithmTaskCTS != null)
         {
             algorithmTaskCTS.Cancel();
-            AddTextToMessageLog("Currently working algorithm is being stopped...");
+            AddTextToMessageLog("Currently working algorithm is being stopped...\n");
+            AddTextToMessageLog(BREAK_LINE + "\n");
         }
         algorithmTaskCTS = null;
     }
@@ -51,11 +61,11 @@ public partial class Form1 : Form
         matrix = FilesHandler.LoadAdjMatrixFromFile(filePath);
         if(matrix != null)
         {
-            AddTextToMessageLog("Matrix loaded...");
+            AddTextToMessageLog("Matrix loaded...\n");
         }
         else
         {
-            AddTextToMessageLog("Can not load matrix from given file path!");
+            AddTextToMessageLog("Can not load matrix from given file path!\n");
         }
     }
 
@@ -90,18 +100,33 @@ public partial class Form1 : Form
         return alg;
     }
 
+
+    /// <summary>
+    /// Little workover for adding text from different thread
+    /// </summary>
+    /// <param name="action"></param>
+    private void RunMethodOnCurrentThread(Action action)
+    {
+        this.Invoke(new MethodInvoker(() =>
+        {
+            action();
+        }));
+    }
+
+
     /// <summary>
     /// Function will write given message in message log (GUI)
     /// </summary>
     /// <param name="message">Message to write</param>
-    private void AddTextToMessageLog(string message)
+    private void AddTextToMessageLog(string message, Color? textColor = null)
     {
-        // little workover for adding text from different thread
-        this.Invoke(new MethodInvoker(() =>
-        {
+        Color col = (textColor.HasValue) ? textColor.Value : DEFAULT;
+        message = message.Replace("\n", Environment.NewLine);
+
+        RunMethodOnCurrentThread(() => {
+            messageLogTextBox.SelectionColor = col;
             messageLogTextBox.AppendText(message);
-            messageLogTextBox.AppendText(Environment.NewLine);
-        }));
+        });
     }
 
     /// <summary>
@@ -161,22 +186,23 @@ public partial class Form1 : Form
     {
         if (algorithmKind == null)
         {
-            AddTextToMessageLog("Can not solve example without choosen algorithm");
+            AddTextToMessageLog("Can not solve example without choosen algorithm\n", WARNING);
         }
         else if(matrix == null)
         {
-            AddTextToMessageLog("Can not solve example without choosen matrix");
+            AddTextToMessageLog("Can not solve example without choosen matrix\n", WARNING);
         }
         else
         {
-
             var algorithm = CreateAlgorithm();
 
-            GC.Collect();
+            AddTextToMessageLog("\n" + BREAK_LINE + "\n");
+            AddTextToMessageLog($"Solving example using ");
+            AddTextToMessageLog($"{algorithm.AlgorithmName}...\n", HIGHLIGHT);
 
-            AddTextToMessageLog($"Solving example using {algorithm.AlgorithmName}...");
+            SolvaButton.Enabled = false;
+            stopButton.Enabled = true;
 
-            
             Task.Factory.StartNew(() => {
                 stopwatch.Restart();
                 var res = algorithm.CalculateBestPathCost(matrix);
@@ -184,6 +210,15 @@ public partial class Form1 : Form
 
                 if(algorithm.CancellationToken.IsCancellationRequested)
                 {
+                    algorithm = null;
+                    GC.Collect();
+
+                    AddTextToMessageLog("Algorithm has stopped.\n");
+                    AddTextToMessageLog(BREAK_LINE + "\n");
+                    RunMethodOnCurrentThread(() => {
+                        SolvaButton.Enabled = true;
+                        stopButton.Enabled = false;
+                    });
                     return;
                 }
 
@@ -191,16 +226,30 @@ public partial class Form1 : Form
 
                 if (res == null)
                 {
-                    AddTextToMessageLog($"Solution could not be found!");
+                    AddTextToMessageLog($"Solution could not be found!\n", WARNING);
                 }
                 else
                 {
-                    AddTextToMessageLog($"Solution found!");
-                    AddTextToMessageLog($"Best Cost: {res.Value} || Time taken: {stopwatch.Elapsed} [s]");
+                    AddTextToMessageLog($"Solution found!\n");
+
+                    AddTextToMessageLog("Best Cost: ");
+                    AddTextToMessageLog($"{res.Value}\n", RESULT);
+                    
+                    //AddTextToMessageLog($"Best Path: {}");
+                    
+                    AddTextToMessageLog("Time taken: ");
+                    AddTextToMessageLog($"{stopwatch.Elapsed.TotalSeconds.ToString("0.###")} [s]\n", RESULT);
                 }
+                AddTextToMessageLog(BREAK_LINE + "\n");
 
+                algorithm = null;
+                GC.Collect();
 
-            }, algorithm.CancellationToken);
+                RunMethodOnCurrentThread(() => {
+                    SolvaButton.Enabled = true;
+                    stopButton.Enabled = false;
+                });
+            });
         }
 
     }
@@ -224,13 +273,10 @@ public partial class Form1 : Form
     private void showMatrixButton_Click(object sender, EventArgs e)
     {
         if (matrix == null) return;
-
         string tmp = matrix.ToString();
-        var lines = tmp.Split("\n");
-        foreach (var line in lines)
-        {
-            AddTextToMessageLog(line);
-        }
+        AddTextToMessageLog("\n" + BREAK_LINE + "\n");
+        AddTextToMessageLog("Loaded Matrix:\n", HIGHLIGHT);
+        AddTextToMessageLog(tmp + BREAK_LINE + "\n");
     }
 
     private void generateRandomMatrixButton_Click(object sender, EventArgs e)
@@ -241,30 +287,30 @@ public partial class Form1 : Form
 
         if(vertexAmount < 2)
         {
-            AddTextToMessageLog($"Matrix must have two or more vertices. Was given: {vertexAmount}");
+            AddTextToMessageLog($"Matrix must have two or more vertices. Was given: {vertexAmount}\n", WARNING);
             return;
         }
 
         if (minDis < 0)
         {
-            AddTextToMessageLog($"Min distance must have positive value. Was given: {minDis}");
+            AddTextToMessageLog($"Min distance must have positive value. Was given: {minDis}\n", WARNING);
             return;
         }
 
         if (minDis < 0)
         {
-            AddTextToMessageLog($"Max distance must have positive value. Was given: {maxDis}");
+            AddTextToMessageLog($"Max distance must have positive value. Was given: {maxDis}\n", WARNING);
             return;
         }
 
         if(minDis >= maxDis)
         {
-            AddTextToMessageLog($"Min distance must be lesser than max distance");
+            AddTextToMessageLog($"Min distance must be lesser than max distance\n", WARNING);
             return;
         }
 
         matrix = new AdjMatrix(vertexAmount, minDis, maxDis);
-        AddTextToMessageLog($"Matrix {vertexAmount}x{vertexAmount} generated.");
+        AddTextToMessageLog($"Matrix {vertexAmount}x{vertexAmount} generated.\n");
 
     }
 
@@ -274,7 +320,7 @@ public partial class Form1 : Form
         {
             algorithmTaskCTS.Cancel();
             algorithmTaskCTS = null;
-            AddTextToMessageLog("Currently working algorithm is being stopped...");
+            AddTextToMessageLog("Currently working algorithm is being stopped...\n");
         }
     }
 }
