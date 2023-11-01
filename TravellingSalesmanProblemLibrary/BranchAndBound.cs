@@ -69,6 +69,11 @@ namespace TravellingSalesmanProblemLibrary
             return (path.ToArray(), cost);
         }
 
+        private void SolveRec(int?[,] matrix, int begin , int end)
+        {
+
+        }
+
         private string TMP(List<int> path, int next)
         {
             string res = "";

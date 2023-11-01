@@ -11,6 +11,7 @@ public class Program
 
         var bab = new BranchAndBound();
         var bf = new BruteForce();
+        var dp = new DynamicProgramming();
 
         AdjMatrix matrix = new(4);
 
@@ -24,6 +25,11 @@ public class Program
 
         var resultBF = bf.CalculateBestPath(matrix);
         Console.WriteLine(resultBF.ToStringCustom());
+
+        Console.WriteLine("========================================");
+
+        var resultDP = dp.CalculateBestPathCost(matrix);
+        Console.WriteLine(resultDP);
 
         Console.WriteLine("========================================");
 

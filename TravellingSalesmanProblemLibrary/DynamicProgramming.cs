@@ -47,7 +47,6 @@ public class DynamicProgramming : TSPAlgorithm
     {
         if (CancellationToken.IsCancellationRequested)
         {
-            Debug.WriteLine("STOP");
             return int.MaxValue;
         }
 
