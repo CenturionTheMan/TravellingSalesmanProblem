@@ -9,9 +9,8 @@ namespace TravellingSalesmanProblemLibrary;
 
 public class BruteForce : TSPAlgorithm
 {
-    public BruteForce(ref CancellationToken cancellationToken) : base(ref cancellationToken)
-    {
-    }
+    public BruteForce(ref CancellationToken cancellationToken) : base(ref cancellationToken) { }
+    public BruteForce() : base() { }
 
     public override string AlgorithmName => "BruteForce";
 

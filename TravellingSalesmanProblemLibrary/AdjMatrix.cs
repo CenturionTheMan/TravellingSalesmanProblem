@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using System.Xml;
 
 namespace TravellingSalesmanProblemLibrary;
@@ -6,10 +7,13 @@ namespace TravellingSalesmanProblemLibrary;
 public class AdjMatrix
 {
 	public int GetMatrixSize { get { return size; } }
+    public int?[,] Matrix { get { return (int?[,])matrix.Clone(); } }
+
 
     private int?[,] matrix;
 	private int size;
 
+    private int? maxDistance;
 
     /// <summary>
     /// Initializes a new instance of the AdjMatrix class with the specified number of vertices.
@@ -17,8 +21,11 @@ public class AdjMatrix
     /// <param name="verticesAmount">The number of vertices in matrix.</param>
     public AdjMatrix(int verticesAmount)
     {
+        if (verticesAmount < 1)
+            throw new ArgumentException("Matrix size must be greater or equal to 1");
         matrix = new int?[verticesAmount, verticesAmount];
         size = verticesAmount;
+        maxDistance = null;
     }
 
     /// <summary>
@@ -42,6 +49,14 @@ public class AdjMatrix
     {
         if (matrix.GetLength(0) != matrix.GetLength(1))
             throw new ArgumentException("Both dimensions must be equal in lenght!");
+        if (matrix.GetLength(0) < 1)
+            throw new ArgumentException("Matrix size must be greater or equal to 1");
+
+        maxDistance = matrix[0, 0];
+        foreach (var dis in matrix)
+        {
+            if (maxDistance < dis) maxDistance = dis;
+        }
 
         this.matrix = matrix;
         this.size = matrix.GetLength(0);
@@ -73,7 +88,7 @@ public class AdjMatrix
             }
 
             if (dis != -1)
-                SetDistance(column, row, dis, false);
+                SetDistance(row, column, dis, false);
 
             column++;
         }
@@ -100,6 +115,8 @@ public class AdjMatrix
 
 				matrix[end, begin] = value;
             }
+
+            if(maxDistance == null || maxDistance < value) maxDistance = value;
 
             return true;
 		}
@@ -155,13 +172,19 @@ public class AdjMatrix
 		if(matrix == null) return "";
 
 		StringBuilder stringBuilder = new();
-		int precision = 4;
+        int precision = (maxDistance.HasValue)? maxDistance.Value.ToString().Length: 5;
+        
+        string nullVal = "";
+        for (int i = 0; i < precision; i++) nullVal += "-";
+
 
 		for (int i = 0; i < size; i++)
 		{
 			for (int j = 0; j < size; j++)
 			{
-				stringBuilder.Append(String.Format("{0,-" + precision + "} ", matrix[i,j]));
+                object tmp = (matrix[i, j].HasValue) ? matrix[i, j].Value : nullVal;
+                string formated = String.Format("{0,-" + precision + "} ", tmp);
+                stringBuilder.Append(formated);
 			}
 			stringBuilder.Append("\n");
 		}
@@ -182,7 +205,13 @@ public class AdjMatrix
         {
             for (int j = 0; j < GetMatrixSize; j++)
             {
-                matrix[i, j] = random.Next(min, max + 1);
+                if (i == j)
+                    matrix[i, j] = null;
+                else
+                {
+                    matrix[i, j] = random.Next(min, max + 1);
+                    if (maxDistance == null || maxDistance < matrix[i, j]) maxDistance = matrix[i, j];
+                }
             }
         }
     }

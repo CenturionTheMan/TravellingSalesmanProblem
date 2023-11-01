@@ -7,7 +7,29 @@ public class Program
 {
     public static void Main()
     {
-        Test();
+        //Test();
+
+        var bab = new BranchAndBound();
+        var bf = new BruteForce();
+
+        AdjMatrix matrix = new(4);
+
+        matrix.SetDistance(0, 1, 12);
+        matrix.SetDistance(0, 2, 14);
+        matrix.SetDistance(0, 3, 17);
+        matrix.SetDistance(1, 2, 15);
+        matrix.SetDistance(1, 3, 18);
+        matrix.SetDistance(2, 3, 29);
+        if (matrix == null) throw new Exception();
+
+        var resultBF = bf.CalculateBestPath(matrix);
+        Console.WriteLine(resultBF.ToStringCustom());
+
+        Console.WriteLine("========================================");
+
+        var result = bab.CalculateBestPath(matrix);
+        Console.WriteLine(result.ToStringCustom());
+
         Console.WriteLine("DONE");
         Console.ReadKey();
     }

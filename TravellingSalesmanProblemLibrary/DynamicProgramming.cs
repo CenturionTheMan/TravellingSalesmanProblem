@@ -11,9 +11,8 @@ public class DynamicProgramming : TSPAlgorithm
 {
     private const int START_NODE = 0;
 
-    public DynamicProgramming(ref CancellationToken cancellationToken) : base(ref cancellationToken)
-    {
-    }
+    public DynamicProgramming(ref CancellationToken cancellationToken) : base(ref cancellationToken) { }
+    public DynamicProgramming() : base() { }
 
     public override string AlgorithmName => "DynamicProgramming";
 
