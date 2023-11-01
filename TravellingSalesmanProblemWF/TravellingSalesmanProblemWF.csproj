@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="PopupAlgorithmSettingsForm.cs" />
+    <Compile Remove="PopupAlgorithmSettingsForm.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TravellingSalesmanProblemLibrary\TravellingSalesmanProblemLibrary.csproj" />
   </ItemGroup>
 

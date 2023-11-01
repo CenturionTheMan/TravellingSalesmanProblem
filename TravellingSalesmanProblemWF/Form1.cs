@@ -323,6 +323,7 @@ public partial class Form1 : Form
 
     private void algorithmSettingsButton_Click(object sender, EventArgs e)
     {
-
+        var popup = new PopupNoSettingsForAlgorithmForm(algorithmKind.ToString().Replace("_", " "));
+        popup.ShowDialog();
     }
 }

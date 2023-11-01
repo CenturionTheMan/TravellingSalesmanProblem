@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.BruteForceRadioButton = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.algorithmSettingsButton = new System.Windows.Forms.Button();
             this.BranchAndBoundradioButton = new System.Windows.Forms.RadioButton();
             this.DynamicProgrammingRadioButton = new System.Windows.Forms.RadioButton();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -39,13 +40,13 @@
             this.fileNameTextBox = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.generateRandomMatrixButton = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.maxDistanceNumeric = new System.Windows.Forms.NumericUpDown();
             this.vertexAmountNumeric = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.minDistanceNumeric = new System.Windows.Forms.NumericUpDown();
-            this.generateRandomMatrixButton = new System.Windows.Forms.Button();
             this.showMatrixButton = new System.Windows.Forms.Button();
             this.SelectFileFromDiscButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -55,7 +56,6 @@
             this.SolvaButton = new System.Windows.Forms.Button();
             this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
             this.stopButton = new System.Windows.Forms.Button();
-            this.algorithmSettingsButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -90,6 +90,20 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Algorithm";
+            // 
+            // algorithmSettingsButton
+            // 
+            this.algorithmSettingsButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(153)))), ((int)(((byte)(126)))));
+            this.algorithmSettingsButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.algorithmSettingsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.algorithmSettingsButton.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.algorithmSettingsButton.Location = new System.Drawing.Point(274, 160);
+            this.algorithmSettingsButton.Name = "algorithmSettingsButton";
+            this.algorithmSettingsButton.Size = new System.Drawing.Size(135, 59);
+            this.algorithmSettingsButton.TabIndex = 9;
+            this.algorithmSettingsButton.Text = "Algorithm Settings";
+            this.algorithmSettingsButton.UseVisualStyleBackColor = false;
+            this.algorithmSettingsButton.Click += new System.EventHandler(this.algorithmSettingsButton_Click);
             // 
             // BranchAndBoundradioButton
             // 
@@ -161,6 +175,20 @@
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Random Matrix";
+            // 
+            // generateRandomMatrixButton
+            // 
+            this.generateRandomMatrixButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(153)))), ((int)(((byte)(126)))));
+            this.generateRandomMatrixButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.generateRandomMatrixButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.generateRandomMatrixButton.Location = new System.Drawing.Point(138, 68);
+            this.generateRandomMatrixButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.generateRandomMatrixButton.Name = "generateRandomMatrixButton";
+            this.generateRandomMatrixButton.Size = new System.Drawing.Size(116, 82);
+            this.generateRandomMatrixButton.TabIndex = 10;
+            this.generateRandomMatrixButton.Text = "Generate Random Matrix";
+            this.generateRandomMatrixButton.UseVisualStyleBackColor = false;
+            this.generateRandomMatrixButton.Click += new System.EventHandler(this.generateRandomMatrixButton_Click);
             // 
             // label6
             // 
@@ -245,20 +273,6 @@
             0,
             0,
             0});
-            // 
-            // generateRandomMatrixButton
-            // 
-            this.generateRandomMatrixButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(153)))), ((int)(((byte)(126)))));
-            this.generateRandomMatrixButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.generateRandomMatrixButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.generateRandomMatrixButton.Location = new System.Drawing.Point(138, 68);
-            this.generateRandomMatrixButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.generateRandomMatrixButton.Name = "generateRandomMatrixButton";
-            this.generateRandomMatrixButton.Size = new System.Drawing.Size(116, 82);
-            this.generateRandomMatrixButton.TabIndex = 10;
-            this.generateRandomMatrixButton.Text = "Generate Random Matrix";
-            this.generateRandomMatrixButton.UseVisualStyleBackColor = false;
-            this.generateRandomMatrixButton.Click += new System.EventHandler(this.generateRandomMatrixButton_Click);
             // 
             // showMatrixButton
             // 
@@ -365,24 +379,10 @@
             this.stopButton.UseVisualStyleBackColor = false;
             this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
             // 
-            // algorithmSettingsButton
-            // 
-            this.algorithmSettingsButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(153)))), ((int)(((byte)(126)))));
-            this.algorithmSettingsButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.algorithmSettingsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.algorithmSettingsButton.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.algorithmSettingsButton.Location = new System.Drawing.Point(274, 160);
-            this.algorithmSettingsButton.Name = "algorithmSettingsButton";
-            this.algorithmSettingsButton.Size = new System.Drawing.Size(135, 59);
-            this.algorithmSettingsButton.TabIndex = 9;
-            this.algorithmSettingsButton.Text = "Algorithm Settings";
-            this.algorithmSettingsButton.UseVisualStyleBackColor = false;
-            this.algorithmSettingsButton.Click += new System.EventHandler(this.algorithmSettingsButton_Click);
-            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(220)))), ((int)(((byte)(210)))));
             this.ClientSize = new System.Drawing.Size(949, 493);
             this.Controls.Add(this.stopButton);
@@ -393,7 +393,9 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "TSP SOLVER";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
