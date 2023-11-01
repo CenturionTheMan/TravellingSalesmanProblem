@@ -13,14 +13,19 @@ public class Program
         var bf = new BruteForce();
         var dp = new DynamicProgramming();
 
-        AdjMatrix matrix = new(4);
+        //AdjMatrix matrix = new(4);
 
-        matrix.SetDistance(0, 1, 12);
-        matrix.SetDistance(0, 2, 14);
-        matrix.SetDistance(0, 3, 17);
-        matrix.SetDistance(1, 2, 15);
-        matrix.SetDistance(1, 3, 18);
-        matrix.SetDistance(2, 3, 29);
+        //matrix.SetDistance(0, 1, 12);
+        //matrix.SetDistance(0, 2, 14);
+        //matrix.SetDistance(0, 3, 17);
+        //matrix.SetDistance(1, 2, 15);
+        //matrix.SetDistance(1, 3, 18);
+        //matrix.SetDistance(2, 3, 29);
+        AdjMatrix matrix = new AdjMatrix(new int?[,] { { null, 20, 30, 10, 11},
+                                                       { 15, null, 16, 4, 2},
+                                                       { 3, 5, null, 2, 4},
+                                                       { 19, 6, 18, null, 3},
+                                                       { 16, 4, 7, 16, null} });
         if (matrix == null) throw new Exception();
 
         var resultBF = bf.CalculateBestPath(matrix);

@@ -34,10 +34,6 @@
             this.BranchAndBoundradioButton = new System.Windows.Forms.RadioButton();
             this.DynamicProgrammingRadioButton = new System.Windows.Forms.RadioButton();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.BruteForcepanel = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.DynamicProgrammingPanel = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.fileNameTextBox = new System.Windows.Forms.TextBox();
@@ -59,9 +55,8 @@
             this.SolvaButton = new System.Windows.Forms.Button();
             this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
             this.stopButton = new System.Windows.Forms.Button();
+            this.algorithmSettingsButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
-            this.BruteForcepanel.SuspendLayout();
-            this.DynamicProgrammingPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -85,12 +80,13 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.algorithmSettingsButton);
             this.groupBox1.Controls.Add(this.BranchAndBoundradioButton);
             this.groupBox1.Controls.Add(this.DynamicProgrammingRadioButton);
             this.groupBox1.Controls.Add(this.BruteForceRadioButton);
-            this.groupBox1.Location = new System.Drawing.Point(7, 8);
+            this.groupBox1.Location = new System.Drawing.Point(7, 257);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(194, 238);
+            this.groupBox1.Size = new System.Drawing.Size(415, 225);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Algorithm";
@@ -98,7 +94,6 @@
             // BranchAndBoundradioButton
             // 
             this.BranchAndBoundradioButton.AutoSize = true;
-            this.BranchAndBoundradioButton.Enabled = false;
             this.BranchAndBoundradioButton.Location = new System.Drawing.Point(5, 72);
             this.BranchAndBoundradioButton.Name = "BranchAndBoundradioButton";
             this.BranchAndBoundradioButton.Size = new System.Drawing.Size(125, 19);
@@ -106,6 +101,7 @@
             this.BranchAndBoundradioButton.TabStop = true;
             this.BranchAndBoundradioButton.Text = "Branch And Bound";
             this.BranchAndBoundradioButton.UseVisualStyleBackColor = true;
+            this.BranchAndBoundradioButton.CheckedChanged += new System.EventHandler(this.BranchAndBoundradioButton_CheckedChanged);
             // 
             // DynamicProgrammingRadioButton
             // 
@@ -118,44 +114,6 @@
             this.DynamicProgrammingRadioButton.Text = "Dynamic Programming";
             this.DynamicProgrammingRadioButton.UseVisualStyleBackColor = true;
             this.DynamicProgrammingRadioButton.CheckedChanged += new System.EventHandler(this.DynamicProgrammingRadioButton_CheckedChanged);
-            // 
-            // BruteForcepanel
-            // 
-            this.BruteForcepanel.Controls.Add(this.label1);
-            this.BruteForcepanel.Location = new System.Drawing.Point(7, 252);
-            this.BruteForcepanel.Name = "BruteForcepanel";
-            this.BruteForcepanel.Size = new System.Drawing.Size(416, 322);
-            this.BruteForcepanel.TabIndex = 2;
-            this.BruteForcepanel.Visible = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(6, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(385, 50);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "No settings to change";
-            // 
-            // DynamicProgrammingPanel
-            // 
-            this.DynamicProgrammingPanel.Controls.Add(this.label7);
-            this.DynamicProgrammingPanel.Location = new System.Drawing.Point(7, 252);
-            this.DynamicProgrammingPanel.Name = "DynamicProgrammingPanel";
-            this.DynamicProgrammingPanel.Size = new System.Drawing.Size(416, 321);
-            this.DynamicProgrammingPanel.TabIndex = 3;
-            this.DynamicProgrammingPanel.Visible = false;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label7.Location = new System.Drawing.Point(6, 9);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(385, 50);
-            this.label7.TabIndex = 8;
-            this.label7.Text = "No settings to change";
             // 
             // openFileDialog1
             // 
@@ -179,7 +137,7 @@
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.loadFileButton);
             this.groupBox2.Controls.Add(this.fileNameTextBox);
-            this.groupBox2.Location = new System.Drawing.Point(207, 8);
+            this.groupBox2.Location = new System.Drawing.Point(7, 12);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(421, 239);
             this.groupBox2.TabIndex = 5;
@@ -188,18 +146,18 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.generateRandomMatrixButton);
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.maxDistanceNumeric);
             this.groupBox3.Controls.Add(this.vertexAmountNumeric);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.minDistanceNumeric);
-            this.groupBox3.Controls.Add(this.generateRandomMatrixButton);
             this.groupBox3.Location = new System.Drawing.Point(4, 82);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox3.Size = new System.Drawing.Size(242, 152);
+            this.groupBox3.Size = new System.Drawing.Size(257, 152);
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Random Matrix";
@@ -293,10 +251,10 @@
             this.generateRandomMatrixButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(153)))), ((int)(((byte)(126)))));
             this.generateRandomMatrixButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.generateRandomMatrixButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.generateRandomMatrixButton.Location = new System.Drawing.Point(154, 70);
+            this.generateRandomMatrixButton.Location = new System.Drawing.Point(138, 68);
             this.generateRandomMatrixButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.generateRandomMatrixButton.Name = "generateRandomMatrixButton";
-            this.generateRandomMatrixButton.Size = new System.Drawing.Size(82, 82);
+            this.generateRandomMatrixButton.Size = new System.Drawing.Size(116, 82);
             this.generateRandomMatrixButton.TabIndex = 10;
             this.generateRandomMatrixButton.Text = "Generate Random Matrix";
             this.generateRandomMatrixButton.UseVisualStyleBackColor = false;
@@ -370,12 +328,12 @@
             this.messageLogTextBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.messageLogTextBox.ForeColor = System.Drawing.SystemColors.WindowText;
             this.messageLogTextBox.HideSelection = false;
-            this.messageLogTextBox.Location = new System.Drawing.Point(634, 12);
+            this.messageLogTextBox.Location = new System.Drawing.Point(434, 12);
             this.messageLogTextBox.Name = "messageLogTextBox";
             this.messageLogTextBox.ReadOnly = true;
             this.messageLogTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.messageLogTextBox.ShortcutsEnabled = false;
-            this.messageLogTextBox.Size = new System.Drawing.Size(504, 507);
+            this.messageLogTextBox.Size = new System.Drawing.Size(504, 415);
             this.messageLogTextBox.TabIndex = 6;
             this.messageLogTextBox.Text = "";
             this.messageLogTextBox.VisibleChanged += new System.EventHandler(this.messageLogTextBox_VisibleChanged);
@@ -385,7 +343,7 @@
             this.SolvaButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(165)))), ((int)(((byte)(141)))));
             this.SolvaButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SolvaButton.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.SolvaButton.Location = new System.Drawing.Point(762, 525);
+            this.SolvaButton.Location = new System.Drawing.Point(562, 433);
             this.SolvaButton.Name = "SolvaButton";
             this.SolvaButton.Size = new System.Drawing.Size(376, 49);
             this.SolvaButton.TabIndex = 7;
@@ -399,7 +357,7 @@
             this.stopButton.Enabled = false;
             this.stopButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.stopButton.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.stopButton.Location = new System.Drawing.Point(634, 525);
+            this.stopButton.Location = new System.Drawing.Point(434, 434);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(122, 48);
             this.stopButton.TabIndex = 8;
@@ -407,18 +365,30 @@
             this.stopButton.UseVisualStyleBackColor = false;
             this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
             // 
+            // algorithmSettingsButton
+            // 
+            this.algorithmSettingsButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(153)))), ((int)(((byte)(126)))));
+            this.algorithmSettingsButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.algorithmSettingsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.algorithmSettingsButton.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.algorithmSettingsButton.Location = new System.Drawing.Point(274, 160);
+            this.algorithmSettingsButton.Name = "algorithmSettingsButton";
+            this.algorithmSettingsButton.Size = new System.Drawing.Size(135, 59);
+            this.algorithmSettingsButton.TabIndex = 9;
+            this.algorithmSettingsButton.Text = "Algorithm Settings";
+            this.algorithmSettingsButton.UseVisualStyleBackColor = false;
+            this.algorithmSettingsButton.Click += new System.EventHandler(this.algorithmSettingsButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(220)))), ((int)(((byte)(210)))));
-            this.ClientSize = new System.Drawing.Size(1148, 586);
+            this.ClientSize = new System.Drawing.Size(949, 493);
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.SolvaButton);
-            this.Controls.Add(this.DynamicProgrammingPanel);
             this.Controls.Add(this.messageLogTextBox);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.BruteForcepanel);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
@@ -426,10 +396,6 @@
             this.Text = "Form1";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.BruteForcepanel.ResumeLayout(false);
-            this.BruteForcepanel.PerformLayout();
-            this.DynamicProgrammingPanel.ResumeLayout(false);
-            this.DynamicProgrammingPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -450,9 +416,6 @@
         private RadioButton DynamicProgrammingRadioButton;
         private RadioButton BranchAndBoundradioButton;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private Panel BruteForcepanel;
-        private Label label1;
-        private Panel DynamicProgrammingPanel;
         private BindingSource bindingSource1;
         private OpenFileDialog openFileDialog1;
         private TextBox fileNameTextBox;
@@ -473,7 +436,7 @@
         private Label label4;
         private NumericUpDown minDistanceNumeric;
         private BindingSource bindingSource2;
-        private Label label7;
         private Button stopButton;
+        private Button algorithmSettingsButton;
     }
 }

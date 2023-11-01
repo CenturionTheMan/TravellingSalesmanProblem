@@ -44,15 +44,6 @@ public partial class Form1 : Form
 
 
     /// <summary>
-    /// Hides settings panels for different algorithms.
-    /// </summary>
-    private void HideAllSettings()
-    {
-        DynamicProgrammingPanel.Visible = false;
-        BruteForcepanel.Visible = false;
-    }
-
-    /// <summary>
     /// Loads an adjacency matrix from a file.
     /// </summary>
     /// <param name="filePath"></param>
@@ -136,9 +127,7 @@ public partial class Form1 : Form
     /// <param name="e"></param>
     private void BruteForceRadioButton_CheckedChanged(object sender, EventArgs e)
     {
-        HideAllSettings();
         algorithmKind = AlgorithmKind.BRUTE_FORCE;
-        BruteForcepanel.Visible = true;
     }
 
     /// <summary>
@@ -148,9 +137,17 @@ public partial class Form1 : Form
     /// <param name="e"></param>
     private void DynamicProgrammingRadioButton_CheckedChanged(object sender, EventArgs e)
     {
-        HideAllSettings();
         algorithmKind = AlgorithmKind.DYNAMIC_PROGRAMMING;
-        DynamicProgrammingPanel.Visible = true;
+    }
+
+    /// <summary>
+    /// Handles the BranchAndBound algorithm selection.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void BranchAndBoundradioButton_CheckedChanged(object sender, EventArgs e)
+    {
+        algorithmKind = AlgorithmKind.BRANCH_AND_BOUND;
     }
 
     /// <summary>
@@ -322,5 +319,10 @@ public partial class Form1 : Form
             algorithmTaskCTS = null;
             AddTextToMessageLog("Currently working algorithm is being stopped...\n");
         }
+    }
+
+    private void algorithmSettingsButton_Click(object sender, EventArgs e)
+    {
+
     }
 }
