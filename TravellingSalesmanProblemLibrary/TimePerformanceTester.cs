@@ -108,7 +108,7 @@ public class TimePerformanceTester
                 for (int j = 0; j < repPerMatrix; j++)
                 {
                     stopWatch.Restart();
-                    _ = algorithm.CalculateBestPathCost(matrix);
+                    _ = algorithm.CalculateBestPath(matrix);
                     stopWatch.Stop();
                     timePerMatrix += stopWatch.ElapsedMilliseconds;
                 }

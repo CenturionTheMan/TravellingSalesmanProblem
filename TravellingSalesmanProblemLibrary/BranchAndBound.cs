@@ -17,7 +17,7 @@ public class BranchAndBound : TSPAlgorithm
     public BranchAndBound(ref CancellationToken cancellationToken) : base(ref cancellationToken) { }
     public BranchAndBound() : base() { }
 
-    public override (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix)
     {
         List<Node> nodes = new();
 
@@ -52,7 +52,6 @@ public class BranchAndBound : TSPAlgorithm
             {
                 if (node.path.Contains(vertexTo)) continue;
 
-                Console.WriteLine(new AdjMatrix(node.matrix));
                 int? edgeCost = node.matrix[vertexFrom, vertexTo];
                 int?[,] wMatrix = SetRowColumnToNull(node.matrix, vertexFrom, vertexTo);
                 if (edgeCost == null) continue;

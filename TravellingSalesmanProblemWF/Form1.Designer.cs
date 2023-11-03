@@ -181,6 +181,7 @@
             this.generateRandomMatrixButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(153)))), ((int)(((byte)(126)))));
             this.generateRandomMatrixButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.generateRandomMatrixButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.generateRandomMatrixButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.generateRandomMatrixButton.Location = new System.Drawing.Point(138, 68);
             this.generateRandomMatrixButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.generateRandomMatrixButton.Name = "generateRandomMatrixButton";

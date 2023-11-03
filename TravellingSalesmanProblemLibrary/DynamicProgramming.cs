@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,28 +12,28 @@ public class DynamicProgramming : TSPAlgorithm
 {
     private const int START_NODE = 0;
 
+    private uint endMask;
+
+
     public DynamicProgramming(ref CancellationToken cancellationToken) : base(ref cancellationToken) { }
     public DynamicProgramming() : base() { }
 
     public override string AlgorithmName => "DynamicProgramming";
 
-    public override (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override int? CalculateBestPathCost(AdjMatrix matrix)
+    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix)
     {
         var maxMask = (ulong)Math.Pow(2, matrix.GetMatrixSize);
 
         if (maxMask > int.MaxValue) return null;
 
         var memoTable = new int?[matrix.GetMatrixSize, maxMask];
-        uint endMask = (uint)(1 << matrix.GetMatrixSize) - 1;
-        var result = SolveReq(matrix, 1, START_NODE, endMask, memoTable);
+        endMask = (uint)(1 << matrix.GetMatrixSize) - 1;
 
-        return result;
+        var result = SolveReq(matrix, 1, START_NODE, memoTable);
+
+        return (null, result);
     }
+
 
     /// <summary>
     /// Recursively solves the traveling salesman problem to find the shortest path.
@@ -40,10 +41,9 @@ public class DynamicProgramming : TSPAlgorithm
     /// <param name="map">The adjacency matrix representing the graph.</param>
     /// <param name="mask">Visited vertexs as a bitmask.</param>
     /// <param name="fromVertex">The starting vertex for the current path segment.</param>
-    /// <param name="endMask">The bitmask representing all vertexs visited.</param>
     /// <param name="memoTable">A memoization table to store intermediate results.</param>
     /// <returns>The shortest distance to complete the traveling salesman tour.</returns>
-    private int SolveReq(AdjMatrix map, uint mask, int fromVertex, uint endMask, int?[,] memoTable)
+    private int SolveReq(AdjMatrix map, uint mask, int fromVertex, int?[,] memoTable)
     {
         if (CancellationToken.IsCancellationRequested)
         {
@@ -51,7 +51,10 @@ public class DynamicProgramming : TSPAlgorithm
         }
 
         //If mask idicates that all vertices were visited in current path, if so add cost for returning to start vertex  
-        if (mask == endMask) return map.GetDistance((int)fromVertex, START_NODE);
+        if (mask == endMask)
+        {
+            return map.GetDistance((int)fromVertex, START_NODE);
+        }
 
         //Check if given scenario was not already sloved, if so take result from table
         if (memoTable[fromVertex, mask].HasValue)
@@ -74,7 +77,8 @@ public class DynamicProgramming : TSPAlgorithm
 
             //create new bitmask for path where nextVertex is included
             var tmpMask = SetBitInMask(mask, nextVertex);
-            tmpRes += SolveReq(map, tmpMask, nextVertex, endMask, memoTable);
+            tmpRes += SolveReq(map, tmpMask, nextVertex, memoTable);
+
             if(tmpRes < res)
             {
                 res = tmpRes;
@@ -83,6 +87,16 @@ public class DynamicProgramming : TSPAlgorithm
 
         memoTable[fromVertex, mask] = res;
         return res;
+    }
+
+    private int CaluclatePathCost(AdjMatrix matrix, List<int> path)
+    {
+        int sum = 0;
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            sum += matrix.GetDistance(path[i], path[i + 1]);
+        }
+        return sum;
     }
 
     /// <summary>

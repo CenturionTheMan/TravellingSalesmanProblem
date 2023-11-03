@@ -202,7 +202,7 @@ public partial class Form1 : Form
 
             Task.Factory.StartNew(() => {
                 stopwatch.Restart();
-                var res = algorithm.CalculateBestPathCost(matrix);
+                var res = algorithm.CalculateBestPath(matrix);
                 stopwatch.Stop();
 
                 if(algorithm.CancellationToken.IsCancellationRequested)
@@ -230,9 +230,10 @@ public partial class Form1 : Form
                     AddTextToMessageLog($"Solution found!\n");
 
                     AddTextToMessageLog("Best Cost: ");
-                    AddTextToMessageLog($"{res.Value}\n", RESULT);
+                    AddTextToMessageLog($"{res.Value.cost}\n", RESULT);
                     
-                    //AddTextToMessageLog($"Best Path: {}");
+                    AddTextToMessageLog("Best Path: ");
+                    AddTextToMessageLog($"{res.Value.path.ArrayToPathString()}\n", RESULT);
                     
                     AddTextToMessageLog("Time taken: ");
                     AddTextToMessageLog($"{stopwatch.Elapsed.TotalSeconds.ToString("0.###")} [s]\n", RESULT);

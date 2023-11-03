@@ -35,6 +35,19 @@ public static class Utilites
 
 
 
-
+    public static string ArrayToPathString(this int[]? path)
+    {
+        if (path == null) return "Null";
+        string pathStr = "";
+        foreach (var item in path)
+        {
+            pathStr += item + "->";
+        }
+        if(path.Length > 0)
+        {
+            pathStr = pathStr.Remove(pathStr.Length - 2, 2);
+        }
+        return pathStr;
+    }
     
 }

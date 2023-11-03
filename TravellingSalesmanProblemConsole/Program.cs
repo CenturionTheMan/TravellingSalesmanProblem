@@ -33,8 +33,8 @@ public class Program
 
         Console.WriteLine("========================================");
 
-        var resultDP = dp.CalculateBestPathCost(matrix);
-        Console.WriteLine(resultDP);
+        var resultDP = dp.CalculateBestPath(matrix);
+        Console.WriteLine(resultDP.ToStringCustom());
 
         Console.WriteLine("========================================");
 

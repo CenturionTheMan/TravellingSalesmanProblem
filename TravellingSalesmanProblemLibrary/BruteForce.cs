@@ -24,7 +24,7 @@ public class BruteForce : TSPAlgorithm
     /// A tuple containing the best path as an array of vertex indices and the total cost of the path.
     /// Returns null if no valid path is found.
     /// </returns>
-    public override (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix)
     {
         List<int[]> permutations = GenerateNumbersPermutations(0, matrix.GetMatrixSize - 1);
         var best = FindBestPath(permutations, matrix);
