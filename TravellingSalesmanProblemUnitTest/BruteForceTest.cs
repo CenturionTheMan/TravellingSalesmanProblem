@@ -24,7 +24,7 @@ public class BruteForceTest
         if (bestPath == null) return;
 
         Assert.Equal(80, bestPath.Value.cost);
-        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.path.Length);
+        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.cost.path.Length);
         Assert.Equal(new int[] { 0, 1, 3, 2, 0 }, bestPath.Value.path);
     }
 
@@ -50,7 +50,7 @@ public class BruteForceTest
         if (bestPath == null) return;
 
         Assert.Equal(114, bestPath.Value.cost);
-        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.path.Length);
+        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.cost.path.Length);
         Assert.Equal(new int[] { 0, 1, 2, 3, 4, 5, 0 }, bestPath.Value.path);
     }
 
@@ -73,7 +73,7 @@ public class BruteForceTest
         if (bestPath == null) return;
 
         Assert.Equal(64, bestPath.Value.cost);
-        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.path.Length);
+        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.cost.path.Length);
         Assert.Equal(new int[] { 0, 2, 1, 3, 0 }, bestPath.Value.path);
     }
 
@@ -93,7 +93,7 @@ public class BruteForceTest
         if (bestPath == null) return;
 
         Assert.Equal(80, bestPath.Value.cost);
-        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.path.Length);
+        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.cost.path.Length);
     }
 
     /// <summary>
@@ -106,11 +106,11 @@ public class BruteForceTest
         Assert.NotNull(matrix);
         if(matrix == null) return;
 
-        var bestPath = new BruteForce().CalculateBestPathCost(matrix);
+        var bestPath = new BruteForce().CalculateBestPath(matrix);
         Assert.NotNull(bestPath);
         if (bestPath == null) return;
 
-        Assert.Equal(136, bestPath.Value);
+        Assert.Equal(136, bestPath.Value.cost);
     }
 
     /// <summary>
@@ -123,11 +123,11 @@ public class BruteForceTest
         Assert.NotNull(matrix);
         if (matrix == null) return;
 
-        var bestPath = new BruteForce().CalculateBestPathCost(matrix);
+        var bestPath = new BruteForce().CalculateBestPath(matrix);
         Assert.NotNull(bestPath);
         if (bestPath == null) return;
 
-        Assert.Equal(150, bestPath.Value);
+        Assert.Equal(150, bestPath.Value.cost);
     }
 
     /// <summary>
@@ -140,10 +140,10 @@ public class BruteForceTest
         Assert.NotNull(matrix);
         if (matrix == null) return;
 
-        var bestPath = new BruteForce().CalculateBestPathCost(matrix);
+        var bestPath = new BruteForce().CalculateBestPath(matrix);
         Assert.NotNull(bestPath);
         if (bestPath == null) return;
 
-        Assert.Equal(149, bestPath.Value);
+        Assert.Equal(149, bestPath.Value.cost);
     }
 }

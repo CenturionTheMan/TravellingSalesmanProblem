@@ -16,15 +16,15 @@ public class DynamicProgrammingTest
 
         map.SetDistance(2, 3, 30);
 
-        var bestPath = new DynamicProgramming().CalculateBestPathCost(map);
+        var bestPath = new DynamicProgramming().CalculateBestPath(map);
 
         Assert.NotNull(bestPath);
 
         if (bestPath == null) return;
 
-        Assert.Equal(80, bestPath.Value);
-        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.path.Length);
-        //Assert.Equal(new int[] { 0, 1, 3, 2, 0 }, bestPath.Value.path);
+        Assert.Equal(80, bestPath.Value.cost);
+        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.cost.path.Length);
+        //Assert.Equal(new int[] { 0, 1, 3, 2, 0 }, bestPath.Value.cost.path);
     }
 
     [Fact]
@@ -42,15 +42,15 @@ public class DynamicProgrammingTest
         map.SetDistance(5, 2, 7, false);
 
 
-        var bestPath = new DynamicProgramming().CalculateBestPathCost(map);
+        var bestPath = new DynamicProgramming().CalculateBestPath(map);
 
         Assert.NotNull(bestPath);
 
         if (bestPath == null) return;
 
-        Assert.Equal(114, bestPath.Value);
-        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.path.Length);
-        //Assert.Equal(new int[] { 0, 1, 2, 3, 4, 5, 0 }, bestPath.Value.path);
+        Assert.Equal(114, bestPath.Value.cost);
+        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.cost.path.Length);
+        //Assert.Equal(new int[] { 0, 1, 2, 3, 4, 5, 0 }, bestPath.Value.cost.path);
     }
 
     [Fact]
@@ -65,15 +65,15 @@ public class DynamicProgrammingTest
         map.SetDistance(1, 3, 18);
         map.SetDistance(2, 3, 29);
 
-        var bestPath = new DynamicProgramming().CalculateBestPathCost(map);
+        var bestPath = new DynamicProgramming().CalculateBestPath(map);
 
         Assert.NotNull(bestPath);
 
         if (bestPath == null) return;
 
-        Assert.Equal(64, bestPath.Value);
-        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.path.Length);
-        //Assert.Equal(new int[] { 0, 2, 1, 3, 0 }, bestPath.Value.path);
+        Assert.Equal(64, bestPath.Value.cost);
+        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.cost.path.Length);
+        //Assert.Equal(new int[] { 0, 2, 1, 3, 0 }, bestPath.Value.cost.path);
     }
 
     [Fact]
@@ -85,14 +85,14 @@ public class DynamicProgrammingTest
                        { 20, 25, 30, 0 } };
         AdjMatrix map = new(grid);
 
-        var bestPath = new DynamicProgramming().CalculateBestPathCost(map);
+        var bestPath = new DynamicProgramming().CalculateBestPath(map);
 
         Assert.NotNull(bestPath);
 
         if (bestPath == null) return;
 
-        Assert.Equal(80, bestPath.Value);
-        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.path.Length);
+        Assert.Equal(80, bestPath.Value.cost);
+        //Assert.Equal(map.GetCitiesAmount + 1, bestPath.Value.cost.path.Length);
     }
 
     /// <summary>
@@ -105,11 +105,11 @@ public class DynamicProgrammingTest
         Assert.NotNull(matrix);
         if (matrix == null) return;
 
-        var bestPath = new DynamicProgramming().CalculateBestPathCost(matrix);
+        var bestPath = new DynamicProgramming().CalculateBestPath(matrix);
         Assert.NotNull(bestPath);
         if (bestPath == null) return;
 
-        Assert.Equal(136, bestPath.Value);
+        Assert.Equal(136, bestPath.Value.cost);
     }
 
     /// <summary>
@@ -122,11 +122,11 @@ public class DynamicProgrammingTest
         Assert.NotNull(matrix);
         if (matrix == null) return;
 
-        var bestPath = new DynamicProgramming().CalculateBestPathCost(matrix);
+        var bestPath = new DynamicProgramming().CalculateBestPath(matrix);
         Assert.NotNull(bestPath);
         if (bestPath == null) return;
 
-        Assert.Equal(150, bestPath.Value);
+        Assert.Equal(150, bestPath.Value.cost);
     }
 
     /// <summary>
@@ -139,10 +139,10 @@ public class DynamicProgrammingTest
         Assert.NotNull(matrix);
         if (matrix == null) return;
 
-        var bestPath = new DynamicProgramming().CalculateBestPathCost(matrix);
+        var bestPath = new DynamicProgramming().CalculateBestPath(matrix);
         Assert.NotNull(bestPath);
         if (bestPath == null) return;
 
-        Assert.Equal(149, bestPath.Value);
+        Assert.Equal(149, bestPath.Value.cost);
     }
 }
