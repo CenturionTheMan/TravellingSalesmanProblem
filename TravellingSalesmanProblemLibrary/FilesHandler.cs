@@ -169,7 +169,7 @@ namespace TravellingSalesmanProblemLibrary
         /// <param name="data">A list of object arrays where each array represents a row of data.</param>
         /// <param name="fileOutputPath">The path to the CSV file to create or append to.</param>
         /// <param name="shouldReplace">Optional. If true, the file will be replaced with the new data; if false, the data will be appended to the existing file.</param>
-        /// <param name="separator">Optional. The character used to separate values within each row (default is ';').</param>
+        /// <param name="separator">Optional. The character used to separate values within each row.</param>
         /// <returns>
         /// True if the operation was successful, false if an error occurred.
         /// </returns>

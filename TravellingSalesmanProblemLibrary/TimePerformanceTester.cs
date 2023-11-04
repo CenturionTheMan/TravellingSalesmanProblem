@@ -85,14 +85,14 @@ public class TimePerformanceTester
 
         Stopwatch stopWatch = new Stopwatch();
 
-        string detailedPath = fileDir + algorithm.AlgorithmName + DETAILED_PATH_SUFFIX + ".csv";
-        string meanPath = fileDir + algorithm.AlgorithmName + MEAN_PATH_SUFFIX + ".csv";
+        string detailedPath = fileDir + algorithm.AlgorithmName + "TimeTest" + DETAILED_PATH_SUFFIX + ".csv";
+        string meanPath = fileDir + algorithm.AlgorithmName + "TimeTest" + MEAN_PATH_SUFFIX + ".csv";
 
 
         List<object[]> tmp = new();
         tmp.Add(new object[] { "Algorithm", "RepsPerSize", "MatrixSize", "TimeInMs"});
-        FilesHandler.CreateCsvFile(tmp, detailedPath, true);
-        FilesHandler.CreateCsvFile(tmp, meanPath, true);
+        FilesHandler.CreateCsvFile(tmp, detailedPath, true, ',');
+        FilesHandler.CreateCsvFile(tmp, meanPath, true, ',');
 
         for (int matrixSize = minMatrixSize; matrixSize <= maxMatrixSize; matrixSize += stepMatrixSize)
         {
@@ -123,8 +123,8 @@ public class TimePerformanceTester
             dataForMean.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanTime });
 
 
-            FilesHandler.CreateCsvFile(dataForDetailed, detailedPath, false);
-            FilesHandler.CreateCsvFile(dataForMean, meanPath, false);
+            FilesHandler.CreateCsvFile(dataForDetailed, detailedPath, false, ',');
+            FilesHandler.CreateCsvFile(dataForMean, meanPath, false, ',');
         }
     }
 

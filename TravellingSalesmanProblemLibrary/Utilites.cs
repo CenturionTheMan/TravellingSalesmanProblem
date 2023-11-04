@@ -33,8 +33,13 @@ public static class Utilites
         return stringBuilder.ToString();
     }
 
-
-
+    /// <summary>
+    /// Converts an integer array to a path string representation.
+    /// </summary>
+    /// <param name="path">The integer array representing a path.</param>
+    /// <returns>
+    /// A string representation of the path, or "Null" if the input array is null.
+    /// </returns>
     public static string ArrayToPathString(this int[]? path)
     {
         if (path == null) return "Null";
@@ -50,8 +55,12 @@ public static class Utilites
         return pathStr;
     }
 
-
-    private static long Factorial(int n)
+    /// <summary>
+    /// Calculates the factorial of a given integer.
+    /// </summary>
+    /// <param name="n">The integer for which to calculate the factorial.</param>
+    /// <returns>The factorial of the input integer.</returns>
+    public static long Factorial(int n)
     {
         if (n == 0 || n == 1) return 1;
 
@@ -61,5 +70,13 @@ public static class Utilites
             sum *= n;
         }
         return sum;
+    }
+
+    public static double Median(this IEnumerable<double> source)
+    {
+        int count = source.Count();
+        source = source.OrderBy(x => x);
+        double median = source.ElementAt(count / 2) + source.ElementAt((count - 1) / 2);
+        return median / 2;
     }
 }
