@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,14 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TravellingSalesmanProblemLibrary;
 
 namespace TravellingSalesmanProblemWF
 {
-    public partial class PopupNoSettingsForAlgorithmForm : Form
+    public partial class PopupSettingsForBabForm : Form
     {
-        public PopupNoSettingsForAlgorithmForm(string algorithmName)
+        public PopupSettingsForBabForm(string algorithmName, ref BranchAndBound.SearchType searchType)
         {
             InitializeComponent();
+            searchTypeComboBox.DataSource = Enum.GetValues(typeof(BranchAndBound.SearchType));
             this.Text = algorithmName;
         }
 

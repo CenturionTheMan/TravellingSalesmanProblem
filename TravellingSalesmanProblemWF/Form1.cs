@@ -336,7 +336,24 @@ public partial class Form1 : Form
 
     private void algorithmSettingsButton_Click(object sender, EventArgs e)
     {
-        var popup = new PopupNoSettingsForAlgorithmForm(algorithmKind.ToString().Replace("_", " "));
-        popup.ShowDialog();
+        if (algorithmKind == null) return;
+
+        string alghName = algorithmKind.ToString().Replace("_", " ");
+
+        switch (algorithmKind.Value)
+        {
+            case AlgorithmKind.BRUTE_FORCE:
+                break;
+            case AlgorithmKind.DYNAMIC_PROGRAMMING:
+                break;
+            case AlgorithmKind.BRANCH_AND_BOUND:
+                {
+                    var bab = new PopupSettingsForBabForm(alghName, ref babSearchType);
+                    bab.ShowDialog();
+                    break;
+                }
+            default:
+                break;
+        }
     }
 }

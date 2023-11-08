@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -216,11 +217,16 @@ public class BranchAndBound : TSPAlgorithm
         return min;
     }
 
-
+    //https://codereview.stackexchange.com/questions/39163/loading-a-combobox-with-an-enum-and-binding-to-it
     public enum SearchType
     {
+        [Description("Low cost search")]
         LOW_COST,
+
+        [Description("Deep for search")]
         DEEP,
+
+        [Description("Breadth for search")]
         BREADTH,
     }
 
