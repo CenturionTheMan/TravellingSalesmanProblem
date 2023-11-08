@@ -85,7 +85,7 @@ public class BranchAndBound : TSPAlgorithm
 
         if (bestPath != null) bestPath.Add(BEGIN_VERTEX);
 
-        return bestPath == null? null : (bestPath.ToArray(), upperBound);
+        return bestPath == null? null : (bestPath.ToArray(), lowerBound);
     }
 
     /// <summary>
