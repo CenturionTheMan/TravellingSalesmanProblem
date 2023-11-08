@@ -13,18 +13,11 @@ public partial class Form1 : Form
     private readonly Color RESULT = Color.MediumSeaGreen;
 
 
+
     AlgorithmKind? algorithmKind = null;
     AdjMatrix? matrix;
     Stopwatch stopwatch = new();
     CancellationTokenSource? algorithmTaskCTS = null;
-
-
-    #region ALGH SETTINGS
-    // B&B
-    BranchAndBound.SearchType babSearchType = BranchAndBound.SearchType.LOW_COST;
-
-    #endregion
-
 
     public Form1()
     {
@@ -89,7 +82,7 @@ public partial class Form1 : Form
                 break;
 
             case AlgorithmKind.BRANCH_AND_BOUND:
-                alg = new BranchAndBound(ref token, babSearchType);
+                alg = new BranchAndBound(ref token);
                 break;
 
             default:
@@ -135,7 +128,6 @@ public partial class Form1 : Form
     private void BruteForceRadioButton_CheckedChanged(object sender, EventArgs e)
     {
         algorithmKind = AlgorithmKind.BRUTE_FORCE;
-        algorithmSettingsButton.Enabled = false;
     }
 
     /// <summary>
@@ -146,8 +138,6 @@ public partial class Form1 : Form
     private void DynamicProgrammingRadioButton_CheckedChanged(object sender, EventArgs e)
     {
         algorithmKind = AlgorithmKind.DYNAMIC_PROGRAMMING;
-        algorithmSettingsButton.Enabled = false;
-
     }
 
     /// <summary>
@@ -158,8 +148,6 @@ public partial class Form1 : Form
     private void BranchAndBoundradioButton_CheckedChanged(object sender, EventArgs e)
     {
         algorithmKind = AlgorithmKind.BRANCH_AND_BOUND;
-        algorithmSettingsButton.Enabled = true;
-
     }
 
     /// <summary>

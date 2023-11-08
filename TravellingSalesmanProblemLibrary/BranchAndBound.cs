@@ -10,27 +10,13 @@ namespace TravellingSalesmanProblemLibrary;
 
 public class BranchAndBound : TSPAlgorithm
 {
-    public SearchType SelectedSearchType { get { return searchType; } set { searchType = value; } }
-    public override string AlgorithmName => "BranchAndBound";
-
-
     private const int BEGIN_VERTEX = 0;
-    private SearchType searchType = SearchType.LOW_COST;
+
+    public override string AlgorithmName => "BranchAndBound";
 
 
     public BranchAndBound(ref CancellationToken cancellationToken) : base(ref cancellationToken) { }
     public BranchAndBound() : base() { }
-
-    public BranchAndBound(SearchType searchType) : base()
-    {
-        this.searchType = searchType;
-    }
-
-    public BranchAndBound(ref CancellationToken cancellationToken, SearchType searchType) : base(ref cancellationToken)
-    {
-        this.searchType = searchType;
-    }
-
 
 
     /// <summary>
@@ -61,22 +47,8 @@ public class BranchAndBound : TSPAlgorithm
                 return null;
             }
 
-            Node node;
-            switch (searchType)
-            {
-                case SearchType.LOW_COST:
-                    node = nodes.MinBy(n => n.cost);
-                    nodes.Remove(node);
-                    break;
-                case SearchType.DEEP:
-                    node = nodes.Last();
-                    break;
-                case SearchType.BREADTH:
-                    node = nodes.FirstOrDefault();
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
+            Node node = nodes.MinBy(n => n.cost);
+            nodes.Remove(node);
 
             if (node.cost >= lowerBound)
             {
@@ -216,13 +188,6 @@ public class BranchAndBound : TSPAlgorithm
         return min;
     }
 
-
-    public enum SearchType
-    {
-        LOW_COST,
-        DEEP,
-        BREADTH,
-    }
 
 
     /// <summary>
