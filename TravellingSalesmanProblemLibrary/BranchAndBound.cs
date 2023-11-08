@@ -31,7 +31,7 @@ public class BranchAndBound : TSPAlgorithm
     {
         List<Node> nodes = new();
         List<int>? bestPath = null;
-        int upperBound = int.MaxValue;
+        int lowerBound = int.MaxValue;
 
         int?[,] cMatrix = matrix.Matrix;
         int vertexFrom = BEGIN_VERTEX;
@@ -50,14 +50,14 @@ public class BranchAndBound : TSPAlgorithm
             Node node = nodes.MinBy(n => n.cost);
             nodes.Remove(node);
 
-            if (node.cost >= upperBound)
+            if (node.cost >= lowerBound)
             {
                 continue;
             }
 
-            if (node.path.Count == matrix.GetMatrixSize && node.cost < upperBound)
+            if (node.path.Count == matrix.GetMatrixSize && node.cost < lowerBound)
             {
-                upperBound = node.cost;
+                lowerBound = node.cost;
                 bestPath = node.path;
             }
 
