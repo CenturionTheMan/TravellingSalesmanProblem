@@ -11,6 +11,11 @@
   <ItemGroup>
     <Compile Remove="PopupAlgorithmSettingsForm.cs" />
     <Compile Remove="PopupAlgorithmSettingsForm.Designer.cs" />
+    <Compile Remove="PopupSettingsBaBForm.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="PopupSettingsBaBForm.resx" />
   </ItemGroup>
 
   <ItemGroup>

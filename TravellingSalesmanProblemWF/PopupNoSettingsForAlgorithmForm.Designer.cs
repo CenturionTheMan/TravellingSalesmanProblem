@@ -59,11 +59,10 @@
             // 
             // PopupNoSettingsForAlgorithmForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(220)))), ((int)(((byte)(210)))));
-            this.ClientSize = new System.Drawing.Size(269, 149);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(265, 145);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.closeButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
