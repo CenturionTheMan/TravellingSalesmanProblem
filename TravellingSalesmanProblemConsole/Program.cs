@@ -7,26 +7,8 @@ public class Program
 {
     const string DIRECTORY_PATH = "G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestResults\\";
 
-    private static string pathForMatrix = "G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\matrix_6x6.txt";
-
     public static void Main()
     {
-        var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForMatrix);
-        BranchAndBound bab = new BranchAndBound(BranchAndBound.SearchType.DEEP);
-        
-        
-        var res = bab.CalculateBestPath(matrix);
-        Console.WriteLine(res.ToStringCustom());
-
-        DynamicProgramming dp = new DynamicProgramming();
-        var res2 = dp.CalculateBestPath(matrix);
-        Console.WriteLine(res2.ToStringCustom());
-
-
-
-
-        return;
-
         //TestTime();
         TestMemory();
         Console.WriteLine("DONE");

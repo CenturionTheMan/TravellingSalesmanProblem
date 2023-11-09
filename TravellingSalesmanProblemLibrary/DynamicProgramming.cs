@@ -27,12 +27,9 @@ public class DynamicProgramming : TSPAlgorithm
         if (maxMask > int.MaxValue) return null;
 
         var memoTable = new int?[matrix.GetMatrixSize, maxMask];
-
-        var pathTable = new int[matrix.GetMatrixSize, maxMask];
-
         endMask = (uint)(1 << matrix.GetMatrixSize) - 1;
 
-        var result = SolveReq(matrix, 1, START_NODE, memoTable, pathTable);
+        var result = SolveReq(matrix, 1, START_NODE, memoTable);
 
         return (null, result);
     }
@@ -45,9 +42,8 @@ public class DynamicProgramming : TSPAlgorithm
     /// <param name="mask">Visited vertexs as a bitmask.</param>
     /// <param name="fromVertex">The starting vertex for the current path segment.</param>
     /// <param name="memoTable">A memoization table to store intermediate results.</param>
-    /// <param name="pathTable">A memoization table to store path.</param>
     /// <returns>The shortest distance to complete the traveling salesman tour.</returns>
-    private int SolveReq(AdjMatrix map, uint mask, int fromVertex, int?[,] memoTable, int[,] pathTable)
+    private int SolveReq(AdjMatrix map, uint mask, int fromVertex, int?[,] memoTable)
     {
         if (CancellationToken.IsCancellationRequested)
         {
@@ -81,12 +77,11 @@ public class DynamicProgramming : TSPAlgorithm
 
             //create new bitmask for path where nextVertex is included
             var tmpMask = SetBitInMask(mask, nextVertex);
-            tmpRes += SolveReq(map, tmpMask, nextVertex, memoTable, pathTable);
+            tmpRes += SolveReq(map, tmpMask, nextVertex, memoTable);
 
             if(tmpRes < res)
             {
                 res = tmpRes;
-                pathTable[fromVertex, mask] = nextVertex;
             }
         }
 
