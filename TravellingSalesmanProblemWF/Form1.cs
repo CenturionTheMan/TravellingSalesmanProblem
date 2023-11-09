@@ -6,11 +6,11 @@ namespace TravellingSalesmanProblemWF;
 
 public partial class Form1 : Form
 {
-    private const string BREAK_LINE = "================================================";
-    private readonly Color WARNING = Color.Red;
-    private readonly Color DEFAULT = Color.Black;
-    private readonly Color HIGHLIGHT = Color.BlueViolet;
-    private readonly Color RESULT = Color.MediumSeaGreen;
+    public const string BREAK_LINE = "===============================================";
+    public readonly Color WARNING = Color.Red;
+    public readonly Color DEFAULT = Color.Black;
+    public readonly Color HIGHLIGHT = Color.BlueViolet;
+    public readonly Color RESULT = Color.MediumSeaGreen;
 
 
     AlgorithmKind? algorithmKind = null;
@@ -21,7 +21,7 @@ public partial class Form1 : Form
 
     #region ALGH SETTINGS
     // B&B
-    BranchAndBound.SearchType babSearchType = BranchAndBound.SearchType.LOW_COST;
+    public BranchAndBound.SearchType babSearchType = BranchAndBound.SearchType.LOW_COST;
 
     #endregion
 
@@ -116,7 +116,7 @@ public partial class Form1 : Form
     /// Function will write given message in message log (GUI)
     /// </summary>
     /// <param name="message">Message to write</param>
-    private void AddTextToMessageLog(string message, Color? textColor = null)
+    public void AddTextToMessageLog(string message, Color? textColor = null)
     {
         Color col = (textColor.HasValue) ? textColor.Value : DEFAULT;
         message = message.Replace("\n", Environment.NewLine);
@@ -348,7 +348,7 @@ public partial class Form1 : Form
                 break;
             case AlgorithmKind.BRANCH_AND_BOUND:
                 {
-                    var bab = new PopupSettingsForBabForm(alghName, ref babSearchType);
+                    var bab = new PopupSettingsForBabForm(this, alghName);
                     bab.ShowDialog();
                     break;
                 }

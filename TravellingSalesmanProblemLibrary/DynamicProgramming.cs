@@ -20,18 +20,51 @@ public class DynamicProgramming : TSPAlgorithm
 
     public override string AlgorithmName => "DynamicProgramming";
 
+
     public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix)
     {
+        if (matrix.GetMatrixSize > 32) return null;
+
         var maxMask = (ulong)Math.Pow(2, matrix.GetMatrixSize);
 
-        if (maxMask > int.MaxValue) return null;
-
         var memoTable = new int?[matrix.GetMatrixSize, maxMask];
+        var parentTable = new int[matrix.GetMatrixSize, maxMask];
+
         endMask = (uint)(1 << matrix.GetMatrixSize) - 1;
+        uint beginMask = 1;
 
-        var result = SolveReq(matrix, 1, START_NODE, memoTable);
+        var cost = SolveReq(matrix, beginMask, START_NODE, memoTable, parentTable);
+        var path = RetrivePath(parentTable, beginMask, START_NODE, matrix.GetMatrixSize);
 
-        return (null, result);
+        return (path, cost);
+    }
+
+    /// <summary>
+    /// Retrieves a path from a parent table
+    /// </summary>
+    /// <param name="parentTable">A table containing parent vertex information.</param>
+    /// <param name="beginMask">The initial mask</param>
+    /// <param name="beginVertex">The starting vertex for the path.</param>
+    /// <returns>An array representing the retrieved path.</returns>
+    private int[] RetrivePath(int[,] parentTable, uint beginMask, int beginVertex, int expectedPathLength)
+    {
+        uint mask = beginMask;
+        int vertex = beginVertex;
+
+        List<int> path = new();
+        path.Add(beginVertex);
+
+        for (int i = 0; i < expectedPathLength - 1; i++)
+        {
+            int prev = parentTable[vertex, mask];
+            path.Add(prev);
+            mask = SetBitInMask(mask, prev);
+            vertex = prev;
+        }
+
+        path.Add(beginVertex);
+
+        return path.ToArray();
     }
 
 
@@ -42,8 +75,9 @@ public class DynamicProgramming : TSPAlgorithm
     /// <param name="mask">Visited vertexs as a bitmask.</param>
     /// <param name="fromVertex">The starting vertex for the current path segment.</param>
     /// <param name="memoTable">A memoization table to store intermediate results.</param>
+    /// <param name="parentTable">A memoization table to store path.</param>
     /// <returns>The shortest distance to complete the traveling salesman tour.</returns>
-    private int SolveReq(AdjMatrix map, uint mask, int fromVertex, int?[,] memoTable)
+    private int SolveReq(AdjMatrix map, uint mask, int fromVertex, int?[,] memoTable, int[,] parentTable)
     {
         if (CancellationToken.IsCancellationRequested)
         {
@@ -77,11 +111,12 @@ public class DynamicProgramming : TSPAlgorithm
 
             //create new bitmask for path where nextVertex is included
             var tmpMask = SetBitInMask(mask, nextVertex);
-            tmpRes += SolveReq(map, tmpMask, nextVertex, memoTable);
+            tmpRes += SolveReq(map, tmpMask, nextVertex, memoTable, parentTable);
 
             if(tmpRes < res)
             {
                 res = tmpRes;
+                parentTable[fromVertex, mask] = nextVertex;
             }
         }
 

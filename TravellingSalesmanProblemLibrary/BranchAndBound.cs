@@ -46,7 +46,7 @@ public class BranchAndBound : TSPAlgorithm
     {
         List<Node> nodes = new();
         List<int>? bestPath = null;
-        int lowerBound = int.MaxValue;
+        int upperBound = int.MaxValue;
 
         int?[,] cMatrix = matrix.Matrix;
         int vertexFrom = BEGIN_VERTEX;
@@ -67,7 +67,6 @@ public class BranchAndBound : TSPAlgorithm
             {
                 case SearchType.LOW_COST:
                     node = nodes.MinBy(n => n.cost);
-                    nodes.Remove(node);
                     break;
                 case SearchType.DEEP:
                     node = nodes.Last();
@@ -78,15 +77,17 @@ public class BranchAndBound : TSPAlgorithm
                 default:
                     throw new NotImplementedException();
             }
+            nodes.Remove(node);
 
-            if (node.cost >= lowerBound)
+
+            if (node.cost >= upperBound)
             {
                 continue;
             }
 
-            if (node.path.Count == matrix.GetMatrixSize && node.cost < lowerBound)
+            if (node.path.Count == matrix.GetMatrixSize)
             {
-                lowerBound = node.cost;
+                upperBound = node.cost;
                 bestPath = node.path;
             }
 
@@ -102,10 +103,10 @@ public class BranchAndBound : TSPAlgorithm
                 if (node.path.Contains(vertexTo)) continue;
 
                 int? edgeCost = node.matrix[vertexFrom, vertexTo];
-                int?[,] wMatrix = SetRowColumnToNull(node.matrix, vertexFrom, vertexTo);
                 if (edgeCost == null) continue;
-                int wCost = ReduceMatrix(ref wMatrix) + edgeCost.Value + node.cost;
 
+                int?[,] wMatrix = SetRowColumnToNull(node.matrix, vertexFrom, vertexTo);
+                int wCost = ReduceMatrix(ref wMatrix) + edgeCost.Value + node.cost;
 
                 Node tmp = new Node(wMatrix, wCost, node.path, vertexTo);
                 nodes.Add(tmp);
@@ -114,7 +115,7 @@ public class BranchAndBound : TSPAlgorithm
 
         if (bestPath != null) bestPath.Add(BEGIN_VERTEX);
 
-        return bestPath == null? null : (bestPath.ToArray(), lowerBound);
+        return bestPath == null? null : (bestPath.ToArray(), upperBound);
     }
 
     /// <summary>
@@ -217,7 +218,6 @@ public class BranchAndBound : TSPAlgorithm
         return min;
     }
 
-    //https://codereview.stackexchange.com/questions/39163/loading-a-combobox-with-an-enum-and-binding-to-it
     public enum SearchType
     {
         [Description("Low cost search")]

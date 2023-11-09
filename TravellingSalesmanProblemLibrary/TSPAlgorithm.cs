@@ -28,11 +28,11 @@ public abstract class TSPAlgorithm
 
 
     /// <summary>
-    /// Finds the best solution for Sales Map Problem.
+    /// Finds the best solution for Sales Man Problem.
     /// </summary>
     /// <param name="matrix">Adjency matrix.</param>
     /// <returns>
-    /// Returns best path if algorithm lets it and cost, or null if no valid path is found.
+    /// Returns best path and cost, or null if no valid path is found.
     /// </returns>
     public abstract (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix);
 
