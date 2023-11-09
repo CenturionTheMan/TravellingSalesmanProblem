@@ -9,6 +9,12 @@ public class Program
 
     public static void Main()
     {
+        var matrix = new AdjMatrix(10, 1, 100);
+        BranchAndBound bab = new BranchAndBound(BranchAndBound.SearchType.DEEP);
+        var res = bab.CalculateBestPath(matrix);
+        Console.WriteLine(res.ToStringCustom());
+        return;
+
         //TestTime();
         TestMemory();
         Console.WriteLine("DONE");

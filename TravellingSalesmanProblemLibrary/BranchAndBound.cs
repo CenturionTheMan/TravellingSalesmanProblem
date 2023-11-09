@@ -67,7 +67,6 @@ public class BranchAndBound : TSPAlgorithm
             {
                 case SearchType.LOW_COST:
                     node = nodes.MinBy(n => n.cost);
-                    nodes.Remove(node);
                     break;
                 case SearchType.DEEP:
                     node = nodes.Last();
@@ -78,16 +77,20 @@ public class BranchAndBound : TSPAlgorithm
                 default:
                     throw new NotImplementedException();
             }
+            nodes.Remove(node);
+
 
             if (node.cost >= lowerBound)
             {
                 continue;
             }
-
-            if (node.path.Count == matrix.GetMatrixSize && node.cost < lowerBound)
+            else
             {
-                lowerBound = node.cost;
-                bestPath = node.path;
+                if (node.path.Count == matrix.GetMatrixSize)
+                {
+                    lowerBound = node.cost;
+                    bestPath = node.path;
+                }
             }
 
             vertexFrom = node.path.Last();
@@ -105,7 +108,6 @@ public class BranchAndBound : TSPAlgorithm
                 int?[,] wMatrix = SetRowColumnToNull(node.matrix, vertexFrom, vertexTo);
                 if (edgeCost == null) continue;
                 int wCost = ReduceMatrix(ref wMatrix) + edgeCost.Value + node.cost;
-
 
                 Node tmp = new Node(wMatrix, wCost, node.path, vertexTo);
                 nodes.Add(tmp);
@@ -217,7 +219,6 @@ public class BranchAndBound : TSPAlgorithm
         return min;
     }
 
-    //https://codereview.stackexchange.com/questions/39163/loading-a-combobox-with-an-enum-and-binding-to-it
     public enum SearchType
     {
         [Description("Low cost search")]
