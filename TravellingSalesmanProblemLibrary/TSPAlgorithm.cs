@@ -37,24 +37,24 @@ public abstract class TSPAlgorithm
     public abstract (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix);
 
 
-    public bool IsKind(AlgorithmKind kind)
-    {
-        if(this is BruteForce && kind == AlgorithmKind.BRUTE_FORCE)
-        {
-            return true;
-        }
+    //public bool IsKind(AlgorithmKind kind)
+    //{
+    //    if(this is BruteForce && kind == AlgorithmKind.BRUTE_FORCE)
+    //    {
+    //        return true;
+    //    }
 
-        if (this is DynamicProgramming && kind == AlgorithmKind.DYNAMIC_PROGRAMMING)
-        {
-            return true;
-        }
+    //    if (this is DynamicProgramming && kind == AlgorithmKind.DYNAMIC_PROGRAMMING)
+    //    {
+    //        return true;
+    //    }
 
-        if (this is BranchAndBound && kind == AlgorithmKind.BRANCH_AND_BOUND)
-        {
-            return true;
-        }
+    //    if (this is BranchAndBound && kind == AlgorithmKind.BRANCH_AND_BOUND)
+    //    {
+    //        return true;
+    //    }
 
 
-        return false;
-    }
+    //    return false;
+    //}
 }
