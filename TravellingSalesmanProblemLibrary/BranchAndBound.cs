@@ -40,7 +40,7 @@ public class BranchAndBound : TSPAlgorithm
     /// <param name="matrix">The adjacency matrix representing the problem.</param>
     /// <returns>
     /// A tuple containing the best path as an array of vertex indices and the total cost,
-    /// or null if the operation is canceled due to a cancellation request or imposible to solve matrix.
+    /// or null if the operation is canceled due to a cancellation request or impossible to solve matrix.
     /// </returns>
     public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix)
     {
@@ -145,7 +145,7 @@ public class BranchAndBound : TSPAlgorithm
     /// <returns></returns>
     private int ReduceMatrix(ref int?[,] matrix)
     {
-        int reducionElemSum = 0;
+        int reductionElemSum = 0;
         //reduce row
         for (int i = 0; i < matrix.GetLength(0); i++)
         {
@@ -153,7 +153,7 @@ public class BranchAndBound : TSPAlgorithm
             if (minRowCost == null || minRowCost == 0) continue;
             
             matrix = ReduceMatrix(ref matrix, minRowCost.Value, false, i);
-            reducionElemSum += minRowCost.Value;
+            reductionElemSum += minRowCost.Value;
         }
 
         //reduce column
@@ -163,10 +163,10 @@ public class BranchAndBound : TSPAlgorithm
             if (minColumnCost == null || minColumnCost == 0) continue;
             
             matrix = ReduceMatrix(ref matrix, minColumnCost.Value, true, i);
-            reducionElemSum += minColumnCost.Value;
+            reductionElemSum += minColumnCost.Value;
         }
 
-        return reducionElemSum;
+        return reductionElemSum;
     }
 
     /// <summary>
