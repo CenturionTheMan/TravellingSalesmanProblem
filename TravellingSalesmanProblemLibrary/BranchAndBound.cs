@@ -48,6 +48,13 @@ public class BranchAndBound : TSPAlgorithm
         List<int>? bestPath = null;
         int upperBound = int.MaxValue;
 
+        var initValues = GetInitUpperBound(matrix);
+        if (initValues != null)
+        {
+            bestPath = initValues.Value.initPath;
+            upperBound = initValues.Value.initCost;
+        }
+
         int?[,] cMatrix = matrix.Matrix;
         int vertexFrom = BEGIN_VERTEX;
         int cost = ReduceMatrix(ref cMatrix);
@@ -116,6 +123,54 @@ public class BranchAndBound : TSPAlgorithm
         if (bestPath != null) bestPath.Add(BEGIN_VERTEX);
 
         return bestPath == null? null : (bestPath.ToArray(), upperBound);
+    }
+
+    /// <summary>
+    /// Method will return initial value for upper bound as well as path asociated with it.
+    /// Path is being created using closest-neighbour selection.
+    /// </summary>
+    /// <param name="adjMatrix">The adjacency matrix representing the problem.</param>
+    /// <returns>Initial upper bound value with path or null if could not created valid path</returns>
+    private (int initCost, List<int> initPath)? GetInitUpperBound(AdjMatrix adjMatrix)
+    {
+        List<int> path = new();
+        int sumCost = 0;
+        int fromVertex = BEGIN_VERTEX;
+        path.Add(BEGIN_VERTEX);
+
+        for (int i = 0; i < adjMatrix.GetMatrixSize - 1; i++)
+        {
+            var next = FindClosestNeigh();
+            if (next == null) return null;
+
+            path.Add(next.Value.vertex);
+            sumCost += next.Value.cost;
+            fromVertex = next.Value.vertex;
+        }
+        if (adjMatrix.TryGetDistance(path[path.Count - 1], BEGIN_VERTEX, out int last) == false) return null;
+        sumCost += last;
+        return (sumCost, path);
+
+
+        (int cost, int vertex)? FindClosestNeigh()
+        {
+            int? minCost = null;
+            int vertex = -1;
+            for (int j = 0; j < adjMatrix.GetMatrixSize; j++)
+            {
+                if (path.Contains(j)) continue;
+
+                if (adjMatrix.TryGetDistance(fromVertex, j, out int dis) == false) continue;
+
+                if(minCost == null || dis < minCost)
+                {
+                    minCost = dis;
+                    vertex = j;
+                }
+            }
+
+            return minCost.HasValue? (minCost.Value, vertex) : null;
+        }
     }
 
     /// <summary>

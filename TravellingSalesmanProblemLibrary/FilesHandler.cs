@@ -79,9 +79,22 @@ namespace TravellingSalesmanProblemLibrary
 
             try
             {
-                var numbersSingleStr = fileCon.Substring(entryEndIndex, fileCon.Length - entryEndIndex - "\nEOF".Length);
+                var numbersSingleStr = fileCon.Substring(entryEndIndex, fileCon.Length - entryEndIndex - "\nEOF".Length - 1);
 
-                var numbers = numbersSingleStr.Replace("\n", " ").Split(" ").ToList().FindAll(e => e != "").Select(e => int.Parse(e));
+                var numbersStr = numbersSingleStr.Replace("\n", " ").Replace("\r","").Split(" ").ToList().FindAll(e => e != "");
+
+                List<int> numbers = new();
+                foreach (var numStr in numbersStr)
+                {
+                    if(int.TryParse(numStr, out int num))
+                    {
+                        numbers.Add(num);
+                    }
+                    else
+                    {
+                        Console.WriteLine("can not parse: " + numStr);
+                    }
+                }
 
                 AdjMatrix worldMap = new(vertexsAmout.Value, numbers.ToArray());
 

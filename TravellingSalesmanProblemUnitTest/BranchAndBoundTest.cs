@@ -151,5 +151,22 @@ namespace TravellingSalesmanProblemUnitTest
 
             Assert.Equal(149, bestPath.Value.cost);
         }
+
+        /// <summary>
+        /// br17.atsp
+        /// </summary>
+        //[Fact]
+        //public void Scenario8Test()
+        //{
+        //    AdjMatrix? matrix = FilesHandler.LoadAdjMatrixFromFile("G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\br17.atsp");
+        //    Assert.NotNull(matrix);
+        //    if (matrix == null) return;
+
+        //    var bestPath = new BranchAndBound().CalculateBestPath(matrix);
+        //    Assert.NotNull(bestPath);
+        //    if (bestPath == null) return;
+
+        //    Assert.Equal(149, bestPath.Value.cost);
+        //}
     }
 }
