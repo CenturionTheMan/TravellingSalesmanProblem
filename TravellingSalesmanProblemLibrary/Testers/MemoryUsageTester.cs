@@ -79,9 +79,9 @@ public class MemoryUsageTester : Tester
                 medianRep.Add(perMatrixMedianRep.Median());
             }
 
-            double meanVal = meanRep.Average();
-            double maxVal = maxRep.Max();
-            double medianVal = medianRep.Median();
+            double meanVal = Math.Round(meanRep.Average(),2);
+            double maxVal = Math.Round(maxRep.Max(), 2);
+            double medianVal = Math.Round(medianRep.Median(), 2);
 
             List<object[]> meanRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanVal} };
             List<object[]> maxRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, maxVal} };

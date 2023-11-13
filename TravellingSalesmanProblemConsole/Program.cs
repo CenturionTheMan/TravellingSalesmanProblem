@@ -26,7 +26,7 @@ public class Program
 
 
 
-        TestTime();
+        //TestTime();
         TestMemory();
         TestPercentFinished();
         Console.WriteLine("DONE");
