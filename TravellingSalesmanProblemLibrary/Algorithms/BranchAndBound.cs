@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using static TravellingSalesmanProblemLibrary.Utilites;
 
-namespace TravellingSalesmanProblemLibrary.Algorithm;
+namespace TravellingSalesmanProblemLibrary;
 
 public class BranchAndBound : TSPAlgorithm
 {
