@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using TravellingSalesmanProblemLibrary;
+using TravellingSalesmanProblemLibrary.Algorithm;
 
 namespace TravellingSalesmanProblemConsole;
 

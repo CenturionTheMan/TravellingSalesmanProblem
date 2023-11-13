@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TravellingSalesmanProblemLibrary;
+namespace TravellingSalesmanProblemLibrary.Algorithm;
 
 public class BruteForce : TSPAlgorithm
 {
@@ -84,7 +84,7 @@ public class BruteForce : TSPAlgorithm
             }
         }
 
-        return bestPath ==null? null : (bestPath, bestCost);
+        return bestPath == null ? null : (bestPath, bestCost);
     }
 
     /// <summary>
@@ -129,7 +129,7 @@ public class BruteForce : TSPAlgorithm
         if (numbersIn.Count == 0)
         {
 
-            if(numbersOut.Count > 0)
+            if (numbersOut.Count > 0)
             {
                 numbersOut.Add(numbersOut[0]);
                 result.Add(numbersOut.ToArray());
@@ -152,5 +152,5 @@ public class BruteForce : TSPAlgorithm
         }
     }
 
-    
+
 }

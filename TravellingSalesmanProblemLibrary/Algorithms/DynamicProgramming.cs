@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TravellingSalesmanProblemLibrary;
+namespace TravellingSalesmanProblemLibrary.Algorithm;
 
 public class DynamicProgramming : TSPAlgorithm
 {
@@ -87,7 +87,7 @@ public class DynamicProgramming : TSPAlgorithm
         //If mask idicates that all vertices were visited in current path, if so add cost for returning to start vertex  
         if (mask == endMask)
         {
-            return map.GetDistance((int)fromVertex, START_NODE);
+            return map.GetDistance(fromVertex, START_NODE);
         }
 
         //Check if given scenario was not already sloved, if so take result from table
@@ -107,13 +107,13 @@ public class DynamicProgramming : TSPAlgorithm
 
             //check if given vertex was already visited in given path
             if (CheckIfGivenVertexWasVisitedInGivenMask(mask, nextVertex)) continue;
-            if (!map.TryGetDistance((int)fromVertex, nextVertex, out int tmpRes)) continue;
+            if (!map.TryGetDistance(fromVertex, nextVertex, out int tmpRes)) continue;
 
             //create new bitmask for path where nextVertex is included
             var tmpMask = SetBitInMask(mask, nextVertex);
             tmpRes += SolveReq(map, tmpMask, nextVertex, memoTable, parentTable);
 
-            if(tmpRes < res)
+            if (tmpRes < res)
             {
                 res = tmpRes;
                 parentTable[fromVertex, mask] = nextVertex;
@@ -142,7 +142,7 @@ public class DynamicProgramming : TSPAlgorithm
     /// <returns>The bitmask with the specified bit set to 1 at the given index.</returns>
     private uint SetBitInMask(uint mask, int bitIndex)
     {
-        return (mask | (uint)(1 << bitIndex));
+        return mask | (uint)(1 << bitIndex);
     }
 
     /// <summary>
@@ -153,10 +153,10 @@ public class DynamicProgramming : TSPAlgorithm
     /// <returns>True if the vertex is visited in the bitmask, otherwise false.</returns>
     private bool CheckIfGivenVertexWasVisitedInGivenMask(uint mask, int vertex)
     {
-        var bitVertex = (1 << vertex);
-        var val = (mask & bitVertex);
+        var bitVertex = 1 << vertex;
+        var val = mask & bitVertex;
         return val != 0;
     }
 
-   
+
 }

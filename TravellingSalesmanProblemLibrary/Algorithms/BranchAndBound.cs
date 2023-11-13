@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.ComponentModel;
 using static TravellingSalesmanProblemLibrary.Utilites;
 
-namespace TravellingSalesmanProblemLibrary;
+namespace TravellingSalesmanProblemLibrary.Algorithm;
 
 public class BranchAndBound : TSPAlgorithm
 {
@@ -47,7 +41,10 @@ public class BranchAndBound : TSPAlgorithm
         List<Node> nodes = new();
         List<int>? bestPath = null;
         int upperBound = int.MaxValue;
+        int?[,] cMatrix = matrix.Matrix;
+        int vertexFrom = BEGIN_VERTEX;
 
+        //calculate initial upper bound value using closest-neighbour selection
         var initValues = GetInitUpperBound(matrix);
         if (initValues != null)
         {
@@ -55,10 +52,10 @@ public class BranchAndBound : TSPAlgorithm
             upperBound = initValues.Value.initCost;
         }
 
-        int?[,] cMatrix = matrix.Matrix;
-        int vertexFrom = BEGIN_VERTEX;
+        //reduce initial matrix
         int cost = ReduceMatrix(ref cMatrix);
 
+        //add initial node to queue
         Node initNode = new Node(cMatrix, cost, vertexFrom);
         nodes.Add(initNode);
 
@@ -69,6 +66,7 @@ public class BranchAndBound : TSPAlgorithm
                 return null;
             }
 
+            //search type handling
             Node node;
             switch (searchType)
             {
@@ -86,20 +84,26 @@ public class BranchAndBound : TSPAlgorithm
             }
             nodes.Remove(node);
 
-
+            //if given node cost (lower bound) is higher than current upper bound -> skip
             if (node.cost >= upperBound)
             {
                 continue;
             }
-
-            if (node.path.Count == matrix.GetMatrixSize)
+            else
             {
-                upperBound = node.cost;
-                bestPath = node.path;
+                //if given path is completed and its cost is lower than current upper bound
+                //assing it as new upper bound
+                if (node.path.Count == matrix.GetMatrixSize)
+                {
+                    upperBound = node.cost;
+                    bestPath = node.path;
+                }
             }
 
+            //search for next sub-path. From last vertex in currenly creatd path
             vertexFrom = node.path.Last();
 
+            //check all possible connections
             for (int vertexTo = 0; vertexTo < matrix.GetMatrixSize; vertexTo++)
             {
                 if (CancellationToken.IsCancellationRequested)
@@ -107,14 +111,20 @@ public class BranchAndBound : TSPAlgorithm
                     return null;
                 }
 
+                //if vertex already in curently created path -> skip
                 if (node.path.Contains(vertexTo)) continue;
 
+                //get cost from vertex to next vertex
                 int? edgeCost = node.matrix[vertexFrom, vertexTo];
                 if (edgeCost == null) continue;
 
+                //remove colun and row from matrix at choosen vertices (set as null)
                 int?[,] wMatrix = SetRowColumnToNull(node.matrix, vertexFrom, vertexTo);
+
+                //reduce matrix
                 int wCost = ReduceMatrix(ref wMatrix) + edgeCost.Value + node.cost;
 
+                //add new sub-node to state space tree
                 Node tmp = new Node(wMatrix, wCost, node.path, vertexTo);
                 nodes.Add(tmp);
             }
