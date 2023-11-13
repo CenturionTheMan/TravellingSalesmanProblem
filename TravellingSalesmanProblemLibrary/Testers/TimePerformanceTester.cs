@@ -39,8 +39,8 @@ public class TimePerformanceTester: Tester
 
         Stopwatch stopWatch = new Stopwatch();
 
-        string detailedPath = fileDir + algorithm.AlgorithmName + "TimeTest" + DETAILED_PATH_SUFFIX + ".csv";
-        string meanPath = fileDir + algorithm.AlgorithmName + "TimeTest" + MEAN_PATH_SUFFIX + ".csv";
+        string detailedPath = fileDir + algorithm.AlgorithmName + "_TimeTest_" + DETAILED_PATH_SUFFIX + ".csv";
+        string meanPath = fileDir + algorithm.AlgorithmName + "_TimeTest_" + MEAN_PATH_SUFFIX + ".csv";
 
 
         List<object[]> tmp = new();
@@ -74,7 +74,7 @@ public class TimePerformanceTester: Tester
                     Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | Time: {timePerMatrix / repPerMatrix} [ms]");
             }
             double meanTime = timePerSize / repPerSize;
-            dataForMean.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanTime });
+            dataForMean.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanTime.ToString("0.00") });
 
 
             FilesHandler.CreateCsvFile(dataForDetailed, detailedPath, false, ',');

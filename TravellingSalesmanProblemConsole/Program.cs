@@ -77,13 +77,13 @@ public class Program
 
     public static void TestPercentFinished()
     {
-        PercentFinishTester dpTester = new PercentFinishTester(new DynamicProgramming());
-        dpTester.SetMatrixSizeForTest(2, 20, 1);
-        dpTester.RunTest(TEST_RESULT_DIRECTORY);
-
         PercentFinishTester babLowCostTester = new(new BranchAndBound(BranchAndBound.SearchType.LOW_COST));
         babLowCostTester.SetMatrixSizeForTest(2, 20, 1);
         babLowCostTester.RunTest(TEST_RESULT_DIRECTORY);
+
+        PercentFinishTester dpTester = new PercentFinishTester(new DynamicProgramming());
+        dpTester.SetMatrixSizeForTest(2, 20, 1);
+        dpTester.RunTest(TEST_RESULT_DIRECTORY);
 
         PercentFinishTester babBFSTester = new(new BranchAndBound(BranchAndBound.SearchType.BREADTH));
         babBFSTester.SetMatrixSizeForTest(2, 11, 1);

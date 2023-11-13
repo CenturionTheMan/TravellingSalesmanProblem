@@ -26,9 +26,9 @@ public class MemoryUsageTester : Tester
     public override void RunTest(string fileDir)
     {
         fileDir = fileDir.ChangeFileExtension("");
-        string pathMean = fileDir + algorithm.AlgorithmName + "MemoryTestMean" + ".csv";
-        string pathMax = fileDir + algorithm.AlgorithmName + "MemoryTestMan" + ".csv";
-        string pathMedian = fileDir + algorithm.AlgorithmName + "MemoryTestMedian" + ".csv";
+        string pathMean = fileDir + algorithm.AlgorithmName + "_MemoryTestMean" + ".csv";
+        string pathMax = fileDir + algorithm.AlgorithmName + "_MemoryTestMan" + ".csv";
+        string pathMedian = fileDir + algorithm.AlgorithmName + "_MemoryTestMedian" + ".csv";
 
         List<object[]> tmp = new();
         tmp.Add(new object[] { "Algorithm", "RepsPerSize", "MatrixSize", "Memory [MB]" });
@@ -81,9 +81,9 @@ public class MemoryUsageTester : Tester
             double maxVal = Math.Round(maxRep.Max(), 2);
             double medianVal = Math.Round(medianRep.Median(), 2);
 
-            List<object[]> meanRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanVal} };
-            List<object[]> maxRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, maxVal} };
-            List<object[]> medianRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, medianVal} };
+            List<object[]> meanRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanVal.ToString("0.00") } };
+            List<object[]> maxRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, maxVal.ToString("0.00") } };
+            List<object[]> medianRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, medianVal.ToString("0.00") } };
             FilesHandler.CreateCsvFile(meanRow, pathMean, false);
             FilesHandler.CreateCsvFile(maxRow, pathMax, false);
             FilesHandler.CreateCsvFile(medianRow, pathMedian, false);

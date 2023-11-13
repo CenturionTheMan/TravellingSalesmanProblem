@@ -9,7 +9,7 @@ namespace TravellingSalesmanProblemLibrary.Testers;
 
 public class PercentFinishTester : Tester
 {
-    private TimeSpan timePerTest = new TimeSpan(0,2,0);
+    private int timePerTestInMs = 1000;
 
     public PercentFinishTester(TSPAlgorithm algorithm) : base(algorithm)
     {
@@ -24,9 +24,9 @@ public class PercentFinishTester : Tester
         repPerSize = 100;
     }
 
-    public Tester SetTimePerTest(TimeSpan timePerTest)
+    public Tester SetTimePerTest(int timePerTestInMs)
     {
-        this.timePerTest = timePerTest;
+        this.timePerTestInMs = timePerTestInMs;
         return this;
     }
 
@@ -37,7 +37,7 @@ public class PercentFinishTester : Tester
 
         fileDir = fileDir.ChangeFileExtension("");
 
-        string filePath = fileDir + algorithm.AlgorithmName + "PercentFinishedTest.csv";
+        string filePath = fileDir + algorithm.AlgorithmName + "_PercentFinishedTest.csv";
 
 
         List<object[]> tmp = new();
@@ -54,45 +54,50 @@ public class PercentFinishTester : Tester
 
                 for (int j = 0; j < repPerMatrix; j++)
                 {
-                    var taskRes = Task.Run(() => RunAlghorithmForGivenTime(matrix, timePerTest));
+                    var taskRes = Task.Run(() => RunAlghorithmForGivenTime(matrix, timePerTestInMs));
                     var hasFinished = taskRes.Result;
-                    if (hasFinished) amountFinished++;
+                    if (hasFinished == true)
+                        amountFinished++;
                 }
 
                 if (repSize % 10 == 0 || repSize == 1)
-                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | FinishedAmount: {amountFinished} | TestsAmount: {testsAmountPerSize}");
+                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | FinishedAmount: {amountFinished}/{testsAmountPerSize}");
             }
 
             double percent = (double)amountFinished / (double)testsAmountPerSize;
             percent = Math.Round(percent * 100, 2);
 
             List<object[]> data = new();
-            data.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, percent });
+            data.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, percent.ToString("0.##") + "%"});
             FilesHandler.CreateCsvFile(data, filePath, false, ',');
         }
     }
 
 
-    private async Task<bool> RunAlghorithmForGivenTime(AdjMatrix matrix, TimeSpan time)
+    private async Task<bool> RunAlghorithmForGivenTime(AdjMatrix matrix, int timeInMs)
     {
         bool hasFinished = false;
+        bool wait = true;
 
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         _ = Task.Factory.StartNew(() => { 
             algorithm.CancellationToken = cancellationTokenSource.Token;
             var result = algorithm.CalculateBestPath(matrix);
-            hasFinished = true;
+            if (wait)
+            {
+                hasFinished = true;
+                wait = false;
+            }
         }, cancellationTokenSource.Token);
 
-        TimeSpan offest = new TimeSpan(0, 0, 0, 0, 1);
+        _ = Task.Factory.StartNew(async () => {
+            await Task.Delay(timeInMs);
+            wait = false;
+        });
 
-        for (TimeSpan counter = new(0,0,0); counter.CompareTo(time) < 0; counter = counter.Add(offest))
+        while (wait)
         {
-            await Task.Delay(offest);
-            if(hasFinished)
-            {
-                break;
-            }
+            await Task.Delay(1);
         }
 
         cancellationTokenSource.Cancel();
