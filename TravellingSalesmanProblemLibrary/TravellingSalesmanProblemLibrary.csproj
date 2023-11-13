@@ -11,8 +11,4 @@
     <Compile Remove="TSP.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Testers\" />
-  </ItemGroup>
-
 </Project>

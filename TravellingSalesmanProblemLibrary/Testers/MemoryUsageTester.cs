@@ -20,7 +20,7 @@ public class MemoryUsageTester : Tester
         matrixMaxDistance = 1000;
 
         repPerMatrix = 1;
-        repPerSize = 5;
+        repPerSize = 20;
     }
 
     public override void RunTest(string fileDir)
@@ -67,6 +67,10 @@ public class MemoryUsageTester : Tester
                     perMatrixMeanRep.Add(memoryTable.Average());
                     perMatrixMaxRep.Add(memoryTable.Max());
                     perMatrixMedianRep.Add(memoryTable.Median());
+
+
+                    if (repSize % 5 == 1 || repSize == repPerSize)
+                        Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | MedianMemory: {memoryTable.Median()} [MB]");
                 }
                 
 

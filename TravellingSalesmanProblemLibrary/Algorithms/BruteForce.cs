@@ -19,7 +19,6 @@ public class BruteForce : TSPAlgorithm
     /// Calculates the best path cost using the brute-force algorithm for a given adjacency matrix.
     /// </summary>
     /// <param name="matrix">The AdjMatrix (adjency matrix) containing vertices and distances.</param>
-    /// <param name="cancellationToken">Token for task cancellation</param>
     /// <returns>
     /// A tuple containing the best path as an array of vertex indices and the total cost of the path.
     /// Returns null if no valid path is found.

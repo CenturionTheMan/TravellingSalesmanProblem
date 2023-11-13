@@ -13,7 +13,7 @@ public abstract class TSPAlgorithm
     public CancellationToken CancellationToken
     {
         get;
-        private set;
+        internal set;
     }
 
     public TSPAlgorithm()
@@ -24,6 +24,11 @@ public abstract class TSPAlgorithm
     public TSPAlgorithm(ref CancellationToken cancellationToken)
     {
         this.CancellationToken = cancellationToken;
+    }
+
+    public TSPAlgorithm(TSPAlgorithm algh)
+    {
+
     }
 
 

@@ -124,16 +124,6 @@ public class DynamicProgramming : TSPAlgorithm
         return res;
     }
 
-    private int CaluclatePathCost(AdjMatrix matrix, List<int> path)
-    {
-        int sum = 0;
-        for (int i = 0; i < path.Count - 1; i++)
-        {
-            sum += matrix.GetDistance(path[i], path[i + 1]);
-        }
-        return sum;
-    }
-
     /// <summary>
     /// Sets a specific bit at the given index in a bitmask.
     /// </summary>
