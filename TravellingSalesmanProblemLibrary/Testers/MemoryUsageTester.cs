@@ -67,12 +67,10 @@ public class MemoryUsageTester : Tester
                     perMatrixMeanRep.Add(memoryTable.Average());
                     perMatrixMaxRep.Add(memoryTable.Max());
                     perMatrixMedianRep.Add(memoryTable.Median());
-
-
-                    if (repSize % 5 == 1 || repSize == repPerSize)
-                        Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | MedianMemory: {memoryTable.Median()} [MB]");
                 }
-                
+
+                if (repSize % 5 == 0 || repSize == 1)
+                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | MedianMemory: {memoryTable.Median()} [MB]");
 
                 meanRep.Add(perMatrixMeanRep.Average());
                 maxRep.Add(perMatrixMaxRep.Max());

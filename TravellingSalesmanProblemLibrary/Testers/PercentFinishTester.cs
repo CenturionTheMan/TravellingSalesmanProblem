@@ -59,12 +59,12 @@ public class PercentFinishTester : Tester
                     if (hasFinished) amountFinished++;
                 }
 
-                if (repSize % 10 == 1 || repSize == repPerSize)
+                if (repSize % 10 == 0 || repSize == 1)
                     Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | FinishedAmount: {amountFinished} | TestsAmount: {testsAmountPerSize}");
             }
 
-            double percent = (double)amountFinished * 100 / (double)testsAmountPerSize;
-            percent = Math.Round(percent, 2);
+            double percent = (double)amountFinished / (double)testsAmountPerSize;
+            percent = Math.Round(percent * 100, 2);
 
             List<object[]> data = new();
             data.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, percent });
