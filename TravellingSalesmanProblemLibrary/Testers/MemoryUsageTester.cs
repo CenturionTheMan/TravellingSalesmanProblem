@@ -7,69 +7,23 @@ using static TravellingSalesmanProblemLibrary.Utilites;
 
 namespace TravellingSalesmanProblemLibrary.Testers;
 
-public class MemoryUsageTester
+public class MemoryUsageTester : Tester
 {
-    private TSPAlgorithm algorithm;
 
-    private int minMatrixSize = 2;
-    private int maxMatrixSize = 10;
-    private int stepMatrixSize = 1;
-
-    private int matrixMinDistance = 1;
-    private int matrixMaxDistance = 1000;
-
-    private int repPerSize = 10;
-
-
-    public MemoryUsageTester(TSPAlgorithm algorithm)
+    public MemoryUsageTester(TSPAlgorithm algorithm) : base(algorithm)
     {
-        this.algorithm = algorithm;
+        minMatrixSize = 2;
+        maxMatrixSize = 20;
+        stepMatrixSize = 1;
+
+        matrixMinDistance = 1;
+        matrixMaxDistance = 1000;
+
+        repPerMatrix = 1;
+        repPerSize = 5;
     }
 
-
-    /// <summary>
-    /// Sets the matrix size range for testing.
-    /// </summary>
-    /// <param name="minMatrixSize">The minimum matrix size.</param>
-    /// <param name="maxMatrixSize">The maximum matrix size.</param>
-    /// <param name="stepMatrixSize">The step size for increasing the matrix size.</param>
-    /// <returns>The current TimePerformanceTester instance.</returns>
-    public MemoryUsageTester SetMatrixSizeForTest(int minMatrixSize, int maxMatrixSize, int stepMatrixSize)
-    {
-        this.minMatrixSize = minMatrixSize;
-        this.maxMatrixSize = maxMatrixSize;
-        this.stepMatrixSize = stepMatrixSize;
-        return this;
-    }
-
-    /// <summary>
-    /// Sets the distance range for matrix generation.
-    /// </summary>
-    /// <param name="matrixMinDistance">The minimum distance value.</param>
-    /// <param name="matrixMaxDistance">The maximum distance value.</param>
-    /// <returns>The current TimePerformanceTester instance.</returns>
-    public MemoryUsageTester SetMatrixDistances(int matrixMinDistance, int matrixMaxDistance)
-    {
-        this.matrixMinDistance = matrixMinDistance;
-        this.matrixMaxDistance = matrixMaxDistance;
-        return this;
-    }
-
-    /// <summary>
-    /// Sets the repetition amount for testing.
-    /// </summary>
-    /// <param name="repPerMatrix">The number of repetitions per matrix.</param>
-    /// <param name="repPerSize">The number of repetitions per matrix size.</param>
-    /// <returns>The current TimePerformanceTester instance.</returns>
-    public MemoryUsageTester SetRepeatAmount(int repPerSize)
-    {
-        this.repPerSize = repPerSize;
-        return this;
-    }
-
-
-    
-    public void PerformMemoryTest(string fileDir)
+    public override void RunTest(string fileDir)
     {
         fileDir = fileDir.ChangeFileExtension("");
         string pathMean = fileDir + algorithm.AlgorithmName + "MemoryTestMean" + ".csv";
@@ -93,20 +47,32 @@ public class MemoryUsageTester
                 AdjMatrix matrix = new AdjMatrix(matrixSize, matrixMinDistance, matrixMaxDistance);
                 CancellationTokenSource memoryRegisterCTS = new CancellationTokenSource();
 
-                var memoryRegisterTaskResult = MeasureMemoryUsageInIntervals(memoryRegisterCTS, 10);
-                algorithm.CalculateBestPath(matrix);
-                memoryRegisterCTS.Cancel();
+                List<double> perMatrixMeanRep = new();
+                List<double> perMatrixMaxRep = new();
+                List<double> perMatrixMedianRep = new();
 
-                var memoryTable = memoryRegisterTaskResult.Result;
-                if(memoryTable == null)
+                for (int j = 0; j < repPerMatrix; j++)
                 {
-                    memoryTable = new();
-                    memoryTable.Add(GC.GetTotalMemory(true));
-                }
+                    var memoryRegisterTaskResult = MeasureMemoryUsageInIntervals(memoryRegisterCTS, 10);
+                    algorithm.CalculateBestPath(matrix);
+                    memoryRegisterCTS.Cancel();
 
-                meanRep.Add( memoryTable.Average() );
-                maxRep.Add( memoryTable.Max() );
-                medianRep.Add( memoryTable.Median() );
+                    var memoryTable = memoryRegisterTaskResult.Result;
+                    if (memoryTable == null)
+                    {
+                        memoryTable = new();
+                        memoryTable.Add(GC.GetTotalMemory(true));
+                    }
+
+                    perMatrixMeanRep.Add(memoryTable.Average());
+                    perMatrixMaxRep.Add(memoryTable.Max());
+                    perMatrixMedianRep.Add(memoryTable.Median());
+                }
+                
+
+                meanRep.Add(perMatrixMeanRep.Average());
+                maxRep.Add(perMatrixMaxRep.Max());
+                medianRep.Add(perMatrixMedianRep.Median());
             }
 
             double meanVal = meanRep.Average();

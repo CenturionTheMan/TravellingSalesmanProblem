@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary.Testers;
 
-public class PercentFinishTester
+public class PercentFinishTester : Tester
 {
+    public PercentFinishTester(TSPAlgorithm algorithm) : base(algorithm)
+    {
+    }
 
+    public override void RunTest(string fileDir)
+    {
+        throw new NotImplementedException();
+    }
 }
