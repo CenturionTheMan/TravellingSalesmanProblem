@@ -26,18 +26,11 @@ public class Program
 
 
 
-        //TestTime();
-        //TestMemory();
+        TestTime();
+        TestMemory();
         TestPercentFinished();
         Console.WriteLine("DONE");
         Console.ReadKey();
-    }
-
-    public static void TestPercentFinished()
-    {
-        PercentFinishTester dpTester = new PercentFinishTester(new DynamicProgramming());
-        dpTester.SetMatrixSizeForTest(2, 20, 1);
-        dpTester.RunTest(TEST_RESULT_DIRECTORY);
     }
 
     public static void TestTime()
@@ -55,7 +48,7 @@ public class Program
         babLowCostTester.RunTest(TEST_RESULT_DIRECTORY);
 
         TimePerformanceTester babBFSTester = new(new BranchAndBound(BranchAndBound.SearchType.BREADTH));
-        babBFSTester.SetMatrixSizeForTest(2, 20, 1);
+        babBFSTester.SetMatrixSizeForTest(2, 11, 1);
         babBFSTester.RunTest(TEST_RESULT_DIRECTORY);
 
         TimePerformanceTester babDFSTester = new(new BranchAndBound(BranchAndBound.SearchType.DEEP));
@@ -74,12 +67,31 @@ public class Program
         babTesterLC.RunTest(TEST_RESULT_DIRECTORY);
 
         MemoryUsageTester babTesterBFS = new MemoryUsageTester(new BranchAndBound(BranchAndBound.SearchType.BREADTH));
-        babTesterBFS.SetMatrixSizeForTest(2, 20, 1);
+        babTesterBFS.SetMatrixSizeForTest(2, 11, 1);
         babTesterBFS.RunTest(TEST_RESULT_DIRECTORY);
 
         MemoryUsageTester babTesterDFS = new MemoryUsageTester(new BranchAndBound(BranchAndBound.SearchType.DEEP));
         babTesterDFS.SetMatrixSizeForTest(2, 20, 1);
         babTesterDFS.RunTest(TEST_RESULT_DIRECTORY);
+    }
+
+    public static void TestPercentFinished()
+    {
+        PercentFinishTester dpTester = new PercentFinishTester(new DynamicProgramming());
+        dpTester.SetMatrixSizeForTest(2, 20, 1);
+        dpTester.RunTest(TEST_RESULT_DIRECTORY);
+
+        PercentFinishTester babLowCostTester = new(new BranchAndBound(BranchAndBound.SearchType.LOW_COST));
+        babLowCostTester.SetMatrixSizeForTest(2, 20, 1);
+        babLowCostTester.RunTest(TEST_RESULT_DIRECTORY);
+
+        PercentFinishTester babBFSTester = new(new BranchAndBound(BranchAndBound.SearchType.BREADTH));
+        babBFSTester.SetMatrixSizeForTest(2, 11, 1);
+        babBFSTester.RunTest(TEST_RESULT_DIRECTORY);
+
+        PercentFinishTester babDFSTester = new(new BranchAndBound(BranchAndBound.SearchType.DEEP));
+        babDFSTester.SetMatrixSizeForTest(2, 20, 1);
+        babDFSTester.RunTest(TEST_RESULT_DIRECTORY);
     }
 }
 
