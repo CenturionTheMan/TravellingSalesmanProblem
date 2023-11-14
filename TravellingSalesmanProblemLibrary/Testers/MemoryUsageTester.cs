@@ -26,9 +26,9 @@ public class MemoryUsageTester : Tester
     public override void RunTest(string fileDir)
     {
         fileDir = fileDir.ChangeFileExtension("");
-        string pathMean = fileDir + algorithm.AlgorithmName + "_MemoryTestMean" + ".csv";
-        string pathMax = fileDir + algorithm.AlgorithmName + "_MemoryTestMax" + ".csv";
-        string pathMedian = fileDir + algorithm.AlgorithmName + "_MemoryTestMedian" + ".csv";
+        string pathMean = fileDir + $"MemoryTest_Avg_{algorithm.AlgorithmName}.csv";
+        string pathMax = fileDir + $"MemoryTest_Max_{algorithm.AlgorithmName}.csv";
+        string pathMedian = fileDir + $"MemoryTest_Median_{algorithm.AlgorithmName}.csv";
 
         List<object[]> tmp = new();
         tmp.Add(new object[] { "Algorithm", "RepsPerSize", "MatrixSize", "Memory [MB]" });

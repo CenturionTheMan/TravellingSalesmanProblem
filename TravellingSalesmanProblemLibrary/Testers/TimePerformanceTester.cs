@@ -39,8 +39,8 @@ public class TimePerformanceTester: Tester
 
         Stopwatch stopWatch = new Stopwatch();
 
-        string detailedPath = fileDir + algorithm.AlgorithmName + "_TimeTest_" + DETAILED_PATH_SUFFIX + ".csv";
-        string meanPath = fileDir + algorithm.AlgorithmName + "_TimeTest_" + MEAN_PATH_SUFFIX + ".csv";
+        string detailedPath = fileDir + $"TimeTest_{algorithm.AlgorithmName}_{DETAILED_PATH_SUFFIX}.csv";
+        string meanPath = fileDir + $"TimeTest_{algorithm.AlgorithmName}_{MEAN_PATH_SUFFIX}.csv";
 
 
         List<object[]> tmp = new();

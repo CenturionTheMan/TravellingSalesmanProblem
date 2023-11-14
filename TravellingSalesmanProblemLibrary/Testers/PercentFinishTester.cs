@@ -37,8 +37,7 @@ public class PercentFinishTester : Tester
 
         fileDir = fileDir.ChangeFileExtension("");
 
-        string filePath = fileDir + algorithm.AlgorithmName + "_PercentFinishedTest.csv";
-
+        string filePath = fileDir + $"PercentFinishedTest_{algorithm.AlgorithmName}.csv";
 
         List<object[]> tmp = new();
         tmp.Add(new object[] { "Algorithm", "RepsPerSize", "MatrixSize", "PercentFinished" });
