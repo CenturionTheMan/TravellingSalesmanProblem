@@ -27,7 +27,7 @@ public class MemoryUsageTester : Tester
     {
         fileDir = fileDir.ChangeFileExtension("");
         string pathMean = fileDir + algorithm.AlgorithmName + "_MemoryTestMean" + ".csv";
-        string pathMax = fileDir + algorithm.AlgorithmName + "_MemoryTestMan" + ".csv";
+        string pathMax = fileDir + algorithm.AlgorithmName + "_MemoryTestMax" + ".csv";
         string pathMedian = fileDir + algorithm.AlgorithmName + "_MemoryTestMedian" + ".csv";
 
         List<object[]> tmp = new();
