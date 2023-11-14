@@ -66,12 +66,13 @@ public class TimePerformanceTester: Tester
                     stopWatch.Stop();
                     timePerMatrix += stopWatch.ElapsedMilliseconds;
                 }
-                timePerSize += timePerMatrix / repPerMatrix * 0.01;
+                double singleTestTime = timePerMatrix / repPerMatrix * 0.01;
+                timePerSize += singleTestTime;
 
-                dataForDetailed.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, timePerMatrix / repPerMatrix });
+                dataForDetailed.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, singleTestTime.ToString("0.00") });
 
                 if (repSize % 10 == 0 || repSize == 1)
-                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | Time: {timePerMatrix / repPerMatrix} [s]");
+                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | Time: {singleTestTime} [s]");
             }
             double meanTime = timePerSize / repPerSize;
             dataForMean.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanTime.ToString("0.00") });
