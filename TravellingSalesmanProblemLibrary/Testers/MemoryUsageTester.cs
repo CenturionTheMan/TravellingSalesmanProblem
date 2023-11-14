@@ -77,13 +77,13 @@ public class MemoryUsageTester : Tester
                 medianRep.Add(perMatrixMedianRep.Median());
             }
 
-            double meanVal = Math.Round(meanRep.Average(),2);
-            double maxVal = Math.Round(maxRep.Max(), 2);
-            double medianVal = Math.Round(medianRep.Median(), 2);
+            double meanVal = meanRep.Average();
+            double maxVal = maxRep.Max();
+            double medianVal = medianRep.Median();
 
-            List<object[]> meanRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanVal.ToString("0.00") } };
-            List<object[]> maxRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, maxVal.ToString("0.00") } };
-            List<object[]> medianRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, medianVal.ToString("0.00") } };
+            List<object[]> meanRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanVal } };
+            List<object[]> maxRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, maxVal } };
+            List<object[]> medianRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, medianVal } };
             FilesHandler.CreateCsvFile(meanRow, pathMean, false);
             FilesHandler.CreateCsvFile(maxRow, pathMax, false);
             FilesHandler.CreateCsvFile(medianRow, pathMedian, false);
