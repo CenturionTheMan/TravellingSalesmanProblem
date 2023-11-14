@@ -72,7 +72,7 @@ public class TimePerformanceTester: Tester
                 dataForDetailed.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, singleTestTime });
 
                 if (repSize % 10 == 0 || repSize == 1)
-                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | Time: {singleTestTime} [s]");
+                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | Time: {singleTestTime} [ms]");
             }
             double meanTime = timePerSize / repPerSize;
             dataForMean.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanTime });
