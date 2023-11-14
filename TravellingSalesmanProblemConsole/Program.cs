@@ -26,8 +26,8 @@ public class Program
 
 
 
-        //TestTime();
-        //TestMemory();
+        TestTime();
+        TestMemory();
         TestPercentFinished();
         Console.WriteLine("DONE");
         Console.ReadKey();
@@ -40,11 +40,11 @@ public class Program
         //ptBruteForce.RunTest(TEST_RESULT_DIRECTORY);
 
         TimePerformanceTester dpTester = new(new DynamicProgramming());
-        dpTester.SetMatrixSizeForTest(2, 20, 1);
+        dpTester.SetMatrixSizeForTest(2, 21, 1);
         dpTester.RunTest(TEST_RESULT_DIRECTORY);
 
         TimePerformanceTester babLowCostTester = new(new BranchAndBound(BranchAndBound.SearchType.LOW_COST));
-        babLowCostTester.SetMatrixSizeForTest(2, 20, 1);
+        babLowCostTester.SetMatrixSizeForTest(2, 21, 1);
         babLowCostTester.RunTest(TEST_RESULT_DIRECTORY);
 
         TimePerformanceTester babBFSTester = new(new BranchAndBound(BranchAndBound.SearchType.BREADTH));
@@ -52,18 +52,18 @@ public class Program
         babBFSTester.RunTest(TEST_RESULT_DIRECTORY);
 
         TimePerformanceTester babDFSTester = new(new BranchAndBound(BranchAndBound.SearchType.DEEP));
-        babDFSTester.SetMatrixSizeForTest(2, 20, 1);
+        babDFSTester.SetMatrixSizeForTest(2, 21, 1);
         babDFSTester.RunTest(TEST_RESULT_DIRECTORY);
     }
 
     public static void TestMemory()
     {
         MemoryUsageTester dpTester = new MemoryUsageTester(new DynamicProgramming());
-        dpTester.SetMatrixSizeForTest(2, 20, 1);
+        dpTester.SetMatrixSizeForTest(2, 21, 1);
         dpTester.RunTest(TEST_RESULT_DIRECTORY);
 
         MemoryUsageTester babTesterLC = new MemoryUsageTester(new BranchAndBound(BranchAndBound.SearchType.LOW_COST));
-        babTesterLC.SetMatrixSizeForTest(2, 20, 1);
+        babTesterLC.SetMatrixSizeForTest(2, 21, 1);
         babTesterLC.RunTest(TEST_RESULT_DIRECTORY);
 
         MemoryUsageTester babTesterBFS = new MemoryUsageTester(new BranchAndBound(BranchAndBound.SearchType.BREADTH));
@@ -71,18 +71,18 @@ public class Program
         babTesterBFS.RunTest(TEST_RESULT_DIRECTORY);
 
         MemoryUsageTester babTesterDFS = new MemoryUsageTester(new BranchAndBound(BranchAndBound.SearchType.DEEP));
-        babTesterDFS.SetMatrixSizeForTest(2, 20, 1);
+        babTesterDFS.SetMatrixSizeForTest(2, 21, 1);
         babTesterDFS.RunTest(TEST_RESULT_DIRECTORY);
     }
 
     public static void TestPercentFinished()
     {
         PercentFinishTester babLowCostTester = new(new BranchAndBound(BranchAndBound.SearchType.LOW_COST));
-        babLowCostTester.SetMatrixSizeForTest(2, 20, 1);
+        babLowCostTester.SetMatrixSizeForTest(2, 25, 1);
         babLowCostTester.RunTest(TEST_RESULT_DIRECTORY);
 
         PercentFinishTester dpTester = new PercentFinishTester(new DynamicProgramming());
-        dpTester.SetMatrixSizeForTest(2, 20, 1);
+        dpTester.SetMatrixSizeForTest(2, 25, 1);
         dpTester.RunTest(TEST_RESULT_DIRECTORY);
 
         PercentFinishTester babBFSTester = new(new BranchAndBound(BranchAndBound.SearchType.BREADTH));
@@ -90,7 +90,7 @@ public class Program
         babBFSTester.RunTest(TEST_RESULT_DIRECTORY);
 
         PercentFinishTester babDFSTester = new(new BranchAndBound(BranchAndBound.SearchType.DEEP));
-        babDFSTester.SetMatrixSizeForTest(2, 20, 1);
+        babDFSTester.SetMatrixSizeForTest(2, 25, 1);
         babDFSTester.RunTest(TEST_RESULT_DIRECTORY);
     }
 }

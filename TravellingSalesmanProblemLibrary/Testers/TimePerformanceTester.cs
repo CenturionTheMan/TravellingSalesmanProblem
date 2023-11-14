@@ -44,7 +44,7 @@ public class TimePerformanceTester: Tester
 
 
         List<object[]> tmp = new();
-        tmp.Add(new object[] { "Algorithm", "RepsPerSize", "MatrixSize", "TimeInMs"});
+        tmp.Add(new object[] { "Algorithm", "RepsPerSize", "MatrixSize", "TimeInSeconds"});
         FilesHandler.CreateCsvFile(tmp, detailedPath, true, ',');
         FilesHandler.CreateCsvFile(tmp, meanPath, true, ',');
 
@@ -66,12 +66,12 @@ public class TimePerformanceTester: Tester
                     stopWatch.Stop();
                     timePerMatrix += stopWatch.ElapsedMilliseconds;
                 }
-                timePerSize += timePerMatrix / repPerMatrix;
+                timePerSize += timePerMatrix / repPerMatrix * 0.01;
 
                 dataForDetailed.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, timePerMatrix / repPerMatrix });
 
                 if (repSize % 10 == 0 || repSize == 1)
-                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | Time: {timePerMatrix / repPerMatrix} [ms]");
+                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | Time: {timePerMatrix / repPerMatrix} [s]");
             }
             double meanTime = timePerSize / repPerSize;
             dataForMean.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanTime.ToString("0.00") });
