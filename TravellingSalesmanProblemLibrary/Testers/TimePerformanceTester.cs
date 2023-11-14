@@ -10,7 +10,7 @@ namespace TravellingSalesmanProblemLibrary.Testers;
 public class TimePerformanceTester: Tester
 {
     const string DETAILED_PATH_SUFFIX = "Detailed";
-    const string MEAN_PATH_SUFFIX = "Mean";
+    const string MEAN_PATH_SUFFIX = "Avg";
 
     /// <summary>
     /// Initializes a new instance of the TimePerformanceTester class.
