@@ -20,7 +20,7 @@ public class MemoryUsageTester : Tester
         matrixMaxDistance = 1000;
 
         repPerMatrix = 1;
-        repPerSize = 20;
+        repPerSize = 10;
     }
 
     public override void RunTest(string fileDir)
