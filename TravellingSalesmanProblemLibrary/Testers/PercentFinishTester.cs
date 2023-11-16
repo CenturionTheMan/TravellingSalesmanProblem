@@ -67,7 +67,7 @@ public class PercentFinishTester : Tester
             percent = Math.Round(percent * 100, 2);
 
             List<object[]> data = new();
-            data.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, percent.ToString("0.##") + "%"});
+            data.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, percent.ToString("0.##")});
             FilesHandler.CreateCsvFile(data, filePath, false, ',');
         }
     }

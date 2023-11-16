@@ -31,7 +31,7 @@ public class MemoryUsageTester : Tester
         string pathMedian = fileDir + $"MemoryTest_Median_{algorithm.AlgorithmName}.csv";
 
         List<object[]> tmp = new();
-        tmp.Add(new object[] { "Algorithm", "RepsPerSize", "MatrixSize", "Memory [MB]" });
+        tmp.Add(new object[] { "Algorithm", "RepsPerSize", "MatrixSize", "MemoryMB" });
         FilesHandler.CreateCsvFile(tmp, pathMean, true);
         FilesHandler.CreateCsvFile(tmp, pathMax, true);
         FilesHandler.CreateCsvFile(tmp, pathMedian, true);
