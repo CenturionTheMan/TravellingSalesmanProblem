@@ -132,7 +132,7 @@ public partial class Form1 : Form
 
     private void SimulatedAnnealingRadioButton_CheckedChanged(object sender, EventArgs e)
     {
-        var tmp = new SimulatedAnnealing(1000000000, 0.99, 1);
+        var tmp = new SimulatedAnnealing(1000000000, 0.99, 1, 10000, 1000000);
         this.algorithm = tmp;
         popupSettingsForm = null; //TODO
         tmp.OnTemperatureMileston += PrintAlgorithMessage;

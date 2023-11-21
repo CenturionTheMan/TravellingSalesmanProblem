@@ -11,7 +11,8 @@ public class Program
 
     private static string pathForMatrix = "G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\matrix_6x6.txt";
     private static string pathForm170Matrix = "D:\\GoogleDriveMirror\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\ftv170.atsp";
-    private static string pathForm403Matrix = "D:\\GoogleDriveMirror\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\rgb403.atsp";
+    private static string pathForm403Matrix = "G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\rbg403.atsp";
+    private static string pathForm47Matrix = "G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\ftv47.atsp";
 
     public static void Main()
     {
@@ -30,7 +31,8 @@ public class Program
         //Console.WriteLine(res2.ToStringCustom());
 
         var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm170Matrix);
-        SimulatedAnnealing simulatedAnnealing = new(10000000, 0.999, 1);
+        if (matrix == null) throw new ArgumentNullException();
+        SimulatedAnnealing simulatedAnnealing = new(5000, 0.995, 1000, 10, 100000);
         var res2 = simulatedAnnealing.CalculateBestPath(matrix);
         Console.WriteLine(res2.ToStringCustom());
 
