@@ -80,8 +80,7 @@ public class PercentFinishTester : Tester
 
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         _ = Task.Factory.StartNew(() => { 
-            algorithm.CancellationToken = cancellationTokenSource.Token;
-            var result = algorithm.CalculateBestPath(matrix);
+            var result = algorithm.CalculateBestPath(matrix, cancellationTokenSource.Token);
             if (wait)
             {
                 hasFinished = true;

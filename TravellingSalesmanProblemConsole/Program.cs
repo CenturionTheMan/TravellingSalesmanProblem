@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using TravellingSalesmanProblemLibrary;
+using TravellingSalesmanProblemLibrary.Algorithms;
 using TravellingSalesmanProblemLibrary.Testers;
 
 namespace TravellingSalesmanProblemConsole;
@@ -9,20 +10,34 @@ public class Program
     const string TEST_RESULT_DIRECTORY = "G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestResults\\";
 
     private static string pathForMatrix = "G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\matrix_6x6.txt";
+    private static string pathForm170Matrix = "D:\\GoogleDriveMirror\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\ftv170.atsp";
+    private static string pathForm403Matrix = "D:\\GoogleDriveMirror\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\rgb403.atsp";
 
     public static void Main()
     {
         //var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForMatrix);
+        //var matrix = new AdjMatrix(new int?[,] {
+        //    { null, 1,1,2},
+        //    { 2, null,4,4},
+        //    { 2,4,null,5},
+        //    { 5,3,6,null}});
         //BranchAndBound bab = new BranchAndBound(BranchAndBound.SearchType.DEEP);
         
-        //var res = bab.CalculateBestPath(matrix);
-        //Console.WriteLine(res.ToStringCustom());
+        
 
         //DynamicProgramming dp = new DynamicProgramming();
         //var res2 = dp.CalculateBestPath(matrix);
         //Console.WriteLine(res2.ToStringCustom());
 
-        //return;
+        var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm170Matrix);
+        SimulatedAnnealing simulatedAnnealing = new(10000000, 0.999, 1);
+        var res2 = simulatedAnnealing.CalculateBestPath(matrix);
+        Console.WriteLine(res2.ToStringCustom());
+
+        //var res1 = bab.CalculateBestPath(matrix);
+        //Console.WriteLine(res1.ToStringCustom());
+
+        return;
 
 
 

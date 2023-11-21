@@ -10,36 +10,34 @@ public abstract class TSPAlgorithm
 {
     public abstract string AlgorithmName { get; }
 
-    public CancellationToken CancellationToken
+    protected TSPAlgorithm()
     {
-        get;
-        internal set;
     }
 
-    public TSPAlgorithm()
-    {
-        this.CancellationToken = new CancellationToken();
-    }
-
-    public TSPAlgorithm(ref CancellationToken cancellationToken)
-    {
-        this.CancellationToken = cancellationToken;
-    }
-
-    public TSPAlgorithm(TSPAlgorithm algh)
-    {
-
-    }
 
 
     /// <summary>
-    /// Finds the best solution for Sales Man Problem.
+    /// Finds the best solution for Traveling Salesman Problem.
+    /// </summary>
+    /// <param name="matrix">Adjency matrix.</param>
+    /// <param name="CancellationToken">Token used for cancelling algorithm durling runtime</param>
+    /// <returns>
+    /// Returns best path and cost, or null if no valid path is found.
+    /// </returns>
+    public abstract (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken CancellationToken);
+
+    /// <summary>
+    /// Finds the best solution for Traveling Salesman Problem.
     /// </summary>
     /// <param name="matrix">Adjency matrix.</param>
     /// <returns>
     /// Returns best path and cost, or null if no valid path is found.
     /// </returns>
-    public abstract (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix);
+    public (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    {
+        return CalculateBestPath(matrix, new CancellationToken());
+    }
+
 
 
     //public bool IsKind(AlgorithmKind kind)

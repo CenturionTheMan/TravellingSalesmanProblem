@@ -28,70 +28,73 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.closeButton = new System.Windows.Forms.Button();
-            this.searchTypeComboBox = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.SuspendLayout();
+            closeButton = new Button();
+            searchTypeComboBox = new ComboBox();
+            label1 = new Label();
+            SuspendLayout();
             // 
             // closeButton
             // 
-            this.closeButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(165)))), ((int)(((byte)(141)))));
-            this.closeButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.closeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.closeButton.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.closeButton.Location = new System.Drawing.Point(101, 88);
-            this.closeButton.Name = "closeButton";
-            this.closeButton.Size = new System.Drawing.Size(168, 38);
-            this.closeButton.TabIndex = 0;
-            this.closeButton.Text = "Save and Close";
-            this.closeButton.UseVisualStyleBackColor = false;
-            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
+            closeButton.BackColor = Color.FromArgb(165, 165, 141);
+            closeButton.FlatAppearance.BorderColor = Color.Black;
+            closeButton.FlatStyle = FlatStyle.Flat;
+            closeButton.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            closeButton.Location = new Point(81, 70);
+            closeButton.Margin = new Padding(2);
+            closeButton.Name = "closeButton";
+            closeButton.Size = new Size(134, 30);
+            closeButton.TabIndex = 0;
+            closeButton.Text = "Save and Close";
+            closeButton.UseVisualStyleBackColor = false;
+            closeButton.Click += closeButton_Click;
             // 
             // searchTypeComboBox
             // 
-            this.searchTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.searchTypeComboBox.FormattingEnabled = true;
-            this.searchTypeComboBox.ItemHeight = 20;
-            this.searchTypeComboBox.Location = new System.Drawing.Point(12, 40);
-            this.searchTypeComboBox.Name = "searchTypeComboBox";
-            this.searchTypeComboBox.Size = new System.Drawing.Size(257, 28);
-            this.searchTypeComboBox.TabIndex = 1;
-            this.searchTypeComboBox.DropDownClosed += new System.EventHandler(this.searchTypeComboBox_DropDownClosed);
+            searchTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            searchTypeComboBox.FormattingEnabled = true;
+            searchTypeComboBox.ItemHeight = 15;
+            searchTypeComboBox.Location = new Point(10, 32);
+            searchTypeComboBox.Margin = new Padding(2);
+            searchTypeComboBox.Name = "searchTypeComboBox";
+            searchTypeComboBox.Size = new Size(206, 23);
+            searchTypeComboBox.TabIndex = 1;
+            searchTypeComboBox.DropDownClosed += searchTypeComboBox_DropDownClosed;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(12, 14);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(231, 23);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Select search type for BandB:";
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Location = new Point(10, 11);
+            label1.Margin = new Padding(2, 0, 2, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(185, 19);
+            label1.TabIndex = 2;
+            label1.Text = "Select search type for BandB:";
             // 
             // PopupSettingsForBabForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(220)))), ((int)(((byte)(210)))));
-            this.ClientSize = new System.Drawing.Size(281, 138);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.searchTypeComboBox);
-            this.Controls.Add(this.closeButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "PopupSettingsForBabForm";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "PopupSettingsForBabForm";
-            this.TopMost = true;
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BackColor = Color.FromArgb(237, 220, 210);
+            ClientSize = new Size(225, 110);
+            Controls.Add(label1);
+            Controls.Add(searchTypeComboBox);
+            Controls.Add(closeButton);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(2);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "PopupSettingsForBabForm";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            SizeGripStyle = SizeGripStyle.Hide;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "PopupSettingsForBabForm";
+            TopMost = true;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

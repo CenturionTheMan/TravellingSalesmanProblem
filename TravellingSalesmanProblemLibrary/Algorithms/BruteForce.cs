@@ -9,7 +9,6 @@ namespace TravellingSalesmanProblemLibrary;
 
 public class BruteForce : TSPAlgorithm
 {
-    public BruteForce(ref CancellationToken cancellationToken) : base(ref cancellationToken) { }
     public BruteForce() : base() { }
 
     public override string AlgorithmName => "BruteForce";
@@ -23,10 +22,10 @@ public class BruteForce : TSPAlgorithm
     /// A tuple containing the best path as an array of vertex indices and the total cost of the path.
     /// Returns null if no valid path is found.
     /// </returns>
-    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
-        List<int[]> permutations = GenerateNumbersPermutations(0, matrix.GetMatrixSize - 1);
-        var best = FindBestPath(permutations, matrix);
+        List<int[]> permutations = GenerateNumbersPermutations(0, matrix.GetMatrixSize - 1, cancellationToken);
+        var best = FindBestPath(permutations, matrix, cancellationToken);
 
         return best;
     }
@@ -40,7 +39,7 @@ public class BruteForce : TSPAlgorithm
     /// <returns>
     /// A list of integer arrays, each representing a unique permutation of numbers.
     /// </returns>
-    private List<int[]> GenerateNumbersPermutations(int minNumber, int maxNumber)
+    private List<int[]> GenerateNumbersPermutations(int minNumber, int maxNumber, CancellationToken cancellationToken)
     {
         List<int> numbers = new();
         for (int i = minNumber; i <= maxNumber; i++)
@@ -49,7 +48,7 @@ public class BruteForce : TSPAlgorithm
         }
 
         List<int[]> permutations = new();
-        GenerateNumberPermutationsRecursively(new List<int>(), numbers, ref permutations);
+        GenerateNumberPermutationsRecursively(new List<int>(), numbers, ref permutations, cancellationToken);
 
         return permutations;
     }
@@ -63,14 +62,14 @@ public class BruteForce : TSPAlgorithm
     /// A tuple containing the best path (as an array of vertex indices) and its cost.
     /// If no valid path is found, returns null.
     /// </returns>
-    private (int[] path, int cost)? FindBestPath(List<int[]> paths, AdjMatrix map)
+    private (int[] path, int cost)? FindBestPath(List<int[]> paths, AdjMatrix map, CancellationToken cancellationToken)
     {
         int bestCost = int.MaxValue;
         int[]? bestPath = null;
 
         foreach (var path in paths)
         {
-            if (CancellationToken.IsCancellationRequested) return null;
+            if (cancellationToken.IsCancellationRequested) return null;
 
 
             var cost = CalculatePathCost(path, map);
@@ -119,9 +118,9 @@ public class BruteForce : TSPAlgorithm
     /// <param name="numbersOut">The list of numbers in the current permutation being constructed.</param>
     /// <param name="numbersIn">The list of available numbers to choose from.</param>
     /// <param name="result">The list where permutations are stored.</param>
-    private void GenerateNumberPermutationsRecursively(List<int> numbersOut, List<int> numbersIn, ref List<int[]> result)
+    private void GenerateNumberPermutationsRecursively(List<int> numbersOut, List<int> numbersIn, ref List<int[]> result, CancellationToken cancellationToken)
     {
-        if (CancellationToken.IsCancellationRequested)
+        if (cancellationToken.IsCancellationRequested)
         {
             return;
         }
@@ -139,13 +138,13 @@ public class BruteForce : TSPAlgorithm
         {
             foreach (var number in numbersIn)
             {
-                if (CancellationToken.IsCancellationRequested)
+                if (cancellationToken.IsCancellationRequested)
                 {
                     return;
                 }
                 numbersOut.Add(number);
                 List<int> newNumbersIn = numbersIn.FindAll(x => x != number);
-                GenerateNumberPermutationsRecursively(numbersOut, newNumbersIn, ref result);
+                GenerateNumberPermutationsRecursively(numbersOut, newNumbersIn, ref result, cancellationToken);
                 numbersOut.Remove(number);
             }
         }

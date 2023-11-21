@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 using TravellingSalesmanProblemLibrary;
+using TravellingSalesmanProblemLibrary.Algorithms;
 
 namespace TravellingSalesmanProblemWF;
 
@@ -13,40 +14,36 @@ public partial class Form1 : Form
     public readonly Color RESULT = Color.MediumSeaGreen;
 
 
-    AlgorithmKind? algorithmKind = null;
-    AdjMatrix? matrix;
-    Stopwatch stopwatch = new();
-    CancellationTokenSource? algorithmTaskCTS = null;
+    private TSPAlgorithm? algorithm = null;
+    private AdjMatrix? matrix = null;
+    private Stopwatch stopwatch = new();
+    private CancellationTokenSource? algorithmTaskCTS = null;
 
-
-    #region ALGH SETTINGS
-    // B&B
-    public BranchAndBound.SearchType babSearchType = BranchAndBound.SearchType.LOW_COST;
-
-    #endregion
+    private Form? popupSettingsForm = null;
 
 
     public Form1()
     {
-        matrix = null;
-
         InitializeComponent();
-
-        BruteForceRadioButton.Checked = true;
+        BruteForceRadioButton.Enabled = true;
     }
 
-    /// <summary>
-    /// Method will stop currently working algorithm task
-    /// </summary>
-    private void FreeCancellationToken()
+    private CancellationToken CreateCancellationToken()
     {
-        if(algorithmTaskCTS != null)
+        if (algorithmTaskCTS != null)
         {
             algorithmTaskCTS.Cancel();
-            AddTextToMessageLog("Currently working algorithm is being stopped...\n");
-            AddTextToMessageLog(BREAK_LINE + "\n");
+            //AddTextToMessageLog("Currently working algorithm is being stopped...\n");
+            //AddTextToMessageLog(BREAK_LINE + "\n");
         }
-        algorithmTaskCTS = null;
+        algorithmTaskCTS = new CancellationTokenSource();
+        return algorithmTaskCTS.Token;
+    }
+
+
+    private void PrintAlgorithMessage(string message)
+    {
+        AddTextToMessageLog(message);
     }
 
 
@@ -57,7 +54,7 @@ public partial class Form1 : Form
     private void LoadMatrixFromFile(string filePath)
     {
         matrix = FilesHandler.LoadAdjMatrixFromFile(filePath);
-        if(matrix != null)
+        if (matrix != null)
         {
             AddTextToMessageLog("Matrix loaded...\n");
         }
@@ -65,37 +62,6 @@ public partial class Form1 : Form
         {
             AddTextToMessageLog("Can not load matrix from given file path!\n");
         }
-    }
-
-    /// <summary>
-    /// Method will be used for settings params for different algh
-    /// </summary>
-    /// <returns>New tsp algorithm</returns>
-    /// <exception cref="Exception"></exception>
-    private TSPAlgorithm CreateAlgorithm()
-    {
-        TSPAlgorithm alg;
-        FreeCancellationToken();
-        algorithmTaskCTS = new CancellationTokenSource();
-        CancellationToken token = algorithmTaskCTS.Token;
-        switch (algorithmKind)
-        {
-            case AlgorithmKind.BRUTE_FORCE:
-                alg = new BruteForce(ref token);
-                break;
-
-            case AlgorithmKind.DYNAMIC_PROGRAMMING:
-                alg = new DynamicProgramming(ref token);
-                break;
-
-            case AlgorithmKind.BRANCH_AND_BOUND:
-                alg = new BranchAndBound(ref token, babSearchType);
-                break;
-
-            default:
-                throw new Exception("Algorithm was not choosen!");
-        }
-        return alg;
     }
 
 
@@ -121,7 +87,8 @@ public partial class Form1 : Form
         Color col = (textColor.HasValue) ? textColor.Value : DEFAULT;
         message = message.Replace("\n", Environment.NewLine);
 
-        RunMethodOnCurrentThread(() => {
+        RunMethodOnCurrentThread(() =>
+        {
             messageLogTextBox.SelectionColor = col;
             messageLogTextBox.AppendText(message);
         });
@@ -134,7 +101,8 @@ public partial class Form1 : Form
     /// <param name="e"></param>
     private void BruteForceRadioButton_CheckedChanged(object sender, EventArgs e)
     {
-        algorithmKind = AlgorithmKind.BRUTE_FORCE;
+        this.algorithm = new BruteForce();
+        popupSettingsForm = null;
         algorithmSettingsButton.Enabled = false;
     }
 
@@ -145,9 +113,9 @@ public partial class Form1 : Form
     /// <param name="e"></param>
     private void DynamicProgrammingRadioButton_CheckedChanged(object sender, EventArgs e)
     {
-        algorithmKind = AlgorithmKind.DYNAMIC_PROGRAMMING;
+        this.algorithm = new DynamicProgramming();
+        popupSettingsForm = null;
         algorithmSettingsButton.Enabled = false;
-
     }
 
     /// <summary>
@@ -157,9 +125,19 @@ public partial class Form1 : Form
     /// <param name="e"></param>
     private void BranchAndBoundradioButton_CheckedChanged(object sender, EventArgs e)
     {
-        algorithmKind = AlgorithmKind.BRANCH_AND_BOUND;
+        this.algorithm = new BranchAndBound();
+        popupSettingsForm = new PopupSettingsForBabForm(this, (BranchAndBound)algorithm);
         algorithmSettingsButton.Enabled = true;
+    }
 
+    private void SimulatedAnnealingRadioButton_CheckedChanged(object sender, EventArgs e)
+    {
+        var tmp = new SimulatedAnnealing(1000000000, 0.99, 1);
+        this.algorithm = tmp;
+        popupSettingsForm = null; //TODO
+        tmp.OnTemperatureMileston += PrintAlgorithMessage;
+
+        algorithmSettingsButton.Enabled = true;
     }
 
     /// <summary>
@@ -193,18 +171,16 @@ public partial class Form1 : Form
     /// <param name="e"></param>
     private void SolvaButton_Click(object sender, EventArgs e)
     {
-        if (algorithmKind == null)
+        if (algorithm == null)
         {
             AddTextToMessageLog("Can not solve example without choosen algorithm\n", WARNING);
         }
-        else if(matrix == null)
+        else if (matrix == null)
         {
             AddTextToMessageLog("Can not solve example without choosen matrix\n", WARNING);
         }
         else
         {
-            var algorithm = CreateAlgorithm();
-
             AddTextToMessageLog("\n" + BREAK_LINE + "\n");
             AddTextToMessageLog($"Solving example using ");
             AddTextToMessageLog($"{algorithm.AlgorithmName}...\n", HIGHLIGHT);
@@ -212,26 +188,27 @@ public partial class Form1 : Form
             SolvaButton.Enabled = false;
             stopButton.Enabled = true;
 
-            Task.Factory.StartNew(() => {
+            var cancelToken = CreateCancellationToken();
+
+            Task.Factory.StartNew(() =>
+            {
                 stopwatch.Restart();
-                var res = algorithm.CalculateBestPath(matrix);
+                var res = algorithm.CalculateBestPath(matrix, cancelToken);
                 stopwatch.Stop();
 
-                if(algorithm.CancellationToken.IsCancellationRequested)
+                if (cancelToken.IsCancellationRequested && res.HasValue == false)
                 {
-                    algorithm = null;
                     GC.Collect();
 
                     AddTextToMessageLog("Algorithm has stopped.\n");
                     AddTextToMessageLog(BREAK_LINE + "\n");
-                    RunMethodOnCurrentThread(() => {
+                    RunMethodOnCurrentThread(() =>
+                    {
                         SolvaButton.Enabled = true;
                         stopButton.Enabled = false;
                     });
                     return;
                 }
-
-                algorithmTaskCTS = null;
 
                 if (res == null)
                 {
@@ -243,23 +220,23 @@ public partial class Form1 : Form
 
                     AddTextToMessageLog("Best Cost: ");
                     AddTextToMessageLog($"{res.Value.cost}\n", RESULT);
-                    
+
                     AddTextToMessageLog("Best Path: ");
                     AddTextToMessageLog($"{res.Value.path.ArrayToPathString()}\n", RESULT);
-                    
+
                     AddTextToMessageLog("Time taken: ");
                     AddTextToMessageLog($"{stopwatch.Elapsed.TotalSeconds.ToString("0.###")} [s]\n", RESULT);
                 }
                 AddTextToMessageLog(BREAK_LINE + "\n");
 
-                algorithm = null;
                 GC.Collect();
 
-                RunMethodOnCurrentThread(() => {
+                RunMethodOnCurrentThread(() =>
+                {
                     SolvaButton.Enabled = true;
                     stopButton.Enabled = false;
                 });
-            });
+            }, cancelToken);
         }
 
     }
@@ -295,7 +272,7 @@ public partial class Form1 : Form
         int minDis = (int)minDistanceNumeric.Value;
         int maxDis = (int)maxDistanceNumeric.Value;
 
-        if(vertexAmount < 2)
+        if (vertexAmount < 2)
         {
             AddTextToMessageLog($"Matrix must have two or more vertices. Was given: {vertexAmount}\n", WARNING);
             return;
@@ -313,7 +290,7 @@ public partial class Form1 : Form
             return;
         }
 
-        if(minDis >= maxDis)
+        if (minDis >= maxDis)
         {
             AddTextToMessageLog($"Min distance must be lesser than max distance\n", WARNING);
             return;
@@ -326,7 +303,7 @@ public partial class Form1 : Form
 
     private void stopButton_Click(object sender, EventArgs e)
     {
-        if(algorithmTaskCTS != null)
+        if (algorithmTaskCTS != null)
         {
             algorithmTaskCTS.Cancel();
             algorithmTaskCTS = null;
@@ -336,24 +313,10 @@ public partial class Form1 : Form
 
     private void algorithmSettingsButton_Click(object sender, EventArgs e)
     {
-        if (algorithmKind == null) return;
+        if (algorithm == null || popupSettingsForm == null) return;
 
-        string alghName = algorithmKind.ToString().Replace("_", " ");
-
-        switch (algorithmKind.Value)
-        {
-            case AlgorithmKind.BRUTE_FORCE:
-                break;
-            case AlgorithmKind.DYNAMIC_PROGRAMMING:
-                break;
-            case AlgorithmKind.BRANCH_AND_BOUND:
-                {
-                    var bab = new PopupSettingsForBabForm(this, alghName);
-                    bab.ShowDialog();
-                    break;
-                }
-            default:
-                break;
-        }
+        popupSettingsForm.ShowDialog();
     }
+
+    
 }

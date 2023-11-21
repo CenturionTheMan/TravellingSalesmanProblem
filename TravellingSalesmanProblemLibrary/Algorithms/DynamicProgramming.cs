@@ -15,13 +15,12 @@ public class DynamicProgramming : TSPAlgorithm
     private uint endMask;
 
 
-    public DynamicProgramming(ref CancellationToken cancellationToken) : base(ref cancellationToken) { }
     public DynamicProgramming() : base() { }
 
     public override string AlgorithmName => "DynamicProgramming";
 
 
-    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         if (matrix.GetMatrixSize > 32) return null;
 
@@ -33,7 +32,7 @@ public class DynamicProgramming : TSPAlgorithm
         endMask = (uint)(1 << matrix.GetMatrixSize) - 1;
         uint beginMask = 1;
 
-        var cost = SolveReq(matrix, beginMask, START_NODE, memoTable, parentTable);
+        var cost = SolveReq(matrix, beginMask, START_NODE, memoTable, parentTable, cancellationToken);
         var path = RetrivePath(parentTable, beginMask, START_NODE, matrix.GetMatrixSize);
 
         return (path, cost);
@@ -51,8 +50,10 @@ public class DynamicProgramming : TSPAlgorithm
         uint mask = beginMask;
         int vertex = beginVertex;
 
-        List<int> path = new();
-        path.Add(beginVertex);
+        List<int> path = new()
+        {
+            beginVertex
+        };
 
         for (int i = 0; i < expectedPathLength - 1; i++)
         {
@@ -77,9 +78,9 @@ public class DynamicProgramming : TSPAlgorithm
     /// <param name="memoTable">A memoization table to store intermediate results.</param>
     /// <param name="parentTable">A memoization table to store path.</param>
     /// <returns>The shortest distance to complete the traveling salesman tour.</returns>
-    private int SolveReq(AdjMatrix map, uint mask, int fromVertex, int?[,] memoTable, int[,] parentTable)
+    private int SolveReq(AdjMatrix map, uint mask, int fromVertex, int?[,] memoTable, int[,] parentTable, CancellationToken cancellationToken)
     {
-        if (CancellationToken.IsCancellationRequested)
+        if (cancellationToken.IsCancellationRequested)
         {
             return int.MaxValue;
         }
@@ -100,7 +101,7 @@ public class DynamicProgramming : TSPAlgorithm
 
         for (int nextVertex = 0; nextVertex < map.GetMatrixSize; nextVertex++)
         {
-            if (CancellationToken.IsCancellationRequested)
+            if (cancellationToken.IsCancellationRequested)
             {
                 return int.MaxValue;
             }
@@ -111,7 +112,7 @@ public class DynamicProgramming : TSPAlgorithm
 
             //create new bitmask for path where nextVertex is included
             var tmpMask = SetBitInMask(mask, nextVertex);
-            tmpRes += SolveReq(map, tmpMask, nextVertex, memoTable, parentTable);
+            tmpRes += SolveReq(map, tmpMask, nextVertex, memoTable, parentTable, cancellationToken);
 
             if (tmpRes < res)
             {

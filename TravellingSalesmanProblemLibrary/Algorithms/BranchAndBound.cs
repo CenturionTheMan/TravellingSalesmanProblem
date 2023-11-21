@@ -13,15 +13,9 @@ public class BranchAndBound : TSPAlgorithm
     private SearchType searchType = SearchType.LOW_COST;
 
 
-    public BranchAndBound(ref CancellationToken cancellationToken) : base(ref cancellationToken) { }
     public BranchAndBound() : base() { }
 
     public BranchAndBound(SearchType searchType) : base()
-    {
-        this.searchType = searchType;
-    }
-
-    public BranchAndBound(ref CancellationToken cancellationToken, SearchType searchType) : base(ref cancellationToken)
     {
         this.searchType = searchType;
     }
@@ -36,7 +30,7 @@ public class BranchAndBound : TSPAlgorithm
     /// A tuple containing the best path as an array of vertex indices and the total cost,
     /// or null if the operation is canceled due to a cancellation request or impossible to solve matrix.
     /// </returns>
-    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         List<Node> nodes = new();
         List<int>? bestPath = null;
@@ -61,7 +55,7 @@ public class BranchAndBound : TSPAlgorithm
 
         while (nodes.Count > 0)
         {
-            if(CancellationToken.IsCancellationRequested)
+            if(cancellationToken.IsCancellationRequested)
             {
                 return null;
             }
@@ -106,7 +100,7 @@ public class BranchAndBound : TSPAlgorithm
             //check all possible connections
             for (int vertexTo = 0; vertexTo < matrix.GetMatrixSize; vertexTo++)
             {
-                if (CancellationToken.IsCancellationRequested)
+                if (cancellationToken.IsCancellationRequested)
                 {
                     return null;
                 }
