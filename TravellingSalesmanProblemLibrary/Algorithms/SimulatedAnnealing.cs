@@ -8,12 +8,15 @@ namespace TravellingSalesmanProblemLibrary.Algorithms;
 
 public class SimulatedAnnealing : TSPAlgorithm
 {
-    public Action<string> OnTemperatureMileston;
+    public Action<string>? OnTemperatureMileston;
     
     public override string AlgorithmName => "SimulatedAnnealing";
 
-
-
+    public double InitialTemperature { get => initialTemperature; private set => initialTemperature = value; }
+    public double Alpha { get => alpha; private set => alpha = value; }
+    public int MaxRepPerNeighbourSearch { get => maxRepPerNeighbourSearch; private set => maxRepPerNeighbourSearch = value; }
+    public int RepAmountPerTemperature { get => repAmountPerTemperature; private set => repAmountPerTemperature = value; }
+    public int InitCostAmountRepUntilBreak { get => initCostAmountRepUntilBreak; private set => initCostAmountRepUntilBreak = value; }
 
     private double initialTemperature;
     private double alpha;
@@ -21,15 +24,15 @@ public class SimulatedAnnealing : TSPAlgorithm
     private int repAmountPerTemperature;
     private int initCostAmountRepUntilBreak;
 
-    private Random random = new Random();
+    private Random random = new();
 
     public SimulatedAnnealing(double initialTemperature, double alpha, int repAmountPerTemperature, int maxRepPerNeighbourSearch, int costAmountRepUntilBreak) : base() 
     {
-        this.initialTemperature = initialTemperature;
-        this.alpha = Math.Clamp(alpha, 0, 1);
-        this.maxRepPerNeighbourSearch = Math.Clamp(maxRepPerNeighbourSearch, 1, maxRepPerNeighbourSearch);
-        this.initCostAmountRepUntilBreak = costAmountRepUntilBreak;
-        this.repAmountPerTemperature = repAmountPerTemperature;
+        this.InitialTemperature = initialTemperature;
+        this.Alpha = Math.Clamp(alpha, 0, 1);
+        this.MaxRepPerNeighbourSearch = Math.Clamp(maxRepPerNeighbourSearch, 1, maxRepPerNeighbourSearch);
+        this.InitCostAmountRepUntilBreak = costAmountRepUntilBreak;
+        this.RepAmountPerTemperature = repAmountPerTemperature;
     }
 
 
@@ -41,10 +44,10 @@ public class SimulatedAnnealing : TSPAlgorithm
 
     private (int[]? path, int cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken) 
     {
-        double temperature = this.initialTemperature;
+        double temperature = this.InitialTemperature;
         int repSameCostAmount = 0;
 
-
+        int tempChangedCounter = 1;
 
         (int[] path, int cost)? initSolution = GetInitPath(matrix);
         if (initSolution == null) return null;
@@ -52,9 +55,11 @@ public class SimulatedAnnealing : TSPAlgorithm
         (int[] path, int cost) globalBestSolution = bestSolution;
 
 
-        while (repSameCostAmount < initCostAmountRepUntilBreak)
+        while (repSameCostAmount < InitCostAmountRepUntilBreak)
         {
-            for (int i = 0; i < repAmountPerTemperature; i++)
+            int repsPerTemperature = this.RepAmountPerTemperature;
+            //int repsPerTemperature = (int)(this.repAmountPerTemperature / Math.Log(temperature));
+            for (int i = 0; i < repsPerTemperature; i++)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
@@ -62,7 +67,7 @@ public class SimulatedAnnealing : TSPAlgorithm
                     return globalBestSolution;
                 }
 
-                var newSolution = CreateSolutionNeighbour(bestSolution, SwapElementsAtIndexes, matrix, cancellationToken);
+                var newSolution = CreateSolutionNeighbour(bestSolution, matrix, cancellationToken);
                 
                 if (newSolution == null)
                 {
@@ -98,11 +103,11 @@ public class SimulatedAnnealing : TSPAlgorithm
                         repSameCostAmount++;
                     }
 
-                    Console.WriteLine($"Best={bestSolution.cost} | Prob={probability.ToString("0.00")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)initCostAmountRepUntilBreak).ToString("0.00")}");
+                    Console.WriteLine($"Best={bestSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
                 }
             }
-
-            temperature = temperature * alpha;
+            tempChangedCounter++;
+            temperature = temperature * Alpha;
         }
 
         CloseCycleInPath(ref globalBestSolution.path);
@@ -123,14 +128,14 @@ public class SimulatedAnnealing : TSPAlgorithm
     }
 
     
-    private (int[] path, int cost)? CreateSolutionNeighbour((int[] path, int cost) solution, Action<int[], int, int> changePositionsFunction, AdjMatrix matrix, CancellationToken cancellationToken)
+    private (int[] path, int cost)? CreateSolutionNeighbour((int[] path, int cost) solution, AdjMatrix matrix, CancellationToken cancellationToken)
     {
         int[] currentPath = (int[])solution.path.Clone();
 
         int[] bestPath = new int[0];
         int bestCost = int.MaxValue;
 
-        for (int i = 0; i < this.maxRepPerNeighbourSearch; i++)
+        for (int i = 0; i < this.MaxRepPerNeighbourSearch; i++)
         {
             if (cancellationToken.IsCancellationRequested) return null;
             int? cost = null;
@@ -141,7 +146,7 @@ public class SimulatedAnnealing : TSPAlgorithm
                 int firstIndex = random.Next(0, matrix.GetMatrixSize);
                 int secondIndex = random.Next(0, matrix.GetMatrixSize);
 
-                changePositionsFunction(currentPath, firstIndex, secondIndex);
+                SwapElementsAtIndexes(currentPath, firstIndex, secondIndex);
 
                 cost = CalculatePathCost(currentPath, matrix);
 
@@ -150,7 +155,7 @@ public class SimulatedAnnealing : TSPAlgorithm
                     bestCost = cost.Value;
                     bestPath = (int[])currentPath.Clone();
                 }
-                changePositionsFunction(currentPath, firstIndex, secondIndex);
+                SwapElementsAtIndexes(currentPath, firstIndex, secondIndex);
 
 
             } while (cost == null);

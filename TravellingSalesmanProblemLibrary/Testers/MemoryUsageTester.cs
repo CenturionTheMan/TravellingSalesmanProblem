@@ -9,9 +9,12 @@ namespace TravellingSalesmanProblemLibrary.Testers;
 
 public class MemoryUsageTester : Tester
 {
+    private int seed;
 
-    public MemoryUsageTester(TSPAlgorithm algorithm) : base(algorithm)
+    public MemoryUsageTester(TSPAlgorithm algorithm, int seed) : base(algorithm)
     {
+        this.seed = seed;
+
         minMatrixSize = 2;
         maxMatrixSize = 20;
         stepMatrixSize = 1;
@@ -44,7 +47,7 @@ public class MemoryUsageTester : Tester
 
             for (int repSize = 1; repSize <= repPerSize; repSize++)
             {
-                AdjMatrix matrix = new AdjMatrix(matrixSize, matrixMinDistance, matrixMaxDistance);
+                AdjMatrix matrix = new AdjMatrix(matrixSize, matrixMinDistance, matrixMaxDistance, seed);
                 CancellationTokenSource memoryRegisterCTS = new CancellationTokenSource();
 
                 List<double> perMatrixMeanRep = new();

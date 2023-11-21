@@ -11,7 +11,9 @@ public class PercentFinishTester : Tester
 {
     private int timePerTestInMs = 1000;
 
-    public PercentFinishTester(TSPAlgorithm algorithm) : base(algorithm)
+    private int seed;
+
+    public PercentFinishTester(TSPAlgorithm algorithm, int seed) : base(algorithm)
     {
         minMatrixSize = 2;
         maxMatrixSize = 10;
@@ -22,6 +24,7 @@ public class PercentFinishTester : Tester
 
         repPerMatrix = 1;
         repPerSize = 100;
+        this.seed = seed;
     }
 
     public Tester SetTimePerTest(int timePerTestInMs)
@@ -49,7 +52,7 @@ public class PercentFinishTester : Tester
 
             for (int repSize = 1; repSize <= repPerSize; repSize++)
             {
-                AdjMatrix matrix = new AdjMatrix(matrixSize, matrixMinDistance, matrixMaxDistance);
+                AdjMatrix matrix = new AdjMatrix(matrixSize, matrixMinDistance, matrixMaxDistance, seed);
 
                 for (int j = 0; j < repPerMatrix; j++)
                 {

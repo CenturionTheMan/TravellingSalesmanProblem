@@ -35,9 +35,10 @@ public class AdjMatrix
     /// <param name="verticesAmount">The number of vertices in matrix</param>
     /// <param name="minDistance">Min range (inclusive)</param>
     /// <param name="maxDistance">Max range (inclusive)</param>
-    public AdjMatrix(int verticesAmount, int minDistance, int maxDistance) : this(verticesAmount)
+    /// <param name="seed">seed for random generator</param>
+    public AdjMatrix(int verticesAmount, int minDistance, int maxDistance, int? seed = null) : this(verticesAmount)
     {
-        FillMapWithRandomValues(minDistance, maxDistance);
+        FillMapWithRandomValues(minDistance, maxDistance, seed);
     }
 
     /// <summary>
@@ -198,9 +199,10 @@ public class AdjMatrix
     /// </summary>
     /// <param name="min">min distance</param>
     /// <param name="max">max distance</param>
-    public void FillMapWithRandomValues(int min, int max)
+    /// <param name="seed">seed for random generator</param>
+    public void FillMapWithRandomValues(int min, int max, int? seed = null)
     {
-        Random random = new Random();
+        Random random = seed == null? new Random() : new Random(seed.Value);
         for (int i = 0; i < GetMatrixSize; i++)
         {
             for (int j = 0; j < GetMatrixSize; j++)

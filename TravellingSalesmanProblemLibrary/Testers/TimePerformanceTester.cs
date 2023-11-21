@@ -12,11 +12,13 @@ public class TimePerformanceTester: Tester
     const string DETAILED_PATH_SUFFIX = "Detailed";
     const string MEAN_PATH_SUFFIX = "Avg";
 
+    private int seed;
+
     /// <summary>
     /// Initializes a new instance of the TimePerformanceTester class.
     /// </summary>
     /// <param name="algorithm">The TSP algorithm to test.</param>
-    public TimePerformanceTester(TSPAlgorithm algorithm) : base(algorithm)
+    public TimePerformanceTester(TSPAlgorithm algorithm, int seed) : base(algorithm)
     {
         minMatrixSize = 2;
         maxMatrixSize = 10;
@@ -27,6 +29,7 @@ public class TimePerformanceTester: Tester
 
         repPerMatrix = 1;
         repPerSize = 100;
+        this.seed = seed;
     }
 
     /// <summary>
@@ -56,7 +59,7 @@ public class TimePerformanceTester: Tester
             double timePerSize = 0;
             for (int repSize = 1; repSize <= repPerSize; repSize++)
             {
-                AdjMatrix matrix = new AdjMatrix(matrixSize, matrixMinDistance, matrixMaxDistance);
+                AdjMatrix matrix = new AdjMatrix(matrixSize, matrixMinDistance, matrixMaxDistance, seed);
 
                 long timePerMatrix = 0;
                 for (int j = 0; j < repPerMatrix; j++)
