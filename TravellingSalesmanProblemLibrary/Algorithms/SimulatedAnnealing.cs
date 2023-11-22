@@ -8,7 +8,7 @@ namespace TravellingSalesmanProblemLibrary.Algorithms;
 
 public class SimulatedAnnealing : TSPAlgorithm
 {
-    public Action<string>? OnTemperatureMileston;
+    public Action<string>? OnAlgorithmShowInfo;
     
     public override string AlgorithmName => "SimulatedAnnealing";
 
@@ -51,8 +51,8 @@ public class SimulatedAnnealing : TSPAlgorithm
 
         (int[] path, int cost)? initSolution = GetInitPath(matrix);
         if (initSolution == null) return null;
-        (int[] path, int cost) bestSolution = initSolution.Value;
-        (int[] path, int cost) globalBestSolution = bestSolution;
+        (int[] path, int cost) currentSolution = initSolution.Value;
+        (int[] path, int cost) bestSolution = currentSolution;
 
 
         while (repSameCostAmount < InitCostAmountRepUntilBreak)
@@ -63,39 +63,39 @@ public class SimulatedAnnealing : TSPAlgorithm
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    CloseCycleInPath(ref globalBestSolution.path);
-                    return globalBestSolution;
+                    CloseCycleInPath(ref bestSolution.path);
+                    return bestSolution;
                 }
 
-                var newSolution = CreateSolutionNeighbour(bestSolution, matrix, cancellationToken);
+                var newSolution = CreateSolutionNeighbour(currentSolution, matrix, cancellationToken);
                 
                 if (newSolution == null)
                 {
-                    CloseCycleInPath(ref globalBestSolution.path);
-                    return globalBestSolution;
+                    CloseCycleInPath(ref bestSolution.path);
+                    return bestSolution;
                 }
 
-                if (newSolution.Value.cost < bestSolution.cost)
+                if (newSolution.Value.cost < currentSolution.cost)
                 {
-                    bestSolution = newSolution.Value;
+                    currentSolution = newSolution.Value;
                     repSameCostAmount = 0;
 
-                    if(globalBestSolution.cost > bestSolution.cost)
-                        globalBestSolution = bestSolution;
+                    if(bestSolution.cost > currentSolution.cost)
+                        bestSolution = currentSolution;
                 }
-                else if (newSolution.Value.cost == bestSolution.cost)
+                else if (newSolution.Value.cost == currentSolution.cost)
                 {
-                    bestSolution = newSolution.Value;
+                    currentSolution = newSolution.Value;
                     repSameCostAmount++;
                 }
                 else
                 {
                     double treshold = random.NextDouble();
-                    double probability = CalculateProbability(newSolution.Value.cost, bestSolution.cost, temperature);
+                    double probability = CalculateProbability(newSolution.Value.cost, currentSolution.cost, temperature);
 
                     if (probability > treshold)
                     {
-                        bestSolution = newSolution.Value;
+                        currentSolution = newSolution.Value;
                         repSameCostAmount = 0;
                     }
                     else
@@ -103,15 +103,23 @@ public class SimulatedAnnealing : TSPAlgorithm
                         repSameCostAmount++;
                     }
 
-                    Console.WriteLine($"Best={bestSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
+                    if((tempChangedCounter-1)%100==0)
+                    {
+                        ShowInfo($"Best={bestSolution.cost} | Current={currentSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
+                    }
                 }
             }
-            tempChangedCounter++;
             temperature = temperature * Alpha;
+            tempChangedCounter++;
         }
 
-        CloseCycleInPath(ref globalBestSolution.path);
-        return globalBestSolution;
+        CloseCycleInPath(ref bestSolution.path);
+        return bestSolution;
+    }
+
+    private void ShowInfo(string message)
+    {
+        OnAlgorithmShowInfo?.Invoke(message);
     }
 
     private void CloseCycleInPath(ref int[] path)

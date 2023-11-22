@@ -5,7 +5,7 @@ using TravellingSalesmanProblemLibrary.Algorithms;
 
 namespace TravellingSalesmanProblemWF;
 
-public partial class Form1 : Form
+public partial class MainForm : Form
 {
     public const string BREAK_LINE = "===============================================";
     public readonly Color WARNING = Color.Red;
@@ -14,7 +14,7 @@ public partial class Form1 : Form
     public readonly Color RESULT = Color.MediumSeaGreen;
 
 
-    private TSPAlgorithm? algorithm = null;
+    public TSPAlgorithm? Algorithm = null;
     private AdjMatrix? matrix = null;
     private Stopwatch stopwatch = new();
     private CancellationTokenSource? algorithmTaskCTS = null;
@@ -22,7 +22,7 @@ public partial class Form1 : Form
     private Form? popupSettingsForm = null;
 
 
-    public Form1()
+    public MainForm()
     {
         InitializeComponent();
         BruteForceRadioButton.Enabled = true;
@@ -33,7 +33,7 @@ public partial class Form1 : Form
         if (algorithmTaskCTS != null)
         {
             algorithmTaskCTS.Cancel();
-            //AddTextToMessageLog("Currently working algorithm is being stopped...\n");
+            //AddTextToMessageLog("Currently working Algorithm is being stopped...\n");
             //AddTextToMessageLog(BREAK_LINE + "\n");
         }
         algorithmTaskCTS = new CancellationTokenSource();
@@ -95,47 +95,47 @@ public partial class Form1 : Form
     }
 
     /// <summary>
-    /// Handles the Brute Force algorithm selection.
+    /// Handles the Brute Force Algorithm selection.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void BruteForceRadioButton_CheckedChanged(object sender, EventArgs e)
     {
-        this.algorithm = new BruteForce();
+        this.Algorithm = new BruteForce();
         popupSettingsForm = null;
         algorithmSettingsButton.Enabled = false;
     }
 
     /// <summary>
-    /// Handles the Dynamic Programming algorithm selection.
+    /// Handles the Dynamic Programming Algorithm selection.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void DynamicProgrammingRadioButton_CheckedChanged(object sender, EventArgs e)
     {
-        this.algorithm = new DynamicProgramming();
+        this.Algorithm = new DynamicProgramming();
         popupSettingsForm = null;
         algorithmSettingsButton.Enabled = false;
     }
 
     /// <summary>
-    /// Handles the BranchAndBound algorithm selection.
+    /// Handles the BranchAndBound Algorithm selection.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void BranchAndBoundradioButton_CheckedChanged(object sender, EventArgs e)
     {
-        this.algorithm = new BranchAndBound();
-        popupSettingsForm = new PopupSettingsForBabForm(this, (BranchAndBound)algorithm);
+        this.Algorithm = new BranchAndBound();
+        popupSettingsForm = new PopupSettingsForBabForm(this, (BranchAndBound)Algorithm);
         algorithmSettingsButton.Enabled = true;
     }
 
     private void SimulatedAnnealingRadioButton_CheckedChanged(object sender, EventArgs e)
     {
         var tmp = new SimulatedAnnealing(1000000000, 0.99, 1, 10000, 1000000);
-        this.algorithm = tmp;
-        popupSettingsForm = null; //TODO
-        tmp.OnTemperatureMileston += PrintAlgorithMessage;
+        this.Algorithm = tmp;
+        popupSettingsForm = new PopupSettingsForSAForm(this, (SimulatedAnnealing)Algorithm);
+        tmp.OnAlgorithmShowInfo += PrintAlgorithMessage;
 
         algorithmSettingsButton.Enabled = true;
     }
@@ -165,15 +165,15 @@ public partial class Form1 : Form
     }
 
     /// <summary>
-    /// Solves the TSP problem using the selected algorithm.
+    /// Solves the TSP problem using the selected Algorithm.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void SolvaButton_Click(object sender, EventArgs e)
     {
-        if (algorithm == null)
+        if (Algorithm == null)
         {
-            AddTextToMessageLog("Can not solve example without choosen algorithm\n", WARNING);
+            AddTextToMessageLog("Can not solve example without choosen Algorithm\n", WARNING);
         }
         else if (matrix == null)
         {
@@ -183,7 +183,7 @@ public partial class Form1 : Form
         {
             AddTextToMessageLog("\n" + BREAK_LINE + "\n");
             AddTextToMessageLog($"Solving example using ");
-            AddTextToMessageLog($"{algorithm.AlgorithmName}...\n", HIGHLIGHT);
+            AddTextToMessageLog($"{Algorithm.AlgorithmName}...\n", HIGHLIGHT);
 
             SolvaButton.Enabled = false;
             stopButton.Enabled = true;
@@ -193,7 +193,7 @@ public partial class Form1 : Form
             Task.Factory.StartNew(() =>
             {
                 stopwatch.Restart();
-                var res = algorithm.CalculateBestPath(matrix, cancelToken);
+                var res = Algorithm.CalculateBestPath(matrix, cancelToken);
                 stopwatch.Stop();
 
                 if (cancelToken.IsCancellationRequested && res.HasValue == false)
@@ -307,13 +307,13 @@ public partial class Form1 : Form
         {
             algorithmTaskCTS.Cancel();
             algorithmTaskCTS = null;
-            AddTextToMessageLog("Currently working algorithm is being stopped...\n");
+            AddTextToMessageLog("Currently working Algorithm is being stopped...\n");
         }
     }
 
     private void algorithmSettingsButton_Click(object sender, EventArgs e)
     {
-        if (algorithm == null || popupSettingsForm == null) return;
+        if (Algorithm == null || popupSettingsForm == null) return;
 
         popupSettingsForm.ShowDialog();
     }

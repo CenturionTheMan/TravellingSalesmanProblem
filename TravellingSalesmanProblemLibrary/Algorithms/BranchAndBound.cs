@@ -5,7 +5,7 @@ namespace TravellingSalesmanProblemLibrary;
 
 public class BranchAndBound : TSPAlgorithm
 {
-    public SearchType SelectedSearchType { get { return searchType; } set { searchType = value; } }
+    public SearchType SelectedSearchType { get { return searchType; } private set { searchType = value; } }
     public override string AlgorithmName => "BranchAndBound_" + searchType;
 
 
