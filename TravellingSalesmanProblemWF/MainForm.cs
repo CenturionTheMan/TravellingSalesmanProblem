@@ -41,7 +41,7 @@ public partial class MainForm : Form
     }
 
 
-    private void PrintAlgorithMessage(string message)
+    public void PrintAlgorithMessage(string message)
     {
         AddTextToMessageLog(message);
     }
@@ -132,7 +132,7 @@ public partial class MainForm : Form
 
     private void SimulatedAnnealingRadioButton_CheckedChanged(object sender, EventArgs e)
     {
-        var tmp = new SimulatedAnnealing(1000000000, 0.99, 1, 10000, 1000000);
+        var tmp = new SimulatedAnnealing(500, 0.99, 1000, 10, 1000000);
         this.Algorithm = tmp;
         popupSettingsForm = new PopupSettingsForSAForm(this, (SimulatedAnnealing)Algorithm);
         tmp.OnAlgorithmShowInfo += PrintAlgorithMessage;
