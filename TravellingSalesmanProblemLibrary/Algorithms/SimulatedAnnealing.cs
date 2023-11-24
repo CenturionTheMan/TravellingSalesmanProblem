@@ -103,18 +103,32 @@ public class SimulatedAnnealing : TSPAlgorithm
                         repSameCostAmount++;
                     }
 
-                    if((tempChangedCounter-1)%100==0)
-                    {
-                        ShowInfo($"Best={bestSolution.cost} | Current={currentSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
-                    }
+                    //Console.WriteLine($"Best={bestSolution.cost} | Current={currentSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
                 }
             }
-            temperature = temperature * Alpha;
+
+            ShowInfo($"Best={bestSolution.cost} | Current={currentSolution.cost} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}\n");
+
+
+            temperature = CalculateNewTemperature(temperature, tempChangedCounter);
+
             tempChangedCounter++;
         }
 
         CloseCycleInPath(ref bestSolution.path);
         return bestSolution;
+    }
+
+    private double CalculateNewTemperature(double temperature, int tempChangedCounter)
+    {
+        //temperature = initialTemperature/Math.Log(tempChangedCounter+1);
+        //if(int.MaxValue == tempChangedCounter)
+        //{
+        //    temperature = 0;
+        //    tempChangedCounter = 0;
+        //}
+
+        return temperature * Alpha;
     }
 
     private void ShowInfo(string message)

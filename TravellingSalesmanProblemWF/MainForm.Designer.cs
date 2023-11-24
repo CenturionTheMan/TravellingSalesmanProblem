@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             BruteForceRadioButton = new RadioButton();
             groupBox1 = new GroupBox();
+            SimulatedAnnealingRadioButton = new RadioButton();
             algorithmSettingsButton = new Button();
             BranchAndBoundradioButton = new RadioButton();
             DynamicProgrammingRadioButton = new RadioButton();
@@ -56,7 +57,6 @@
             SolvaButton = new Button();
             bindingSource2 = new BindingSource(components);
             stopButton = new Button();
-            SimulatedAnnealingRadioButton = new RadioButton();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             groupBox2.SuspendLayout();
@@ -92,6 +92,18 @@
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Select Algorithm";
+            // 
+            // SimulatedAnnealingRadioButton
+            // 
+            SimulatedAnnealingRadioButton.AutoSize = true;
+            SimulatedAnnealingRadioButton.Location = new Point(4, 97);
+            SimulatedAnnealingRadioButton.Name = "SimulatedAnnealingRadioButton";
+            SimulatedAnnealingRadioButton.Size = new Size(135, 19);
+            SimulatedAnnealingRadioButton.TabIndex = 10;
+            SimulatedAnnealingRadioButton.TabStop = true;
+            SimulatedAnnealingRadioButton.Text = "Simulated Annealing";
+            SimulatedAnnealingRadioButton.UseVisualStyleBackColor = true;
+            SimulatedAnnealingRadioButton.CheckedChanged += SimulatedAnnealingRadioButton_CheckedChanged;
             // 
             // algorithmSettingsButton
             // 
@@ -138,10 +150,10 @@
             // fileNameTextBox
             // 
             fileNameTextBox.BackColor = Color.FromArgb(255, 241, 230);
-            fileNameTextBox.Location = new Point(131, 47);
+            fileNameTextBox.Location = new Point(131, 33);
             fileNameTextBox.Multiline = true;
             fileNameTextBox.Name = "fileNameTextBox";
-            fileNameTextBox.Size = new Size(284, 30);
+            fileNameTextBox.Size = new Size(284, 44);
             fileNameTextBox.TabIndex = 4;
             // 
             // groupBox2
@@ -295,7 +307,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(131, 29);
+            label2.Location = new Point(131, 15);
             label2.Name = "label2";
             label2.Size = new Size(85, 15);
             label2.TabIndex = 6;
@@ -358,19 +370,7 @@
             stopButton.UseVisualStyleBackColor = false;
             stopButton.Click += stopButton_Click;
             // 
-            // SimulatedAnnealingRadioButton
-            // 
-            SimulatedAnnealingRadioButton.AutoSize = true;
-            SimulatedAnnealingRadioButton.Location = new Point(4, 97);
-            SimulatedAnnealingRadioButton.Name = "SimulatedAnnealingRadioButton";
-            SimulatedAnnealingRadioButton.Size = new Size(135, 19);
-            SimulatedAnnealingRadioButton.TabIndex = 10;
-            SimulatedAnnealingRadioButton.TabStop = true;
-            SimulatedAnnealingRadioButton.Text = "Simulated Annealing";
-            SimulatedAnnealingRadioButton.UseVisualStyleBackColor = true;
-            SimulatedAnnealingRadioButton.CheckedChanged += SimulatedAnnealingRadioButton_CheckedChanged;
-            // 
-            // Form1
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
@@ -383,7 +383,7 @@
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
-            Name = "Form1";
+            Name = "MainForm";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "TSP SOLVER";

@@ -15,7 +15,6 @@ namespace TravellingSalesmanProblemWF
     public partial class PopupSettingsForBabForm : Form
     {
         private MainForm parent;
-        private BranchAndBound branchAndBound;
 
         public BranchAndBound.SearchType babSearchType = BranchAndBound.SearchType.LOW_COST;
 
@@ -23,7 +22,6 @@ namespace TravellingSalesmanProblemWF
         public PopupSettingsForBabForm(MainForm parent, BranchAndBound branchAndBound)
         {
             this.parent = parent;
-            this.branchAndBound = branchAndBound;
 
             var initSearchType = branchAndBound.SelectedSearchType;
 
