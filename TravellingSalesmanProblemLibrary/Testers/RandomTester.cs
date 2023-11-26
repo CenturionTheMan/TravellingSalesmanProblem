@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary.Testers
 {
-    public abstract class Tester
+    public abstract class RandomTester : ITester
     {
         protected TSPAlgorithm algorithm;
 
@@ -21,7 +21,7 @@ namespace TravellingSalesmanProblemLibrary.Testers
         protected int repPerMatrix;
 
 
-        protected Tester(TSPAlgorithm algorithm)
+        protected RandomTester(TSPAlgorithm algorithm)
         {
             this.algorithm = algorithm;
         }
@@ -33,7 +33,7 @@ namespace TravellingSalesmanProblemLibrary.Testers
         /// <param name="maxMatrixSize">The maximum matrix size.</param>
         /// <param name="stepMatrixSize">The step size for increasing the matrix size.</param>
         /// <returns>The current TimePerformanceTester instance.</returns>
-        public Tester SetMatrixSizeForTest(int minMatrixSize, int maxMatrixSize, int stepMatrixSize)
+        public RandomTester SetMatrixSizeForTest(int minMatrixSize, int maxMatrixSize, int stepMatrixSize)
         {
             this.minMatrixSize = minMatrixSize;
             this.maxMatrixSize = maxMatrixSize;
@@ -47,7 +47,7 @@ namespace TravellingSalesmanProblemLibrary.Testers
         /// <param name="matrixMinDistance">The minimum distance value.</param>
         /// <param name="matrixMaxDistance">The maximum distance value.</param>
         /// <returns>The current TimePerformanceTester instance.</returns>
-        public Tester SetMatrixDistances(int matrixMinDistance, int matrixMaxDistance)
+        public RandomTester SetMatrixDistances(int matrixMinDistance, int matrixMaxDistance)
         {
             this.matrixMinDistance = matrixMinDistance;
             this.matrixMaxDistance = matrixMaxDistance;
@@ -60,13 +60,13 @@ namespace TravellingSalesmanProblemLibrary.Testers
         /// <param name="repPerMatrix">The number of repetitions per matrix.</param>
         /// <param name="repPerSize">The number of repetitions per matrix size.</param>
         /// <returns>The current TimePerformanceTester instance.</returns>
-        public Tester SetRepeatAmount(int repPerSize, int repPerMatrix)
+        public RandomTester SetRepeatAmount(int repPerSize, int repPerMatrix)
         {
             this.repPerMatrix = repPerMatrix;
             this.repPerSize = repPerSize;
             return this;
         }
 
-        public abstract void RunTest(string fileDir);
+        public abstract void RunTest(string outputFileDir);
     }
 }

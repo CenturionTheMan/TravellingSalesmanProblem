@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary.Testers;
 
-public class TimePerformanceTester: Tester
+public class TimePerformanceTester: RandomTester
 {
     const string DETAILED_PATH_SUFFIX = "Detailed";
     const string MEAN_PATH_SUFFIX = "Avg";
@@ -60,6 +60,7 @@ public class TimePerformanceTester: Tester
             for (int repSize = 1; repSize <= repPerSize; repSize++)
             {
                 AdjMatrix matrix = new AdjMatrix(matrixSize, matrixMinDistance, matrixMaxDistance, seed);
+                seed++;
 
                 long timePerMatrix = 0;
                 for (int j = 0; j < repPerMatrix; j++)

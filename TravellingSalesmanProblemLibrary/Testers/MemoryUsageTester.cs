@@ -7,7 +7,7 @@ using static TravellingSalesmanProblemLibrary.Utilites;
 
 namespace TravellingSalesmanProblemLibrary.Testers;
 
-public class MemoryUsageTester : Tester
+public class MemoryUsageTester : RandomTester
 {
     private int seed;
 
@@ -48,6 +48,7 @@ public class MemoryUsageTester : Tester
             for (int repSize = 1; repSize <= repPerSize; repSize++)
             {
                 AdjMatrix matrix = new AdjMatrix(matrixSize, matrixMinDistance, matrixMaxDistance, seed);
+                seed++;
                 CancellationTokenSource memoryRegisterCTS = new CancellationTokenSource();
 
                 List<double> perMatrixMeanRep = new();

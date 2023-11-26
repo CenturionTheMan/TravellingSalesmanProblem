@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary.Testers;
 
-public class PercentFinishTester : Tester
+public class PercentFinishTester : RandomTester
 {
     private int timePerTestInMs = 1000;
 
@@ -27,7 +27,7 @@ public class PercentFinishTester : Tester
         this.seed = seed;
     }
 
-    public Tester SetTimePerTest(int timePerTestInMs)
+    public RandomTester SetTimePerTest(int timePerTestInMs)
     {
         this.timePerTestInMs = timePerTestInMs;
         return this;
@@ -53,6 +53,7 @@ public class PercentFinishTester : Tester
             for (int repSize = 1; repSize <= repPerSize; repSize++)
             {
                 AdjMatrix matrix = new AdjMatrix(matrixSize, matrixMinDistance, matrixMaxDistance, seed);
+                seed++;
 
                 for (int j = 0; j < repPerMatrix; j++)
                 {

@@ -15,7 +15,7 @@ public class Program
     private static string pathForm47Matrix = "G:\\My Drive\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\ftv47.atsp";
 
 
-    private const int SEED = 123;
+    private static int SEED = 123;
 
 
     public static void Main()
@@ -27,30 +27,32 @@ public class Program
         //    { 2,4,null,5},
         //    { 5,3,6,null}});
         //BranchAndBound bab = new BranchAndBound(BranchAndBound.SearchType.DEEP);
-        
-        
+
+
 
         //DynamicProgramming dp = new DynamicProgramming();
         //var res2 = dp.CalculateBestPath(matrix);
         //Console.WriteLine(res2.ToStringCustom());
 
-        var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm170Matrix);
-        if (matrix == null) throw new ArgumentNullException();
-        SimulatedAnnealing simulatedAnnealing = new(500, 0.998, 1500, 15, 100000);
-        var res2 = simulatedAnnealing.CalculateBestPath(matrix);
-        Console.WriteLine(res2.ToStringCustom());
+        //var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm170Matrix);
+        //if (matrix == null) throw new ArgumentNullException();
+        //SimulatedAnnealing simulatedAnnealing = new(500, 0.998, 1500, 15, 100000);
+        //var res2 = simulatedAnnealing.CalculateBestPath(matrix);
+        //Console.WriteLine(res2.ToStringCustom());
 
         //var res1 = bab.CalculateBestPath(matrix);
         //Console.WriteLine(res1.ToStringCustom());
 
-        return;
+        //return;
 
+        Random rnd = new();
+        SEED = rnd.Next(0,100000);
 
-
-        TestTime();
-        TestMemory();
+        //TestTime();
+        //TestMemory();
         TestPercentFinished();
         Console.WriteLine("DONE");
+        Console.WriteLine(SEED);
         Console.ReadKey();
     }
 

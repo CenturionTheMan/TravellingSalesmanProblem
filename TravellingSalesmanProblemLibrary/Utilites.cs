@@ -8,6 +8,15 @@ namespace TravellingSalesmanProblemLibrary;
 
 public static class Utilites
 {
+
+    public static void DoAfterTime(Action toDo, TimeSpan waitAmount)
+    {
+        var tmp = new Thread(() => { 
+            Thread.Sleep(waitAmount);
+            toDo();
+        });
+        tmp.Start();
+    }
    
     /// <summary>
     /// Converts a tuple representing a path and its cost into a formatted string.
