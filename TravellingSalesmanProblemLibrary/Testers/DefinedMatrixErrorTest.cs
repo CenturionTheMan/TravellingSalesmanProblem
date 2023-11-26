@@ -49,8 +49,8 @@ public class DefinedMatrixErrorTest : ITester
     {
         outputFileDir = outputFileDir.ChangeFileExtension("");
 
-        pathError = outputFileDir + $"ErrorTest_{algorithm.AlgorithmName}.csv";
-        pathBest = outputFileDir + $"BestPathTest_{algorithm.AlgorithmName}.csv";
+        pathError = outputFileDir + $"ErrorTest_{algorithm.AlgorithmName}_{matrixName}.csv";
+        pathBest = outputFileDir + $"BestPathTest_{algorithm.AlgorithmName}_{matrixName}.csv";
         algorithm.OnAlgorithmTempReduction += OnTemperatureDecrease;
 
         List<object[]> tmp = new()

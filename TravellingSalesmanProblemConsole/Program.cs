@@ -60,9 +60,11 @@ public class Program
 
     public static void DefinedMatrixErrorTest()
     {
-        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(500, 0.995, 1000, 100, 100000);
-        DefinedMatrixErrorTest test = new(simulatedAnnealing, "ftv74", "D:\\GoogleDriveMirror\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\ftv47.atsp", 1776);
-        test.RunTest("D:\\GoogleDriveMirror\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestResults\\");
+       new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 0.995, 1000, 100, 100000),
+            "ftv74", "D:\\GoogleDriveMirror\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\ftv47.atsp", 
+            1776).RunTest(TEST_RESULT_DIRECTORY);
+
+
     }
 
     public static void TestTime()
