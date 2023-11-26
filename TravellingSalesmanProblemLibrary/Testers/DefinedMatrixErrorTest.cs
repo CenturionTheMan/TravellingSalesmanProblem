@@ -96,7 +96,7 @@ public class DefinedMatrixErrorTest : ITester
 
         List<object[]> tmp = new()
         {
-            new object[] { algorithm.AlgorithmName, currentRep, matrixName, stopWatch.ElapsedMilliseconds, (expectedCost - current.cost) / (double)expectedCost }
+            new object[] { algorithm.AlgorithmName, currentRep, matrixName, stopWatch.ElapsedMilliseconds, Math.Abs((expectedCost - current.cost)) / (double)expectedCost }
         };
         FilesHandler.CreateCsvFile(tmp, pathError, false, ',');
     }

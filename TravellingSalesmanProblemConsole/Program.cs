@@ -45,15 +45,24 @@ public class Program
 
         //return;
 
-        Random rnd = new();
-        SEED = rnd.Next(0,100000);
+        //Random rnd = new();
+        //SEED = rnd.Next(0,100000);
 
         //TestTime();
         //TestMemory();
-        TestPercentFinished();
-        Console.WriteLine("DONE");
-        Console.WriteLine(SEED);
+        //TestPercentFinished();
+        //Console.WriteLine("DONE");
+        //Console.WriteLine(SEED);
+
+        DefinedMatrixErrorTest();
         Console.ReadKey();
+    }
+
+    public static void DefinedMatrixErrorTest()
+    {
+        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(500, 0.995, 1000, 100, 100000);
+        DefinedMatrixErrorTest test = new(simulatedAnnealing, "ftv74", "D:\\GoogleDriveMirror\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestExamples\\ftv47.atsp", 1776);
+        test.RunTest("D:\\GoogleDriveMirror\\Studia\\Studia_sem_5\\PEA\\TravellingSalesmanProblem\\TestResults\\");
     }
 
     public static void TestTime()

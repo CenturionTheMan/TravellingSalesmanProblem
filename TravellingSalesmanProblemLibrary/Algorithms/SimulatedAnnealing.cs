@@ -112,7 +112,7 @@ public class SimulatedAnnealing : TSPAlgorithm
                         repSameCostAmount++;
                     }
 
-                    //Console.WriteLine($"Best={bestSolution.cost} | Current={currentSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
+                    Console.WriteLine($"Best={bestSolution.cost} | Current={currentSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
                 }
             }
 
@@ -121,6 +121,12 @@ public class SimulatedAnnealing : TSPAlgorithm
 
             ShowInfo($"Best={bestSolution.cost} | Current={currentSolution.cost} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}\n");
             InvokeOnTempReduction(bestSolution);
+
+            if(repSameCostAmount >= InitCostAmountRepUntilBreak && bestSolution.cost < currentSolution.cost)
+            {
+                currentSolution = bestSolution;
+                repSameCostAmount = initCostAmountRepUntilBreak/2;
+            }
 
             tempChangedCounter++;
         }
