@@ -90,7 +90,9 @@ public class SimulatedAnnealing : TSPAlgorithm
                     repSameCostAmount = 0;
 
                     if(bestSolution.cost > currentSolution.cost)
+                    {
                         bestSolution = currentSolution;
+                    }
                 }
                 else if (newSolution.Value.cost == currentSolution.cost)
                 {
@@ -114,13 +116,13 @@ public class SimulatedAnnealing : TSPAlgorithm
 
                     Console.WriteLine($"Best={bestSolution.cost} | Current={currentSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
                 }
-            }
 
+                InvokeOnIteration(bestSolution);
+            }
 
             temperature = CalculateNewTemperature(temperature, tempChangedCounter);
 
             ShowInfo($"Best={bestSolution.cost} | Current={currentSolution.cost} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}\n");
-            InvokeOnTempReduction(bestSolution);
 
             if(repSameCostAmount >= InitCostAmountRepUntilBreak && bestSolution.cost < currentSolution.cost)
             {
@@ -136,7 +138,7 @@ public class SimulatedAnnealing : TSPAlgorithm
         return bestSolution;
     }
 
-    private void InvokeOnTempReduction((int[] path, int cost) current)
+    private void InvokeOnIteration((int[] path, int cost) current)
     {
         if(OnAlgorithmTempReduction != null)
         {
