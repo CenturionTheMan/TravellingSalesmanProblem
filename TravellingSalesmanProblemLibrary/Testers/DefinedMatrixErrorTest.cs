@@ -45,6 +45,17 @@ public class DefinedMatrixErrorTest : ITester
         this.matrixName = matrixName;
     }
 
+    public DefinedMatrixErrorTest SetRunTime(TimeSpan runTime)
+    {
+        this.runTime = runTime;
+        return this;
+    }
+    public DefinedMatrixErrorTest SetRepPerMatrix(int repPerMatrix)
+    {
+        this.repPerMatrix = repPerMatrix;
+        return this;
+    }
+
     public void RunTest(string outputFileDir)
     {
         outputFileDir = outputFileDir.ChangeFileExtension("");

@@ -20,40 +20,6 @@ public class Program
 
     public static void Main()
     {
-        //var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForMatrix);
-        //var matrix = new AdjMatrix(new int?[,] {
-        //    { null, 1,1,2},
-        //    { 2, null,4,4},
-        //    { 2,4,null,5},
-        //    { 5,3,6,null}});
-        //BranchAndBound bab = new BranchAndBound(BranchAndBound.SearchType.DEEP);
-
-
-
-        //DynamicProgramming dp = new DynamicProgramming();
-        //var res2 = dp.CalculateBestPath(matrix);
-        //Console.WriteLine(res2.ToStringCustom());
-
-        //var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm170Matrix);
-        //if (matrix == null) throw new ArgumentNullException();
-        //SimulatedAnnealing simulatedAnnealing = new(500, 0.998, 1500, 15, 100000);
-        //var res2 = simulatedAnnealing.CalculateBestPath(matrix);
-        //Console.WriteLine(res2.ToStringCustom());
-
-        //var res1 = bab.CalculateBestPath(matrix);
-        //Console.WriteLine(res1.ToStringCustom());
-
-        //return;
-
-        //Random rnd = new();
-        //SEED = rnd.Next(0,100000);
-
-        //TestTime();
-        //TestMemory();
-        //TestPercentFinished();
-        //Console.WriteLine("DONE");
-        //Console.WriteLine(SEED);
-
         DefinedMatrixErrorTest();
         Console.ReadKey();
     }
@@ -61,16 +27,22 @@ public class Program
     public static void DefinedMatrixErrorTest()
     {
         new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 0.998, 1000, 100, 100000),
-            "ftv74", pathForm47Matrix, 
-            1776).RunTest(TEST_RESULT_DIRECTORY);
+            "ftv74", pathForm47Matrix,
+            1776)
+            .SetRunTime(new TimeSpan(0,2,0))
+            .RunTest(TEST_RESULT_DIRECTORY);
 
         new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 0.995, 1000, 100, 100000),
             "ftv170", pathForm170Matrix,
-            2755).RunTest(TEST_RESULT_DIRECTORY);
+            2755)
+            .SetRunTime(new TimeSpan(0, 4, 0))
+            .RunTest(TEST_RESULT_DIRECTORY);
 
         new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 0.995, 1000, 100, 100000),
             "rgb403", pathForm403Matrix,
-            2465).RunTest(TEST_RESULT_DIRECTORY);
+            2465)
+            .SetRunTime(new TimeSpan(0, 6, 0))
+            .RunTest(TEST_RESULT_DIRECTORY);
     }
 
     public static void TestTime()
