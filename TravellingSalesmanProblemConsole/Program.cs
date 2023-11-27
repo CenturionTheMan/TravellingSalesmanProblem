@@ -26,7 +26,7 @@ public class Program
 
     public static void DefinedMatrixErrorTest()
     {
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 0.998, 1000, 100, 100000),
+        new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 0.995, 1000, 100, 100000),
             "ftv74", pathForm47Matrix,
             1776)
             .SetRunTime(new TimeSpan(0,2,0))

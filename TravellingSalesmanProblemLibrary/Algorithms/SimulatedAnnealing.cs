@@ -11,7 +11,7 @@ namespace TravellingSalesmanProblemLibrary.Algorithms;
 public class SimulatedAnnealing : TSPAlgorithm
 {
     public Action<string>? OnAlgorithmShowInfo;
-    public Action<(int[] path, int cost)>? OnAlgorithmTempReduction;
+    public Action<int>? OnAlgorithmTempReduction;
 
     public override string AlgorithmName => "SimulatedAnnealing";
 
@@ -61,6 +61,7 @@ public class SimulatedAnnealing : TSPAlgorithm
         (int[] path, int cost) currentSolution = initSolution.Value;
         (int[] path, int cost) bestSolution = currentSolution;
 
+        int noImprovementCounter = 0;
 
         while (repSameCostAmount < InitCostAmountRepUntilBreak)
         {
@@ -92,6 +93,7 @@ public class SimulatedAnnealing : TSPAlgorithm
                     if(bestSolution.cost > currentSolution.cost)
                     {
                         bestSolution = currentSolution;
+                        noImprovementCounter = 0;
                     }
                 }
                 else if (newSolution.Value.cost == currentSolution.cost)
@@ -114,17 +116,25 @@ public class SimulatedAnnealing : TSPAlgorithm
                         repSameCostAmount++;
                     }
 
-                    Console.WriteLine($"Best={bestSolution.cost} | Current={currentSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
+                    //Console.WriteLine($"Best={bestSolution.cost} | Current={currentSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
                 }
 
-                InvokeOnIteration(bestSolution);
             }
 
+            //noImprovementCounter++;
+            //if (noImprovementCounter == 10)
+            //{
+            //    currentSolution = bestSolution;
+            //    noImprovementCounter = 0;
+            //}
+
             temperature = CalculateNewTemperature(temperature, tempChangedCounter);
+            InvokeOnTempReduction(bestSolution.cost);
 
             ShowInfo($"Best={bestSolution.cost} | Current={currentSolution.cost} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}\n");
 
-            if(repSameCostAmount >= InitCostAmountRepUntilBreak && bestSolution.cost < currentSolution.cost)
+
+            if (repSameCostAmount >= InitCostAmountRepUntilBreak && bestSolution.cost < currentSolution.cost)
             {
                 currentSolution = bestSolution;
                 repSameCostAmount = initCostAmountRepUntilBreak/2;
@@ -138,15 +148,11 @@ public class SimulatedAnnealing : TSPAlgorithm
         return bestSolution;
     }
 
-    private void InvokeOnIteration((int[] path, int cost) current)
+    private void InvokeOnTempReduction(int currentCost)
     {
         if(OnAlgorithmTempReduction != null)
         {
-            int[] newPath = new int[current.path.Length + 1];
-            Array.Copy(current.path, newPath, current.path.Length);
-            newPath[current.path.Length - 1] = current.path[0];
-
-            OnAlgorithmTempReduction.Invoke((newPath, current.cost));
+            OnAlgorithmTempReduction.Invoke(currentCost);
         }
     }
 
@@ -164,6 +170,7 @@ public class SimulatedAnnealing : TSPAlgorithm
 
     private void ShowInfo(string message)
     {
+        Console.WriteLine(message);
         OnAlgorithmShowInfo?.Invoke(message);
     }
 

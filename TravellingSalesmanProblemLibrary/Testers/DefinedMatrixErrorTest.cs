@@ -24,7 +24,7 @@ public class DefinedMatrixErrorTest : ITester
     private string pathBest = "";
     private int currentRep;
 
-    private (int[] path, int cost, long timeInMs)? best;
+    private (int cost, long timeInMs)? bestCost;
 
     public DefinedMatrixErrorTest(SimulatedAnnealing algorithm, string matrixName, AdjMatrix matrix, int expectedCost)
     {
@@ -85,29 +85,29 @@ public class DefinedMatrixErrorTest : ITester
             _ = algorithm.CalculateBestPath(matrix,cancellationTokenSource.Token);
             stopWatch.Stop();
 
-            if (best != null)
+            if (bestCost != null)
             {
                 List<object[]> line = new()
                 {
-                    new object[] { algorithm.AlgorithmName, currentRep, matrixName, best.Value.timeInMs, best.Value.cost}
+                    new object[] { algorithm.AlgorithmName, currentRep, matrixName, bestCost.Value.timeInMs, bestCost.Value.cost}
                 };
                 FilesHandler.CreateCsvFile(line, pathBest, false, ',');
             }
-            best = null;
+            bestCost = null;
         }
     }
 
 
-    private void OnTemperatureDecrease((int[] path, int cost) current)
+    private void OnTemperatureDecrease(int currentCost)
     {
-        if(best == null || best.Value.cost > current.cost)
+        if(bestCost == null || bestCost.Value.cost > currentCost)
         {
-            best = (current.path, current.cost, stopWatch.ElapsedMilliseconds);
+            bestCost = (currentCost, stopWatch.ElapsedMilliseconds);
         }
 
         List<object[]> tmp = new()
         {
-            new object[] { algorithm.AlgorithmName, currentRep, matrixName, stopWatch.ElapsedMilliseconds, Math.Abs((expectedCost - current.cost)) / (double)expectedCost }
+            new object[] { algorithm.AlgorithmName, currentRep, matrixName, stopWatch.ElapsedMilliseconds, Math.Abs((expectedCost - currentCost)) / (double)expectedCost }
         };
         FilesHandler.CreateCsvFile(tmp, pathError, false, ',');
     }
