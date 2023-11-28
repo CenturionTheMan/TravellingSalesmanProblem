@@ -76,14 +76,21 @@ public class DefinedMatrixErrorTest : ITester
         };
         FilesHandler.CreateCsvFile(tmp2, pathBest, true, ',');
 
+        (int[]? path, int cost)? result = null; //save it to file!!
+
         for (currentRep = 0; currentRep < repPerMatrix; currentRep++)
         {
             CancellationTokenSource cancellationTokenSource = new();
             cancellationTokenSource.CancelAfter(runTime);
             
             stopWatch.Restart();
-            _ = algorithm.CalculateBestPath(matrix,cancellationTokenSource.Token);
+            var res = algorithm.CalculateBestPath(matrix,cancellationTokenSource.Token);
             stopWatch.Stop();
+
+            if(res.HasValue && (result == null || res.Value.cost < result.Value.cost))
+            {
+                result = res;
+            }
 
             if (bestCost != null)
             {

@@ -20,6 +20,8 @@ public class SimulatedAnnealing : TSPAlgorithm
     public int MaxRepPerNeighbourSearch { get => maxRepPerNeighbourSearch; private set => maxRepPerNeighbourSearch = value; }
     public int RepAmountPerTemperature { get => repAmountPerTemperature; private set => repAmountPerTemperature = value; }
     public int InitCostAmountRepUntilBreak { get => initCostAmountRepUntilBreak; private set => initCostAmountRepUntilBreak = value; }
+    public CoolingFunction ChoosenCoolingFunction { get => coolingFunction; private set => coolingFunction = value; }
+
 
     private double initialTemperature;
     private double alpha;
@@ -27,19 +29,34 @@ public class SimulatedAnnealing : TSPAlgorithm
     private int repAmountPerTemperature;
     private int initCostAmountRepUntilBreak;
 
+    private CoolingFunction coolingFunction;
+
     private Random random = new();
 
     private Stopwatch stopwatch = new();
 
-    public SimulatedAnnealing(double initialTemperature, double alpha, int repAmountPerTemperature, int maxRepPerNeighbourSearch, int costAmountRepUntilBreak) : base() 
+    public SimulatedAnnealing(double initialTemperature, double alpha, int repAmountPerTemperature, int maxRepPerNeighbourSearch, int costAmountRepUntilBreak, CoolingFunction coolingFunction = CoolingFunction.GEOMETRIC) : base() 
     {
         this.InitialTemperature = initialTemperature;
         this.Alpha = Math.Clamp(alpha, 0, 1);
         this.MaxRepPerNeighbourSearch = Math.Clamp(maxRepPerNeighbourSearch, 1, maxRepPerNeighbourSearch);
         this.InitCostAmountRepUntilBreak = costAmountRepUntilBreak;
         this.RepAmountPerTemperature = repAmountPerTemperature;
+
+        this.coolingFunction = coolingFunction;
     }
 
+    public SimulatedAnnealing(double alpha, int maxRepPerNeighbourSearch, int costAmountRepUntilBreak, CoolingFunction coolingFunction) : base()
+    {
+        this.Alpha = Math.Clamp(alpha, 0, 1);
+        this.MaxRepPerNeighbourSearch = Math.Clamp(maxRepPerNeighbourSearch, 1, maxRepPerNeighbourSearch);
+        this.InitCostAmountRepUntilBreak = costAmountRepUntilBreak;
+        this.coolingFunction = coolingFunction;
+
+        throw new NotImplementedException();
+        //this.InitialTemperature = initialTemperature;
+        //this.RepAmountPerTemperature = repAmountPerTemperature;
+    }
 
     public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
@@ -61,12 +78,10 @@ public class SimulatedAnnealing : TSPAlgorithm
         (int[] path, int cost) currentSolution = initSolution.Value;
         (int[] path, int cost) bestSolution = currentSolution;
 
-        int noImprovementCounter = 0;
-
         while (repSameCostAmount < InitCostAmountRepUntilBreak)
         {
             int repsPerTemperature = this.RepAmountPerTemperature;
-            //int repsPerTemperature = (int)(this.repAmountPerTemperature / Math.Log(temperature));
+
             for (int i = 0; i < repsPerTemperature; i++)
             {
                 if (cancellationToken.IsCancellationRequested)
@@ -93,7 +108,6 @@ public class SimulatedAnnealing : TSPAlgorithm
                     if(bestSolution.cost > currentSolution.cost)
                     {
                         bestSolution = currentSolution;
-                        noImprovementCounter = 0;
                     }
                 }
                 else if (newSolution.Value.cost == currentSolution.cost)
@@ -121,20 +135,13 @@ public class SimulatedAnnealing : TSPAlgorithm
 
             }
 
-            //noImprovementCounter++;
-            //if (noImprovementCounter == 10)
-            //{
-            //    currentSolution = bestSolution;
-            //    noImprovementCounter = 0;
-            //}
-
             temperature = CalculateNewTemperature(temperature, tempChangedCounter);
             InvokeOnTempReduction(bestSolution.cost);
 
             ShowInfo($"Best={bestSolution.cost} | Current={currentSolution.cost} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}\n");
 
 
-            if (repSameCostAmount >= InitCostAmountRepUntilBreak && bestSolution.cost < currentSolution.cost)
+            if (repSameCostAmount*2 >= InitCostAmountRepUntilBreak && bestSolution.cost < currentSolution.cost)
             {
                 currentSolution = bestSolution;
                 repSameCostAmount = initCostAmountRepUntilBreak/2;
@@ -158,14 +165,15 @@ public class SimulatedAnnealing : TSPAlgorithm
 
     private double CalculateNewTemperature(double temperature, int tempChangedCounter)
     {
-        //temperature = initialTemperature/Math.Log(tempChangedCounter+1);
-        //if(int.MaxValue == tempChangedCounter)
-        //{
-        //    temperature = 0;
-        //    tempChangedCounter = 0;
-        //}
+        double result = coolingFunction switch
+        {
+            CoolingFunction.GEOMETRIC => temperature * Alpha,
+            CoolingFunction.LINEAR => temperature - Alpha,
+            CoolingFunction.LOGARITHMIC => 1/Math.Log(tempChangedCounter + 1),
+            _ => throw new Exception()
+        };
 
-        return temperature * Alpha;
+        return result;
     }
 
     private void ShowInfo(string message)
@@ -295,4 +303,14 @@ public class SimulatedAnnealing : TSPAlgorithm
             return minCost.HasValue ? (minCost.Value, vertex) : null;
         }
     }
+
+
+
+    public enum CoolingFunction
+    {
+        LINEAR,
+        LOGARITHMIC,
+        GEOMETRIC,
+    }
+
 }

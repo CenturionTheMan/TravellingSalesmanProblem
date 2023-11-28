@@ -32,7 +32,7 @@ public class Program
             .SetRunTime(new TimeSpan(0,2,0))
             .RunTest(TEST_RESULT_DIRECTORY);
 
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 0.995, 1000, 100, 100000),
+        new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 0.996, 1000, 10, 1000000),
             "ftv170", pathForm170Matrix,
             2755)
             .SetRunTime(new TimeSpan(0, 4, 0))
