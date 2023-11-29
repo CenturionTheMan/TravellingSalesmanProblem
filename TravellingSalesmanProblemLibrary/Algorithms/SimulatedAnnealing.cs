@@ -108,6 +108,7 @@ public class SimulatedAnnealing : TSPAlgorithm
                     if(bestSolution.cost > currentSolution.cost)
                     {
                         bestSolution = currentSolution;
+                        InvokeOnTempReduction(bestSolution.cost);
                     }
                 }
                 else if (newSolution.Value.cost == currentSolution.cost)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -102,6 +103,9 @@ public class DefinedMatrixErrorTest : ITester
             }
             bestCost = null;
         }
+
+        string createText = $"Matrix: {matrixName} | Cost: {result.Value.cost} | path:\n{result.Value.path.ArrayToPathString()}";
+        File.WriteAllText(outputFileDir + "BestPaths.txt", createText);
     }
 
 
