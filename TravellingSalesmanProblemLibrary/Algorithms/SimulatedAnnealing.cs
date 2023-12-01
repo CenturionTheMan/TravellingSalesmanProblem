@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary.Algorithms;
 
-public class SimulatedAnnealing : TSPAlgorithm
+public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
 {
     public Action<string>? OnAlgorithmShowInfo;
-    public Action<int>? OnAlgorithmTempReduction;
 
     public override string AlgorithmName => "SimulatedAnnealing";
 
@@ -28,12 +27,14 @@ public class SimulatedAnnealing : TSPAlgorithm
     private int maxRepPerNeighbourSearch;
     private int repAmountPerTemperature;
     private int initCostAmountRepUntilBreak;
-
     private CoolingFunction coolingFunction;
 
-    private Random random = new();
+    private TimeSpan intervalLength;
 
-    private Stopwatch stopwatch = new();
+    private int? currentBestCost;
+
+    private Random random = new();
+    private Action<int?, long>? onIntervalShowCurrentSolution;
 
     public SimulatedAnnealing(double initialTemperature, double alpha, int repAmountPerTemperature, int maxRepPerNeighbourSearch, int costAmountRepUntilBreak, CoolingFunction coolingFunction = CoolingFunction.GEOMETRIC) : base() 
     {
@@ -63,11 +64,38 @@ public class SimulatedAnnealing : TSPAlgorithm
         return RunAlgorithm(matrix, cancellationToken);
     }
 
+    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
+    {
+        this.intervalLength = intervalLength;
+        onIntervalShowCurrentSolution += toInvoke;
+    }
+
+    public int? GetCurrentSolutionCost()
+    {
+        return currentBestCost;
+    }
+
+    private void CallShowSolutionInIntervals(CancellationToken cancellationToken)
+    {
+        _ = Task.Factory.StartNew(async () => {
+            Stopwatch stopwatch = new();
+            stopwatch.Restart();
+            while (true)
+            {
+                onIntervalShowCurrentSolution?.Invoke(currentBestCost, stopwatch.ElapsedMilliseconds);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    stopwatch.Stop();
+                    return;
+                }
+                await Task.Delay(intervalLength);
+            }
+        }, cancellationToken);
+    }
+
 
     private (int[]? path, int cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken) 
     {
-        stopwatch.Restart();
-
         double temperature = this.InitialTemperature;
         int repSameCostAmount = 0;
 
@@ -77,6 +105,11 @@ public class SimulatedAnnealing : TSPAlgorithm
         if (initSolution == null) return null;
         (int[] path, int cost) currentSolution = initSolution.Value;
         (int[] path, int cost) bestSolution = currentSolution;
+        
+        currentBestCost = bestSolution.cost;
+
+        CancellationTokenSource cancellationTokenSource = new();
+        if(onIntervalShowCurrentSolution != null) { CallShowSolutionInIntervals(cancellationTokenSource.Token); }
 
         while (repSameCostAmount < InitCostAmountRepUntilBreak)
         {
@@ -87,7 +120,7 @@ public class SimulatedAnnealing : TSPAlgorithm
                 if (cancellationToken.IsCancellationRequested)
                 {
                     CloseCycleInPath(ref bestSolution.path);
-                    stopwatch.Stop();
+                    cancellationTokenSource.Cancel();
                     return bestSolution;
                 }
 
@@ -96,7 +129,7 @@ public class SimulatedAnnealing : TSPAlgorithm
                 if (newSolution == null)
                 {
                     CloseCycleInPath(ref bestSolution.path);
-                    stopwatch.Stop();
+                    cancellationTokenSource.Cancel();
                     return bestSolution;
                 }
 
@@ -108,7 +141,7 @@ public class SimulatedAnnealing : TSPAlgorithm
                     if(bestSolution.cost > currentSolution.cost)
                     {
                         bestSolution = currentSolution;
-                        InvokeOnTempReduction(bestSolution.cost);
+                        currentBestCost = bestSolution.cost;
                     }
                 }
                 else if (newSolution.Value.cost == currentSolution.cost)
@@ -137,7 +170,6 @@ public class SimulatedAnnealing : TSPAlgorithm
             }
 
             temperature = CalculateNewTemperature(temperature, tempChangedCounter);
-            InvokeOnTempReduction(bestSolution.cost);
 
             ShowInfo($"Best={bestSolution.cost} | Current={currentSolution.cost} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}\n");
 
@@ -152,16 +184,8 @@ public class SimulatedAnnealing : TSPAlgorithm
         }
 
         CloseCycleInPath(ref bestSolution.path);
-        stopwatch.Stop();
+        cancellationTokenSource.Cancel();
         return bestSolution;
-    }
-
-    private void InvokeOnTempReduction(int currentCost)
-    {
-        if(OnAlgorithmTempReduction != null)
-        {
-            OnAlgorithmTempReduction.Invoke(currentCost);
-        }
     }
 
     private double CalculateNewTemperature(double temperature, int tempChangedCounter)
@@ -304,7 +328,6 @@ public class SimulatedAnnealing : TSPAlgorithm
             return minCost.HasValue ? (minCost.Value, vertex) : null;
         }
     }
-
 
 
     public enum CoolingFunction

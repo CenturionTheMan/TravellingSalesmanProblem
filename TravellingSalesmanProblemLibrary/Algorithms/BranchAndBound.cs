@@ -8,7 +8,6 @@ public class BranchAndBound : TSPAlgorithm
     public SearchType SelectedSearchType { get { return searchType; } private set { searchType = value; } }
     public override string AlgorithmName => "BranchAndBound_" + searchType;
 
-
     private const int BEGIN_VERTEX = 0;
     private SearchType searchType = SearchType.LOW_COST;
 

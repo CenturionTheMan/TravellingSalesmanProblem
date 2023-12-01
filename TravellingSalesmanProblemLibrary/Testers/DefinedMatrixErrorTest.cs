@@ -14,7 +14,7 @@ public class DefinedMatrixErrorTest : ITester
     private SimulatedAnnealing algorithm;
     private AdjMatrix matrix;
 
-    private Stopwatch stopWatch = new Stopwatch();
+    //private Stopwatch stopWatch = new Stopwatch();
 
     private TimeSpan runTime = new TimeSpan(0,2,0);
     private int repPerMatrix = 10;
@@ -23,7 +23,6 @@ public class DefinedMatrixErrorTest : ITester
 
     private string pathError = "";
     private string pathBest = "";
-    private int currentRep;
 
     private (int cost, long timeInMs)? bestCost;
 
@@ -60,33 +59,31 @@ public class DefinedMatrixErrorTest : ITester
     public void RunTest(string outputFileDir)
     {
         outputFileDir = outputFileDir.ChangeFileExtension("");
-
-        pathError = outputFileDir + $"ErrorTest_{algorithm.AlgorithmName}_{matrixName}.csv";
         pathBest = outputFileDir + $"BestPathTest_{algorithm.AlgorithmName}_{matrixName}.csv";
-        algorithm.OnAlgorithmTempReduction += OnTemperatureDecrease;
 
-        List<object[]> tmp = new()
-        {
-            new object[] { "Algorithm", "currentRep", "MatrixName", "TimeInMiliSeconds", "Error" }
-        };
-        FilesHandler.CreateCsvFile(tmp, pathError, true, ',');
+        algorithm.OnShowCurrentSolutionInIntervals(new TimeSpan(0, 0, 1), OnDataReceived);
 
         List<object[]> tmp2 = new()
         {
-            new object[] { "Algorithm", "currentRep", "MatrixName", "TimeInMiliSeconds", "Cost"}
+            new object[] { "Algorithm", "Iteration", "MatrixName", "TimeInMiliSeconds", "Cost", "Error"}
         };
         FilesHandler.CreateCsvFile(tmp2, pathBest, true, ',');
 
         (int[]? path, int cost)? result = null; //save it to file!!
 
-        for (currentRep = 0; currentRep < repPerMatrix; currentRep++)
+        for (int currentRep = 0; currentRep < repPerMatrix; currentRep++)
         {
+            pathError = outputFileDir + $"ErrorTest_{algorithm.AlgorithmName}_{matrixName}_{currentRep}.csv";
+            List<object[]> tmp = new()
+            {
+                new object[] { "Algorithm", "MatrixName", "TimeInMiliSeconds", "Error" }
+            };
+            FilesHandler.CreateCsvFile(tmp, pathError, true, ',');
+
             CancellationTokenSource cancellationTokenSource = new();
             cancellationTokenSource.CancelAfter(runTime);
             
-            stopWatch.Restart();
             var res = algorithm.CalculateBestPath(matrix,cancellationTokenSource.Token);
-            stopWatch.Stop();
 
             if(res.HasValue && (result == null || res.Value.cost < result.Value.cost))
             {
@@ -95,30 +92,33 @@ public class DefinedMatrixErrorTest : ITester
 
             if (bestCost != null)
             {
+                var ratio = Math.Abs((expectedCost - bestCost.Value.cost) * 100 / (double)expectedCost);
                 List<object[]> line = new()
                 {
-                    new object[] { algorithm.AlgorithmName, currentRep, matrixName, bestCost.Value.timeInMs, bestCost.Value.cost}
+                    new object[] { algorithm.AlgorithmName, currentRep, matrixName, bestCost.Value.timeInMs, bestCost.Value.cost, ratio}
                 };
                 FilesHandler.CreateCsvFile(line, pathBest, false, ',');
             }
             bestCost = null;
         }
 
-        string createText = $"Matrix: {matrixName} | Cost: {result.Value.cost} | path:\n{result.Value.path.ArrayToPathString()}";
-        File.WriteAllText(outputFileDir + "BestPaths.txt", createText);
+        string createText = $"{result.Value.path.ArrayToPathString()}";
+        File.WriteAllText(outputFileDir + $"BestPathFound_{matrixName}.txt", createText);
     }
 
 
-    private void OnTemperatureDecrease(int currentCost)
+    private void OnDataReceived(int? currentCost, long time)
     {
+        if (currentCost == null) return;
+
         if(bestCost == null || bestCost.Value.cost > currentCost)
         {
-            bestCost = (currentCost, stopWatch.ElapsedMilliseconds);
+            bestCost = (currentCost.Value, time);
         }
 
         List<object[]> tmp = new()
         {
-            new object[] { algorithm.AlgorithmName, currentRep, matrixName, stopWatch.ElapsedMilliseconds, Math.Abs((expectedCost - currentCost)) / (double)expectedCost }
+            new object[] { algorithm.AlgorithmName, matrixName, time, Math.Abs((expectedCost - currentCost.Value)) * 100/ (double)expectedCost }
         };
         FilesHandler.CreateCsvFile(tmp, pathError, false, ',');
     }
