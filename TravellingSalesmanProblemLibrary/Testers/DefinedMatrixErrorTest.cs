@@ -103,7 +103,7 @@ public class DefinedMatrixErrorTest : ITester
         }
 
         string createText = $"{result.Value.path.ArrayToPathString()}";
-        File.WriteAllText(outputFileDir + $"BestPathFound_{matrixName}.txt", createText);
+        File.WriteAllText(outputFileDir + $"BestPathFound_{algorithm.AlgorithmName}_{matrixName}.txt", createText);
     }
 
 

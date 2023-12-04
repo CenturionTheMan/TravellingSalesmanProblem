@@ -12,7 +12,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
 {
     public Action<string>? OnAlgorithmShowInfo;
 
-    public override string AlgorithmName => "SimulatedAnnealing_"+ChoosenCoolingFunction;
+    public override string AlgorithmName => "SimulatedAnnealing_" + ChoosenCoolingFunction;
 
     public double InitialTemperature { get => initialTemperature; private set => initialTemperature = value; }
     public double Alpha { get => alpha; private set => alpha = value; }
@@ -36,7 +36,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
     private Random random = new();
     private Action<int?, long>? onIntervalShowCurrentSolution;
 
-    public SimulatedAnnealing(double initialTemperature, double alpha, int repAmountPerTemperature, int maxRepPerNeighbourSearch, int costAmountRepUntilBreak, CoolingFunction coolingFunction = CoolingFunction.GEOMETRIC) : base() 
+    public SimulatedAnnealing(double initialTemperature, double alpha, int repAmountPerTemperature, int maxRepPerNeighbourSearch, int costAmountRepUntilBreak, CoolingFunction coolingFunction = CoolingFunction.GEOMETRIC) : base()
     {
         this.InitialTemperature = initialTemperature;
         this.Alpha = alpha;
@@ -70,7 +70,12 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
         onIntervalShowCurrentSolution += toInvoke;
     }
 
-    public int? GetCurrentSolutionCost()
+    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke)
+    {
+        onIntervalShowCurrentSolution -= toInvoke;
+    }
+
+public int? GetCurrentSolutionCost()
     {
         return currentBestCost;
     }
@@ -82,12 +87,12 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
             stopwatch.Restart();
             while (true)
             {
-                onIntervalShowCurrentSolution?.Invoke(currentBestCost, stopwatch.ElapsedMilliseconds);
                 if (cancellationToken.IsCancellationRequested)
                 {
                     stopwatch.Stop();
                     return;
                 }
+                onIntervalShowCurrentSolution?.Invoke(currentBestCost, stopwatch.ElapsedMilliseconds);
                 await Task.Delay(intervalLength);
             }
         }, cancellationToken);
