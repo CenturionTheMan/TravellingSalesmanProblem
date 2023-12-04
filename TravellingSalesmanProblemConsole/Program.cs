@@ -26,51 +26,51 @@ public class Program
 
     public static void DefinedMatrixErrorTest()
     {
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(200, 0.995, 1000, 20, 100000, SimulatedAnnealing.CoolingFunction.GEOMETRIC),
-            "ftv47", pathForm47Matrix,
-            1776)
-            .SetRunTime(new TimeSpan(0,2,0))
-            .RunTest(TEST_RESULT_DIRECTORY);
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(75, 0.05, 1000, 20, 100000, SimulatedAnnealing.CoolingFunction.LINEAR),
-            "ftv47", pathForm47Matrix,
-            1776)
-            .SetRunTime(new TimeSpan(0, 2, 0))
-            .RunTest(TEST_RESULT_DIRECTORY);
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 100, 1000, 20, 100000, SimulatedAnnealing.CoolingFunction.LOGARITHMIC),
-            "ftv47", pathForm47Matrix,
-            1776)
-            .SetRunTime(new TimeSpan(0, 2, 0))
-            .RunTest(TEST_RESULT_DIRECTORY);
+        //new DefinedMatrixErrorTest(new SimulatedAnnealing(200, 0.995, 1000, 20, 100000, SimulatedAnnealing.CoolingFunction.GEOMETRIC),
+        //    "ftv47", pathForm47Matrix,
+        //    1776)
+        //    .SetRunTime(new TimeSpan(0,2,0))
+        //    .RunTest(TEST_RESULT_DIRECTORY);
+        //new DefinedMatrixErrorTest(new SimulatedAnnealing(75, 0.05, 1000, 20, 100000, SimulatedAnnealing.CoolingFunction.LINEAR),
+        //    "ftv47", pathForm47Matrix,
+        //    1776)
+        //    .SetRunTime(new TimeSpan(0, 2, 0))
+        //    .RunTest(TEST_RESULT_DIRECTORY);
+        //new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 100, 1000, 20, 100000, SimulatedAnnealing.CoolingFunction.LOGARITHMIC),
+        //    "ftv47", pathForm47Matrix,
+        //    1776)
+        //    .SetRunTime(new TimeSpan(0, 2, 0))
+        //    .RunTest(TEST_RESULT_DIRECTORY);
 
 
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 0.996, 1000, 10, 1000000, SimulatedAnnealing.CoolingFunction.GEOMETRIC),
-            "ftv170", pathForm170Matrix,
-            2755)
-            .SetRunTime(new TimeSpan(0, 4, 0))
-            .RunTest(TEST_RESULT_DIRECTORY);
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(75, 0.05, 1000, 10, 100000, SimulatedAnnealing.CoolingFunction.LINEAR),
-            "ftv170", pathForm170Matrix,
-            2755)
-            .SetRunTime(new TimeSpan(0, 4, 0))
-            .RunTest(TEST_RESULT_DIRECTORY);
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(75, 40, 1000, 15, 100000, SimulatedAnnealing.CoolingFunction.LOGARITHMIC),
-            "ftv170", pathForm170Matrix,
-            2755)
-            .SetRunTime(new TimeSpan(0, 4, 0))
-            .RunTest(TEST_RESULT_DIRECTORY);
+        //new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 0.996, 1000, 10, 1000000, SimulatedAnnealing.CoolingFunction.GEOMETRIC),
+        //    "ftv170", pathForm170Matrix,
+        //    2755)
+        //    .SetRunTime(new TimeSpan(0, 4, 0))
+        //    .RunTest(TEST_RESULT_DIRECTORY);
+        //new DefinedMatrixErrorTest(new SimulatedAnnealing(75, 0.05, 1000, 10, 100000, SimulatedAnnealing.CoolingFunction.LINEAR),
+        //    "ftv170", pathForm170Matrix,
+        //    2755)
+        //    .SetRunTime(new TimeSpan(0, 4, 0))
+        //    .RunTest(TEST_RESULT_DIRECTORY);
+        //new DefinedMatrixErrorTest(new SimulatedAnnealing(75, 40, 1000, 15, 100000, SimulatedAnnealing.CoolingFunction.LOGARITHMIC),
+        //    "ftv170", pathForm170Matrix,
+        //    2755)
+        //    .SetRunTime(new TimeSpan(0, 4, 0))
+        //    .RunTest(TEST_RESULT_DIRECTORY);
 
 
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 0.995, 1000, 100, 100000, SimulatedAnnealing.CoolingFunction.GEOMETRIC),
+        //new DefinedMatrixErrorTest(new SimulatedAnnealing(500, 0.995, 1000, 100, 100000, SimulatedAnnealing.CoolingFunction.GEOMETRIC),
+        //    "rgb403", pathForm403Matrix,
+        //    2465)
+        //    .SetRunTime(new TimeSpan(0, 6, 0))
+        //    .RunTest(TEST_RESULT_DIRECTORY);
+        new DefinedMatrixErrorTest(new SimulatedAnnealing(15, 0.02, 1000, 10, 100000, SimulatedAnnealing.CoolingFunction.LINEAR),
             "rgb403", pathForm403Matrix,
             2465)
             .SetRunTime(new TimeSpan(0, 6, 0))
             .RunTest(TEST_RESULT_DIRECTORY);
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(50, 0.05, 1000, 100, 100000, SimulatedAnnealing.CoolingFunction.LINEAR),
-            "rgb403", pathForm403Matrix,
-            2465)
-            .SetRunTime(new TimeSpan(0, 6, 0))
-            .RunTest(TEST_RESULT_DIRECTORY);
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(50, 10, 1000, 1, 100000, SimulatedAnnealing.CoolingFunction.LOGARITHMIC),
+        new DefinedMatrixErrorTest(new SimulatedAnnealing(15, 6.5, 1000, 1, 100000, SimulatedAnnealing.CoolingFunction.LOGARITHMIC),
             "rgb403", pathForm403Matrix,
             2465)
             .SetRunTime(new TimeSpan(0, 6, 0))
