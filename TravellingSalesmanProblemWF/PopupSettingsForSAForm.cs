@@ -11,7 +11,7 @@ namespace TravellingSalesmanProblemWF
         private int maxRepPerNeighbourSearch;
         private int repAmountPerTemperature;
         private int initCostAmountRepUntilBreak;
-
+        private SimulatedAnnealing.CoolingFunction coolingFunction;
 
         public PopupSettingsForSAForm(MainForm parent, SimulatedAnnealing algorithm)
         {
@@ -31,7 +31,13 @@ namespace TravellingSalesmanProblemWF
             RepAmountPerTempNumericUpDown.Value = (decimal)repAmountPerTemperature;
             CostRepAmountNumericUpDown.Value = (decimal)initCostAmountRepUntilBreak;
 
+
             this.Text = algorithm.AlgorithmName;
+
+            CoolingTypeComboBox.DataSource = Enum.GetValues(typeof(SimulatedAnnealing.CoolingFunction));
+            CoolingTypeComboBox.SelectedItem = algorithm.ChoosenCoolingFunction;
+            coolingFunction = algorithm.ChoosenCoolingFunction;
+
         }
 
         private void AlphaNumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -56,7 +62,7 @@ namespace TravellingSalesmanProblemWF
 
         private void PopupSettingsForSAForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var simulatedAnnealing = new SimulatedAnnealing(initialTemperature, alpha, repAmountPerTemperature, maxRepPerNeighbourSearch, initCostAmountRepUntilBreak);
+            var simulatedAnnealing = new SimulatedAnnealing(initialTemperature, alpha, repAmountPerTemperature, maxRepPerNeighbourSearch, initCostAmountRepUntilBreak, coolingFunction);
             parent.Algorithm = simulatedAnnealing;
             simulatedAnnealing.OnAlgorithmShowInfo += parent.PrintAlgorithMessage;
         }
@@ -69,6 +75,39 @@ namespace TravellingSalesmanProblemWF
         private void closeButton_Click_1(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void CoolingTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            coolingFunction = (SimulatedAnnealing.CoolingFunction)CoolingTypeComboBox.SelectedItem;
+
+            TemperatureNumericUpDown.Enabled = true;
+
+            switch (coolingFunction)
+            {
+                case SimulatedAnnealing.CoolingFunction.LINEAR:
+                    AlphaNumericUpDown.DecimalPlaces = 2;
+                    AlphaNumericUpDown.Maximum = 1000000;
+                    AlphaNumericUpDown.Minimum = (decimal)0.01;
+                    AlphaNumericUpDown.Increment = (decimal)0.01;
+                    break;
+                case SimulatedAnnealing.CoolingFunction.LOGARITHMIC:
+                    TemperatureNumericUpDown.Enabled = false;
+                    AlphaNumericUpDown.DecimalPlaces = 1;
+                    AlphaNumericUpDown.Maximum = 1000000;
+                    AlphaNumericUpDown.Minimum = (decimal)0.1;
+                    AlphaNumericUpDown.Increment = (decimal)0.1;
+                    break;
+                case SimulatedAnnealing.CoolingFunction.GEOMETRIC:
+                    AlphaNumericUpDown.DecimalPlaces = 4;
+                    AlphaNumericUpDown.Maximum = (decimal)0.9999;
+                    AlphaNumericUpDown.Minimum = (decimal)0.0001;
+                    AlphaNumericUpDown.Increment = (decimal)0.0001;
+
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

@@ -61,7 +61,7 @@ public class DefinedMatrixErrorTest : ITester
         outputFileDir = outputFileDir.ChangeFileExtension("");
         pathBest = outputFileDir + $"BestPathTest_{algorithm.AlgorithmName}_{matrixName}.csv";
 
-        algorithm.OnShowCurrentSolutionInIntervals(new TimeSpan(0, 0, 1), OnDataReceived);
+        algorithm.OnShowCurrentSolutionInIntervals(new TimeSpan(0, 0, 0, 0, 100), OnDataReceived);
 
         List<object[]> tmp2 = new()
         {

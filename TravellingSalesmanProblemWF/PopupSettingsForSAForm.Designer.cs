@@ -28,219 +28,212 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.closeButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.AlphaNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.TemperatureNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.RepAmountPerTempNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.CostRepAmountNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.RepInNeighbourhoodNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.AlphaNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TemperatureNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.RepAmountPerTempNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.CostRepAmountNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.RepInNeighbourhoodNumericUpDown)).BeginInit();
-            this.SuspendLayout();
+            closeButton = new Button();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            label5 = new Label();
+            AlphaNumericUpDown = new NumericUpDown();
+            TemperatureNumericUpDown = new NumericUpDown();
+            RepAmountPerTempNumericUpDown = new NumericUpDown();
+            CostRepAmountNumericUpDown = new NumericUpDown();
+            RepInNeighbourhoodNumericUpDown = new NumericUpDown();
+            label4 = new Label();
+            CoolingTypeComboBox = new ComboBox();
+            label6 = new Label();
+            ((System.ComponentModel.ISupportInitialize)AlphaNumericUpDown).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)TemperatureNumericUpDown).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)RepAmountPerTempNumericUpDown).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)CostRepAmountNumericUpDown).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)RepInNeighbourhoodNumericUpDown).BeginInit();
+            SuspendLayout();
             // 
             // closeButton
             // 
-            this.closeButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(165)))), ((int)(((byte)(141)))));
-            this.closeButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.closeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.closeButton.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.closeButton.Location = new System.Drawing.Point(232, 211);
-            this.closeButton.Margin = new System.Windows.Forms.Padding(2);
-            this.closeButton.Name = "closeButton";
-            this.closeButton.Size = new System.Drawing.Size(168, 38);
-            this.closeButton.TabIndex = 0;
-            this.closeButton.Text = "Save and Close";
-            this.closeButton.UseVisualStyleBackColor = false;
-            this.closeButton.Click += new System.EventHandler(this.closeButton_Click_1);
+            closeButton.BackColor = Color.FromArgb(165, 165, 141);
+            closeButton.FlatAppearance.BorderColor = Color.Black;
+            closeButton.FlatStyle = FlatStyle.Flat;
+            closeButton.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            closeButton.Location = new Point(186, 206);
+            closeButton.Margin = new Padding(2);
+            closeButton.Name = "closeButton";
+            closeButton.Size = new Size(134, 30);
+            closeButton.TabIndex = 0;
+            closeButton.Text = "Save and Close";
+            closeButton.UseVisualStyleBackColor = false;
+            closeButton.Click += closeButton_Click_1;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 14);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 20);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Alpha factor:";
+            label1.AutoSize = true;
+            label1.Location = new Point(14, 69);
+            label1.Margin = new Padding(2, 0, 2, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(75, 15);
+            label1.TabIndex = 1;
+            label1.Text = "Alpha factor:";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(18, 47);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(135, 20);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Initial temperature:";
+            label2.AutoSize = true;
+            label2.Location = new Point(14, 13);
+            label2.Margin = new Padding(2, 0, 2, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(107, 15);
+            label2.TabIndex = 2;
+            label2.Text = "Initial temperature:";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(18, 80);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(232, 20);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Repeats amount per temperature:";
+            label3.AutoSize = true;
+            label3.Location = new Point(14, 96);
+            label3.Margin = new Padding(2, 0, 2, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(91, 15);
+            label3.TabIndex = 3;
+            label3.Text = "Reps per epoch:";
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(18, 163);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(215, 20);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "Cost repeats amount until stop:";
+            label5.AutoSize = true;
+            label5.Location = new Point(14, 150);
+            label5.Margin = new Padding(2, 0, 2, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(173, 15);
+            label5.TabIndex = 5;
+            label5.Text = "Cost repeats amount until stop:";
             // 
             // AlphaNumericUpDown
             // 
-            this.AlphaNumericUpDown.DecimalPlaces = 3;
-            this.AlphaNumericUpDown.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            196608});
-            this.AlphaNumericUpDown.Location = new System.Drawing.Point(256, 12);
-            this.AlphaNumericUpDown.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.AlphaNumericUpDown.Name = "AlphaNumericUpDown";
-            this.AlphaNumericUpDown.Size = new System.Drawing.Size(144, 27);
-            this.AlphaNumericUpDown.TabIndex = 6;
-            this.AlphaNumericUpDown.Value = new decimal(new int[] {
-            99,
-            0,
-            0,
-            131072});
-            this.AlphaNumericUpDown.ValueChanged += new System.EventHandler(this.AlphaNumericUpDown_ValueChanged);
+            AlphaNumericUpDown.DecimalPlaces = 4;
+            AlphaNumericUpDown.Increment = new decimal(new int[] { 1, 0, 0, 262144 });
+            AlphaNumericUpDown.Location = new Point(205, 67);
+            AlphaNumericUpDown.Margin = new Padding(2);
+            AlphaNumericUpDown.Maximum = new decimal(new int[] { 9999, 0, 0, 262144 });
+            AlphaNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
+            AlphaNumericUpDown.Name = "AlphaNumericUpDown";
+            AlphaNumericUpDown.Size = new Size(115, 23);
+            AlphaNumericUpDown.TabIndex = 6;
+            AlphaNumericUpDown.Value = new decimal(new int[] { 99, 0, 0, 131072 });
+            AlphaNumericUpDown.ValueChanged += AlphaNumericUpDown_ValueChanged;
             // 
             // TemperatureNumericUpDown
             // 
-            this.TemperatureNumericUpDown.Location = new System.Drawing.Point(256, 45);
-            this.TemperatureNumericUpDown.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.TemperatureNumericUpDown.Name = "TemperatureNumericUpDown";
-            this.TemperatureNumericUpDown.Size = new System.Drawing.Size(144, 27);
-            this.TemperatureNumericUpDown.TabIndex = 7;
-            this.TemperatureNumericUpDown.Value = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-            this.TemperatureNumericUpDown.ValueChanged += new System.EventHandler(this.TemperatureNumericUpDown_ValueChanged);
+            TemperatureNumericUpDown.Location = new Point(205, 11);
+            TemperatureNumericUpDown.Margin = new Padding(2);
+            TemperatureNumericUpDown.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            TemperatureNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            TemperatureNumericUpDown.Name = "TemperatureNumericUpDown";
+            TemperatureNumericUpDown.Size = new Size(115, 23);
+            TemperatureNumericUpDown.TabIndex = 7;
+            TemperatureNumericUpDown.Value = new decimal(new int[] { 500, 0, 0, 0 });
+            TemperatureNumericUpDown.ValueChanged += TemperatureNumericUpDown_ValueChanged;
             // 
             // RepAmountPerTempNumericUpDown
             // 
-            this.RepAmountPerTempNumericUpDown.Location = new System.Drawing.Point(256, 78);
-            this.RepAmountPerTempNumericUpDown.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.RepAmountPerTempNumericUpDown.Name = "RepAmountPerTempNumericUpDown";
-            this.RepAmountPerTempNumericUpDown.Size = new System.Drawing.Size(144, 27);
-            this.RepAmountPerTempNumericUpDown.TabIndex = 8;
-            this.RepAmountPerTempNumericUpDown.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.RepAmountPerTempNumericUpDown.ValueChanged += new System.EventHandler(this.RepAmountPerTempNumericUpDown_ValueChanged);
+            RepAmountPerTempNumericUpDown.Location = new Point(205, 94);
+            RepAmountPerTempNumericUpDown.Margin = new Padding(2);
+            RepAmountPerTempNumericUpDown.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            RepAmountPerTempNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            RepAmountPerTempNumericUpDown.Name = "RepAmountPerTempNumericUpDown";
+            RepAmountPerTempNumericUpDown.Size = new Size(115, 23);
+            RepAmountPerTempNumericUpDown.TabIndex = 8;
+            RepAmountPerTempNumericUpDown.Value = new decimal(new int[] { 100, 0, 0, 0 });
+            RepAmountPerTempNumericUpDown.ValueChanged += RepAmountPerTempNumericUpDown_ValueChanged;
             // 
             // CostRepAmountNumericUpDown
             // 
-            this.CostRepAmountNumericUpDown.Location = new System.Drawing.Point(256, 161);
-            this.CostRepAmountNumericUpDown.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.CostRepAmountNumericUpDown.Name = "CostRepAmountNumericUpDown";
-            this.CostRepAmountNumericUpDown.Size = new System.Drawing.Size(144, 27);
-            this.CostRepAmountNumericUpDown.TabIndex = 9;
-            this.CostRepAmountNumericUpDown.Value = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.CostRepAmountNumericUpDown.ValueChanged += new System.EventHandler(this.CostRepAmountNumericUpDown_ValueChanged);
+            CostRepAmountNumericUpDown.Location = new Point(205, 148);
+            CostRepAmountNumericUpDown.Margin = new Padding(2);
+            CostRepAmountNumericUpDown.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            CostRepAmountNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            CostRepAmountNumericUpDown.Name = "CostRepAmountNumericUpDown";
+            CostRepAmountNumericUpDown.Size = new Size(115, 23);
+            CostRepAmountNumericUpDown.TabIndex = 9;
+            CostRepAmountNumericUpDown.Value = new decimal(new int[] { 100000, 0, 0, 0 });
+            CostRepAmountNumericUpDown.ValueChanged += CostRepAmountNumericUpDown_ValueChanged;
             // 
             // RepInNeighbourhoodNumericUpDown
             // 
-            this.RepInNeighbourhoodNumericUpDown.Location = new System.Drawing.Point(256, 128);
-            this.RepInNeighbourhoodNumericUpDown.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.RepInNeighbourhoodNumericUpDown.Name = "RepInNeighbourhoodNumericUpDown";
-            this.RepInNeighbourhoodNumericUpDown.Size = new System.Drawing.Size(144, 27);
-            this.RepInNeighbourhoodNumericUpDown.TabIndex = 11;
-            this.RepInNeighbourhoodNumericUpDown.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.RepInNeighbourhoodNumericUpDown.ValueChanged += new System.EventHandler(this.RepInNeighbourhoodNumericUpDown_ValueChanged);
+            RepInNeighbourhoodNumericUpDown.Location = new Point(205, 121);
+            RepInNeighbourhoodNumericUpDown.Margin = new Padding(2);
+            RepInNeighbourhoodNumericUpDown.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            RepInNeighbourhoodNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            RepInNeighbourhoodNumericUpDown.Name = "RepInNeighbourhoodNumericUpDown";
+            RepInNeighbourhoodNumericUpDown.Size = new Size(115, 23);
+            RepInNeighbourhoodNumericUpDown.TabIndex = 11;
+            RepInNeighbourhoodNumericUpDown.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            RepInNeighbourhoodNumericUpDown.ValueChanged += RepInNeighbourhoodNumericUpDown_ValueChanged;
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(18, 115);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(200, 40);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "Repeats amount \r\nwhile neighbourhood search:\r\n";
+            label4.AutoSize = true;
+            label4.Location = new Point(14, 123);
+            label4.Margin = new Padding(2, 0, 2, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(178, 15);
+            label4.TabIndex = 10;
+            label4.Text = "Number of compared neighbors";
+            // 
+            // CoolingTypeComboBox
+            // 
+            CoolingTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            CoolingTypeComboBox.FormattingEnabled = true;
+            CoolingTypeComboBox.Location = new Point(205, 39);
+            CoolingTypeComboBox.Name = "CoolingTypeComboBox";
+            CoolingTypeComboBox.Size = new Size(115, 23);
+            CoolingTypeComboBox.TabIndex = 12;
+            CoolingTypeComboBox.SelectedIndexChanged += CoolingTypeComboBox_SelectedIndexChanged;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(14, 42);
+            label6.Name = "label6";
+            label6.Size = new Size(100, 15);
+            label6.TabIndex = 13;
+            label6.Text = "Cooling function:";
             // 
             // PopupSettingsForSAForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(220)))), ((int)(((byte)(210)))));
-            this.ClientSize = new System.Drawing.Size(434, 269);
-            this.Controls.Add(this.RepInNeighbourhoodNumericUpDown);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.CostRepAmountNumericUpDown);
-            this.Controls.Add(this.RepAmountPerTempNumericUpDown);
-            this.Controls.Add(this.TemperatureNumericUpDown);
-            this.Controls.Add(this.AlphaNumericUpDown);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.closeButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(2);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "PopupSettingsForSAForm";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "PopupSettingsForSAForm";
-            this.TopMost = true;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PopupSettingsForSAForm_FormClosing);
-            ((System.ComponentModel.ISupportInitialize)(this.AlphaNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TemperatureNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.RepAmountPerTempNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.CostRepAmountNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.RepInNeighbourhoodNumericUpDown)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BackColor = Color.FromArgb(237, 220, 210);
+            ClientSize = new Size(347, 247);
+            Controls.Add(label6);
+            Controls.Add(CoolingTypeComboBox);
+            Controls.Add(RepInNeighbourhoodNumericUpDown);
+            Controls.Add(label4);
+            Controls.Add(CostRepAmountNumericUpDown);
+            Controls.Add(RepAmountPerTempNumericUpDown);
+            Controls.Add(TemperatureNumericUpDown);
+            Controls.Add(AlphaNumericUpDown);
+            Controls.Add(label5);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(closeButton);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(2);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "PopupSettingsForSAForm";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            SizeGripStyle = SizeGripStyle.Hide;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "PopupSettingsForSAForm";
+            TopMost = true;
+            FormClosing += PopupSettingsForSAForm_FormClosing;
+            ((System.ComponentModel.ISupportInitialize)AlphaNumericUpDown).EndInit();
+            ((System.ComponentModel.ISupportInitialize)TemperatureNumericUpDown).EndInit();
+            ((System.ComponentModel.ISupportInitialize)RepAmountPerTempNumericUpDown).EndInit();
+            ((System.ComponentModel.ISupportInitialize)CostRepAmountNumericUpDown).EndInit();
+            ((System.ComponentModel.ISupportInitialize)RepInNeighbourhoodNumericUpDown).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -256,5 +249,7 @@
         private NumericUpDown CostRepAmountNumericUpDown;
         private NumericUpDown RepInNeighbourhoodNumericUpDown;
         private Label label4;
+        private ComboBox CoolingTypeComboBox;
+        private Label label6;
     }
 }

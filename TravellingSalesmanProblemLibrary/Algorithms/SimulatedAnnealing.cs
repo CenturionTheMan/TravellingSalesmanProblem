@@ -12,7 +12,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
 {
     public Action<string>? OnAlgorithmShowInfo;
 
-    public override string AlgorithmName => "SimulatedAnnealing";
+    public override string AlgorithmName => "SimulatedAnnealing_"+ChoosenCoolingFunction;
 
     public double InitialTemperature { get => initialTemperature; private set => initialTemperature = value; }
     public double Alpha { get => alpha; private set => alpha = value; }
@@ -39,7 +39,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
     public SimulatedAnnealing(double initialTemperature, double alpha, int repAmountPerTemperature, int maxRepPerNeighbourSearch, int costAmountRepUntilBreak, CoolingFunction coolingFunction = CoolingFunction.GEOMETRIC) : base() 
     {
         this.InitialTemperature = initialTemperature;
-        this.Alpha = Math.Clamp(alpha, 0, 1);
+        this.Alpha = alpha;
         this.MaxRepPerNeighbourSearch = Math.Clamp(maxRepPerNeighbourSearch, 1, maxRepPerNeighbourSearch);
         this.InitCostAmountRepUntilBreak = costAmountRepUntilBreak;
         this.RepAmountPerTemperature = repAmountPerTemperature;
@@ -49,7 +49,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
 
     public SimulatedAnnealing(double alpha, int maxRepPerNeighbourSearch, int costAmountRepUntilBreak, CoolingFunction coolingFunction) : base()
     {
-        this.Alpha = Math.Clamp(alpha, 0, 1);
+        this.Alpha = alpha;
         this.MaxRepPerNeighbourSearch = Math.Clamp(maxRepPerNeighbourSearch, 1, maxRepPerNeighbourSearch);
         this.InitCostAmountRepUntilBreak = costAmountRepUntilBreak;
         this.coolingFunction = coolingFunction;
@@ -194,9 +194,11 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
         {
             CoolingFunction.GEOMETRIC => temperature * Alpha,
             CoolingFunction.LINEAR => temperature - Alpha,
-            CoolingFunction.LOGARITHMIC => 1/Math.Log(tempChangedCounter + 1),
+            CoolingFunction.LOGARITHMIC => Alpha/Math.Log(tempChangedCounter + 1),
             _ => throw new Exception()
         };
+
+        if (result < 0) result = 0;
 
         return result;
     }
