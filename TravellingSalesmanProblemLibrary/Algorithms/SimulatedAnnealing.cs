@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary.Algorithms;
 
+/// <summary>
+/// Represents the Simulated Annealing algorithm for solving the Travelling Salesman Problem.
+/// </summary>
 public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
 {
     public Action<string>? OnAlgorithmShowInfo;
@@ -36,6 +39,15 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
     private Random random = new();
     private Action<int?, long>? onIntervalShowCurrentSolution;
 
+    /// <summary>
+    /// Initializes a new instance of the SimulatedAnnealing class.
+    /// </summary>
+    /// <param name="initialTemperature">The initial temperature for the algorithm.</param>
+    /// <param name="alpha">The alpha value used in the temperature update.</param>
+    /// <param name="repAmountPerTemperature">The number of repetitions per temperature.</param>
+    /// <param name="maxRepPerNeighbourSearch">The maximum number of repetitions per neighbour search.</param>
+    /// <param name="costAmountRepUntilBreak">The cost amount repetitions until algorithm stop.</param>
+    /// <param name="coolingFunction">The cooling function to use (default is GEOMETRIC).</param>
     public SimulatedAnnealing(double initialTemperature, double alpha, int repAmountPerTemperature, int maxRepPerNeighbourSearch, int costAmountRepUntilBreak, CoolingFunction coolingFunction = CoolingFunction.GEOMETRIC) : base()
     {
         this.InitialTemperature = initialTemperature;
@@ -47,39 +59,50 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
         this.coolingFunction = coolingFunction;
     }
 
-    public SimulatedAnnealing(double alpha, int maxRepPerNeighbourSearch, int costAmountRepUntilBreak, CoolingFunction coolingFunction) : base()
-    {
-        this.Alpha = alpha;
-        this.MaxRepPerNeighbourSearch = Math.Clamp(maxRepPerNeighbourSearch, 1, maxRepPerNeighbourSearch);
-        this.InitCostAmountRepUntilBreak = costAmountRepUntilBreak;
-        this.coolingFunction = coolingFunction;
-
-        throw new NotImplementedException();
-        //this.InitialTemperature = initialTemperature;
-        //this.RepAmountPerTemperature = repAmountPerTemperature;
-    }
-
+    /// <summary>
+    /// Calculates the best path for the Travelling Salesman Problem using the Simulated Annealing algorithm.
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the problem.</param>
+    /// <param name="cancellationToken">The cancellation token to stop the calculation.</param>
+    /// <returns>The best path and its cost, or null if a valid path could not be created.</returns>
     public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         return RunAlgorithm(matrix, cancellationToken);
     }
 
+    /// <summary>
+    /// Sets up a periodic interval for showing the current solution during the algorithm execution.
+    /// </summary>
+    /// <param name="intervalLength">The interval length for displaying the current solution.</param>
+    /// <param name="toInvoke">The action to invoke for displaying the current solution.</param>
     public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
     {
         this.intervalLength = intervalLength;
         onIntervalShowCurrentSolution += toInvoke;
     }
 
+    /// <summary>
+    /// Unsubscribes an action from the event handler for showing the current solution in intervals.
+    /// </summary>
+    /// <param name="toInvoke">The action to unsubscribe.</param>
     public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke)
     {
         onIntervalShowCurrentSolution -= toInvoke;
     }
 
-public int? GetCurrentSolutionCost()
+    /// <summary>
+    /// Retrieves the current cost of the best solution.
+    /// </summary>
+    /// <returns>The current cost of the best solution.</returns>
+    public int? GetCurrentSolutionCost()
     {
         return currentBestCost;
     }
 
+    /// <summary>
+    /// Initiates the periodic display of the current solution in intervals using a separate task.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token to interrupt the display task.</param>
     private void CallShowSolutionInIntervals(CancellationToken cancellationToken)
     {
         _ = Task.Factory.StartNew(async () => {
@@ -98,7 +121,12 @@ public int? GetCurrentSolutionCost()
         }, cancellationToken);
     }
 
-
+    /// <summary>
+    /// Runs the simulated annealing algorithm to find the best path for the given adjacency matrix.
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the problem.</param>
+    /// <param name="cancellationToken">The cancellation token to stop the algorithm.</param>
+    /// <returns>The best path and its cost, or null if the algorithm could not find a valid path.</returns>
     private (int[]? path, int cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken) 
     {
         double temperature = this.InitialTemperature;
@@ -193,6 +221,13 @@ public int? GetCurrentSolutionCost()
         return bestSolution;
     }
 
+    /// <summary>
+    /// Calculates the new temperature based on the cooling function.
+    /// </summary>
+    /// <param name="temperature">The current temperature.</param>
+    /// <param name="tempChangedCounter">The counter for temperature changes.</param>
+    /// <returns>The new temperature.</returns>
+    /// <exception cref="Exception">Thrown when an invalid cooling function is choosen.</exception>
     private double CalculateNewTemperature(double temperature, int tempChangedCounter)
     {
         double result = coolingFunction switch
@@ -208,18 +243,33 @@ public int? GetCurrentSolutionCost()
         return result;
     }
 
+    /// <summary>
+    /// Displays information about the algorithm progress.
+    /// </summary>
+    /// <param name="message">The information message to display.</param>
     private void ShowInfo(string message)
     {
         Console.WriteLine(message);
         OnAlgorithmShowInfo?.Invoke(message);
     }
 
+    /// <summary>
+    /// Closes the cycle in the given path to create a Hamilton cycle.
+    /// </summary>
+    /// <param name="path">The path to close the cycle.</param>
     private void CloseCycleInPath(ref int[] path)
     {
         Array.Resize(ref path, path.Length);
         path[path.Length - 1] = path[0];
     }
 
+    /// <summary>
+    /// Calculates the probability of accepting a worse solution.
+    /// </summary>
+    /// <param name="newCost">The cost of the new solution.</param>
+    /// <param name="oldCost">The cost of the current solution.</param>
+    /// <param name="temperature">The current temperature.</param>
+    /// <returns>The probability of accepting the worse solution.</returns>
     private double CalculateProbability(double newCost, double oldCost, double temperature)
     {
         double diff = newCost - oldCost;
@@ -227,7 +277,13 @@ public int? GetCurrentSolutionCost()
         return prob;
     }
 
-    
+    /// <summary>
+    /// Creates a neighboring solution by swapping elements in the current path.
+    /// </summary>
+    /// <param name="solution">The current solution.</param>
+    /// <param name="matrix">The adjacency matrix representing the problem.</param>
+    /// <param name="cancellationToken">The cancellation token to interrupt the operation.</param>
+    /// <returns>The neighboring solution and its cost, or null if the operation was canceled.</returns>
     private (int[] path, int cost)? CreateSolutionNeighbour((int[] path, int cost) solution, AdjMatrix matrix, CancellationToken cancellationToken)
     {
         int[] currentPath = (int[])solution.path.Clone();
@@ -264,6 +320,12 @@ public int? GetCurrentSolutionCost()
         return (bestPath, bestCost);
     }
 
+    /// <summary>
+    /// Swaps elements at the specified indexes in the given array.
+    /// </summary>
+    /// <param name="array">The array in which to swap elements.</param>
+    /// <param name="firstIndex">The index of the first element to swap.</param>
+    /// <param name="secondIndex">The index of the second element to swap.</param>
     private void SwapElementsAtIndexes(int[] array, int firstIndex, int secondIndex)
     {
         int tmp = array[firstIndex];
@@ -271,6 +333,12 @@ public int? GetCurrentSolutionCost()
         array[secondIndex] = tmp;
     }
 
+    /// <summary>
+    /// Calculates the cost of the given path in the context of the provided adjacency matrix.
+    /// </summary>
+    /// <param name="path">The path to calculate the cost for.</param>
+    /// <param name="matrix">The adjacency matrix representing the problem.</param>
+    /// <returns>The cost of the path, or null if the cost could not be calculated.</returns>
     private int? CalculatePathCost(int[] path, AdjMatrix matrix)
     {
         int sum = 0;
@@ -291,7 +359,7 @@ public int? GetCurrentSolutionCost()
     /// Path is being created using closest-neighbour selection.
     /// </summary>
     /// <param name="adjMatrix">The adjacency matrix representing the problem.</param>
-    /// <returns>Initial upper bound value with path or null if could not created valid path</returns>
+    /// <returns>Path and its cost or null if could not created valid path</returns>
     private (int[] path, int cost)? GetInitPath(AdjMatrix adjMatrix)
     {
         const int BEGIN_VERTEX = 0;
