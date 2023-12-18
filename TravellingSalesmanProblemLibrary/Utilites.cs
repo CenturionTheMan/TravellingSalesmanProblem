@@ -8,6 +8,18 @@ namespace TravellingSalesmanProblemLibrary;
 
 public static class Utilites
 {
+    /// <summary>
+    /// Swaps elements at the specified indexes in the given array.
+    /// </summary>
+    /// <param name="array">The array in which to swap elements.</param>
+    /// <param name="firstIndex">The index of the first element to swap.</param>
+    /// <param name="secondIndex">The index of the second element to swap.</param>
+    public static void SwapArrayElementsAtIndex<T>(this T[] array, int firstIndex, int secondIndex)
+    {
+        T tmp = array[firstIndex];
+        array[firstIndex] = array[secondIndex];
+        array[secondIndex] = tmp;
+    }
 
     public static void DoAfterTime(Action toDo, TimeSpan waitAmount)
     {

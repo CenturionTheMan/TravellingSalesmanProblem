@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using static TravellingSalesmanProblemLibrary.Utilites;
 
-namespace TravellingSalesmanProblemLibrary.Algorithms;
+namespace TravellingSalesmanProblemLibrary;
 
 /// <summary>
 /// Represents the Simulated Annealing algorithm for solving the Travelling Salesman Problem.
@@ -91,15 +86,6 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
     }
 
     /// <summary>
-    /// Retrieves the current cost of the best solution.
-    /// </summary>
-    /// <returns>The current cost of the best solution.</returns>
-    public int? GetCurrentSolutionCost()
-    {
-        return currentBestCost;
-    }
-
-    /// <summary>
     /// Initiates the periodic display of the current solution in intervals using a separate task.
     /// </summary>
     /// <param name="cancellationToken">The cancellation token to interrupt the display task.</param>
@@ -115,6 +101,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
                     stopwatch.Stop();
                     return;
                 }
+
                 onIntervalShowCurrentSolution?.Invoke(currentBestCost, stopwatch.ElapsedMilliseconds);
                 await Task.Delay(intervalLength);
             }
@@ -197,7 +184,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
                         repSameCostAmount++;
                     }
 
-                    //Console.WriteLine($"Best={bestSolution.cost} | Current={currentSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
+                    Console.WriteLine($"Best={bestSolution.cost} | Current={currentSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
                 }
 
             }
@@ -302,7 +289,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
                 int firstIndex = random.Next(0, matrix.GetMatrixSize);
                 int secondIndex = random.Next(0, matrix.GetMatrixSize);
 
-                SwapElementsAtIndexes(currentPath, firstIndex, secondIndex);
+                currentPath.SwapArrayElementsAtIndex(firstIndex, secondIndex);
 
                 cost = CalculatePathCost(currentPath, matrix);
 
@@ -311,8 +298,8 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
                     bestCost = cost.Value;
                     bestPath = (int[])currentPath.Clone();
                 }
-                SwapElementsAtIndexes(currentPath, firstIndex, secondIndex);
 
+                currentPath.SwapArrayElementsAtIndex(firstIndex, secondIndex);
 
             } while (cost == null);
         }
@@ -320,18 +307,6 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
         return (bestPath, bestCost);
     }
 
-    /// <summary>
-    /// Swaps elements at the specified indexes in the given array.
-    /// </summary>
-    /// <param name="array">The array in which to swap elements.</param>
-    /// <param name="firstIndex">The index of the first element to swap.</param>
-    /// <param name="secondIndex">The index of the second element to swap.</param>
-    private void SwapElementsAtIndexes(int[] array, int firstIndex, int secondIndex)
-    {
-        int tmp = array[firstIndex];
-        array[firstIndex] = array[secondIndex];
-        array[secondIndex] = tmp;
-    }
 
     /// <summary>
     /// Calculates the cost of the given path in the context of the provided adjacency matrix.
@@ -362,12 +337,12 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
     /// <returns>Path and its cost or null if could not created valid path</returns>
     private (int[] path, int cost)? GetInitPath(AdjMatrix adjMatrix)
     {
-        const int BEGIN_VERTEX = 0;
+        int beginVertex = random.Next(0, adjMatrix.GetMatrixSize);
 
         List<int> path = new();
         int sumCost = 0;
-        int fromVertex = BEGIN_VERTEX;
-        path.Add(BEGIN_VERTEX);
+        int fromVertex = beginVertex;
+        path.Add(beginVertex);
 
         for (int i = 0; i < adjMatrix.GetMatrixSize - 1; i++)
         {
@@ -378,7 +353,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
             sumCost += next.Value.cost;
             fromVertex = next.Value.vertex;
         }
-        if (adjMatrix.TryGetDistance(path[path.Count - 1], BEGIN_VERTEX, out int last) == false) return null;
+        if (adjMatrix.TryGetDistance(path[path.Count - 1], beginVertex, out int last) == false) return null;
         sumCost += last;
         return (path.ToArray(), sumCost);
 

@@ -10,5 +10,4 @@ public interface ISolutionImprover
 {
     public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke);
     public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke);
-    public int? GetCurrentSolutionCost();
 }

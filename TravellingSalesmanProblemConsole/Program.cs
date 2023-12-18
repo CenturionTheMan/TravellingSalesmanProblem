@@ -20,6 +20,8 @@ public class Program
 
     public static void Main()
     {
+        var tmp = new SimulatedAnnealing(200, 0.995, 1000, 1, 100000, SimulatedAnnealing.CoolingFunction.GEOMETRIC);
+
         DefinedMatrixErrorTest();
         Console.ReadKey();
     }
