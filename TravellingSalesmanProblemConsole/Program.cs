@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using TravellingSalesmanProblemLibrary;
-using TravellingSalesmanProblemLibrary.Algorithms;
 using TravellingSalesmanProblemLibrary.Testers;
 
 namespace TravellingSalesmanProblemConsole;
@@ -20,9 +19,16 @@ public class Program
 
     public static void Main()
     {
-        var tmp = new SimulatedAnnealing(200, 0.995, 1000, 1, 100000, SimulatedAnnealing.CoolingFunction.GEOMETRIC);
+        var tmp = new GeneticAlgorithm(100, 0.8, 0.1);
 
-        DefinedMatrixErrorTest();
+        var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm47Matrix);
+
+        //var matrix = new AdjMatrix(4, 10, 100);
+        CancellationTokenSource cancellationTokenSource = new();
+        cancellationTokenSource.CancelAfter(new TimeSpan(0, 1, 0));
+        var res = tmp.CalculateBestPath(matrix, cancellationTokenSource.Token);
+        Console.WriteLine(res.ToStringCustom());
+
         Console.ReadKey();
     }
 

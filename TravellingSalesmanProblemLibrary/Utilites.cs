@@ -14,11 +14,18 @@ public static class Utilites
     /// <param name="array">The array in which to swap elements.</param>
     /// <param name="firstIndex">The index of the first element to swap.</param>
     /// <param name="secondIndex">The index of the second element to swap.</param>
-    public static void SwapArrayElementsAtIndex<T>(this T[] array, int firstIndex, int secondIndex)
+    public static void SwapArrayElementsAtIndex<T>(T[] array, int firstIndex, int secondIndex)
     {
         T tmp = array[firstIndex];
         array[firstIndex] = array[secondIndex];
         array[secondIndex] = tmp;
+    }
+
+    public static T[] SwapElements<T>(this T[] array, int firstIndex, int secondIndex)
+    {
+        var tmp = new List<T>(array).ToArray();
+        SwapArrayElementsAtIndex(tmp, firstIndex, secondIndex);
+        return tmp;
     }
 
     public static void DoAfterTime(Action toDo, TimeSpan waitAmount)

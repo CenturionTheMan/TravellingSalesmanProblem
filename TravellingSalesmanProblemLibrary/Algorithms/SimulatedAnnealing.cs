@@ -289,7 +289,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
                 int firstIndex = random.Next(0, matrix.GetMatrixSize);
                 int secondIndex = random.Next(0, matrix.GetMatrixSize);
 
-                currentPath.SwapArrayElementsAtIndex(firstIndex, secondIndex);
+                SwapArrayElementsAtIndex(currentPath, firstIndex, secondIndex);
 
                 cost = CalculatePathCost(currentPath, matrix);
 
@@ -299,7 +299,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
                     bestPath = (int[])currentPath.Clone();
                 }
 
-                currentPath.SwapArrayElementsAtIndex(firstIndex, secondIndex);
+                SwapArrayElementsAtIndex(currentPath, firstIndex, secondIndex);
 
             } while (cost == null);
         }
