@@ -16,7 +16,7 @@ namespace TravellingSalesmanProblemWF
     {
         private MainForm parent;
 
-        public BranchAndBound.SearchType babSearchType = BranchAndBound.SearchType.LOW_COST;
+        public SearchType babSearchType = SearchType.LOW_COST;
 
 
         public PopupSettingsForBabForm(MainForm parent, BranchAndBound branchAndBound)
@@ -27,7 +27,7 @@ namespace TravellingSalesmanProblemWF
 
             InitializeComponent();
 
-            searchTypeComboBox.DataSource = Enum.GetValues(typeof(BranchAndBound.SearchType));
+            searchTypeComboBox.DataSource = Enum.GetValues(typeof(SearchType));
             searchTypeComboBox.SelectedItem = initSearchType;
 
             this.Text = branchAndBound.AlgorithmName;
@@ -41,7 +41,7 @@ namespace TravellingSalesmanProblemWF
 
         private void searchTypeComboBox_DropDownClosed(object sender, EventArgs e)
         {
-            babSearchType = (BranchAndBound.SearchType)searchTypeComboBox.SelectedItem;
+            babSearchType = (SearchType)searchTypeComboBox.SelectedItem;
             //parent.AddTextToMessageLog("Selected search type for B&B: " + branchAndBound.SelectedSearchType.ToString() + "\n");
         }
 

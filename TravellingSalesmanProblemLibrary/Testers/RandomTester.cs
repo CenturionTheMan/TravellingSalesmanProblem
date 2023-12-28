@@ -8,7 +8,7 @@ namespace TravellingSalesmanProblemLibrary.Testers
 {
     public abstract class RandomTester : ITester
     {
-        protected TSPAlgorithm algorithm;
+        protected ITSPAlgorithm algorithm;
 
         protected int minMatrixSize;
         protected int maxMatrixSize;
@@ -21,7 +21,7 @@ namespace TravellingSalesmanProblemLibrary.Testers
         protected int repPerMatrix;
 
 
-        protected RandomTester(TSPAlgorithm algorithm)
+        protected RandomTester(ITSPAlgorithm algorithm)
         {
             this.algorithm = algorithm;
         }

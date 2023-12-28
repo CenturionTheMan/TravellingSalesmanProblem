@@ -6,31 +6,21 @@ namespace TravellingSalesmanProblemLibrary;
 /// <summary>
 /// Represents the Simulated Annealing algorithm for solving the Travelling Salesman Problem.
 /// </summary>
-public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
+public class SimulatedAnnealing : ITSPAlgorithm
 {
     public Action<string>? OnAlgorithmShowInfo;
-
-    public override string AlgorithmName => "SimulatedAnnealing_" + ChoosenCoolingFunction;
-
-    public double InitialTemperature { get => initialTemperature; private set => initialTemperature = value; }
-    public double Alpha { get => alpha; private set => alpha = value; }
-    public int MaxRepPerNeighbourSearch { get => maxRepPerNeighbourSearch; private set => maxRepPerNeighbourSearch = value; }
-    public int RepAmountPerTemperature { get => repAmountPerTemperature; private set => repAmountPerTemperature = value; }
-    public int InitCostAmountRepUntilBreak { get => initCostAmountRepUntilBreak; private set => initCostAmountRepUntilBreak = value; }
-    public CoolingFunction ChoosenCoolingFunction { get => coolingFunction; private set => coolingFunction = value; }
+    public string AlgorithmName => "SimulatedAnnealing_" + ChoosenCoolingFunction;
 
 
-    private double initialTemperature;
-    private double alpha;
-    private int maxRepPerNeighbourSearch;
-    private int repAmountPerTemperature;
-    private int initCostAmountRepUntilBreak;
-    private CoolingFunction coolingFunction;
+    public readonly double InitialTemperature;
+    public readonly double Alpha;
+    public readonly int MaxRepPerNeighbourSearch;
+    public readonly int RepAmountPerTemperature;
+    public readonly int CostRepAmountUntilBreak;
+    public readonly CoolingFunction ChoosenCoolingFunction;
 
     private TimeSpan intervalLength;
-
     private int? currentBestCost;
-
     private Random random = new();
     private Action<int?, long>? onIntervalShowCurrentSolution;
 
@@ -48,10 +38,9 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
         this.InitialTemperature = initialTemperature;
         this.Alpha = alpha;
         this.MaxRepPerNeighbourSearch = Math.Clamp(maxRepPerNeighbourSearch, 1, maxRepPerNeighbourSearch);
-        this.InitCostAmountRepUntilBreak = costAmountRepUntilBreak;
+        this.CostRepAmountUntilBreak = costAmountRepUntilBreak;
         this.RepAmountPerTemperature = repAmountPerTemperature;
-
-        this.coolingFunction = coolingFunction;
+        this.ChoosenCoolingFunction = coolingFunction;
     }
 
     /// <summary>
@@ -60,30 +49,19 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
     /// <param name="matrix">The adjacency matrix representing the problem.</param>
     /// <param name="cancellationToken">The cancellation token to stop the calculation.</param>
     /// <returns>The best path and its cost, or null if a valid path could not be created.</returns>
-    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
+    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         return RunAlgorithm(matrix, cancellationToken);
     }
 
-    /// <summary>
-    /// Sets up a periodic interval for showing the current solution during the algorithm execution.
-    /// </summary>
-    /// <param name="intervalLength">The interval length for displaying the current solution.</param>
-    /// <param name="toInvoke">The action to invoke for displaying the current solution.</param>
+    
     public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
     {
         this.intervalLength = intervalLength;
         onIntervalShowCurrentSolution += toInvoke;
     }
-
-    /// <summary>
-    /// Unsubscribes an action from the event handler for showing the current solution in intervals.
-    /// </summary>
-    /// <param name="toInvoke">The action to unsubscribe.</param>
-    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke)
-    {
-        onIntervalShowCurrentSolution -= toInvoke;
-    }
+    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke) => onIntervalShowCurrentSolution -= toInvoke;
+    
 
     /// <summary>
     /// Initiates the periodic display of the current solution in intervals using a separate task.
@@ -114,7 +92,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
     /// <param name="matrix">The adjacency matrix representing the problem.</param>
     /// <param name="cancellationToken">The cancellation token to stop the algorithm.</param>
     /// <returns>The best path and its cost, or null if the algorithm could not find a valid path.</returns>
-    private (int[]? path, int cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken) 
+    private (int[] path, int cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken) 
     {
         double temperature = this.InitialTemperature;
         int repSameCostAmount = 0;
@@ -131,7 +109,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
         CancellationTokenSource cancellationTokenSource = new();
         if(onIntervalShowCurrentSolution != null) { CallShowSolutionInIntervals(cancellationTokenSource.Token); }
 
-        while (repSameCostAmount < InitCostAmountRepUntilBreak)
+        while (repSameCostAmount < CostRepAmountUntilBreak)
         {
             int repsPerTemperature = this.RepAmountPerTemperature;
 
@@ -184,20 +162,20 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
                         repSameCostAmount++;
                     }
 
-                    Console.WriteLine($"Best={bestSolution.cost} | Current={currentSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}");
+                    Console.WriteLine($"Best={bestSolution.cost} | Current={currentSolution.cost} | Prob={probability.ToString("0.000")} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)CostRepAmountUntilBreak).ToString("0.00")}");
                 }
 
             }
 
             temperature = CalculateNewTemperature(temperature, tempChangedCounter);
 
-            ShowInfo($"Best={bestSolution.cost} | Current={currentSolution.cost} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)InitCostAmountRepUntilBreak).ToString("0.00")}\n");
+            ShowInfo($"Best={bestSolution.cost} | Current={currentSolution.cost} | Temp={temperature.ToString("0.00")} | RepCostFator={(repSameCostAmount / (double)CostRepAmountUntilBreak).ToString("0.00")}\n");
 
 
-            if (repSameCostAmount*2 >= InitCostAmountRepUntilBreak && bestSolution.cost < currentSolution.cost)
+            if (repSameCostAmount*2 >= CostRepAmountUntilBreak && bestSolution.cost < currentSolution.cost)
             {
                 currentSolution = bestSolution;
-                repSameCostAmount = initCostAmountRepUntilBreak/2;
+                repSameCostAmount = CostRepAmountUntilBreak/2;
             }
 
             tempChangedCounter++;
@@ -206,6 +184,11 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
         CloseCycleInPath(ref bestSolution.path);
         cancellationTokenSource.Cancel();
         return bestSolution;
+    }
+
+    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    {
+        return CalculateBestPath(matrix, CancellationToken.None);
     }
 
     /// <summary>
@@ -217,7 +200,7 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
     /// <exception cref="Exception">Thrown when an invalid cooling function is choosen.</exception>
     private double CalculateNewTemperature(double temperature, int tempChangedCounter)
     {
-        double result = coolingFunction switch
+        double result = ChoosenCoolingFunction switch
         {
             CoolingFunction.GEOMETRIC => temperature * Alpha,
             CoolingFunction.LINEAR => temperature - Alpha,
@@ -378,13 +361,4 @@ public class SimulatedAnnealing : TSPAlgorithm, ISolutionImprover
             return minCost.HasValue ? (minCost.Value, vertex) : null;
         }
     }
-
-
-    public enum CoolingFunction
-    {
-        LINEAR,
-        LOGARITHMIC,
-        GEOMETRIC,
-    }
-
 }

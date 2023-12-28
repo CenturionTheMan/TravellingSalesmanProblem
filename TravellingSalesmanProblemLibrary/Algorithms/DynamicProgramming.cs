@@ -8,19 +8,22 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public class DynamicProgramming : TSPAlgorithm
+public class DynamicProgramming : ITSPAlgorithm
 {
     private const int START_NODE = 0;
 
     private uint endMask;
 
 
-    public DynamicProgramming() : base() { }
+    public DynamicProgramming()
+    {
 
-    public override string AlgorithmName => "DynamicProgramming";
+    }
+
+    public string AlgorithmName => "DynamicProgramming";
 
 
-    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
+    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         if (matrix.GetMatrixSize > 32) return null;
 
@@ -36,6 +39,11 @@ public class DynamicProgramming : TSPAlgorithm
         var path = RetrivePath(parentTable, beginMask, START_NODE, matrix.GetMatrixSize);
 
         return (path, cost);
+    }
+
+    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    {
+        return CalculateBestPath(matrix, CancellationToken.None);
     }
 
     /// <summary>
@@ -94,7 +102,7 @@ public class DynamicProgramming : TSPAlgorithm
         //Check if given scenario was not already sloved, if so take result from table
         if (memoTable[fromVertex, mask].HasValue)
         {
-            return memoTable[fromVertex, mask].Value;
+            return memoTable[fromVertex, mask]!.Value;
         }
 
         int res = int.MaxValue;
@@ -149,5 +157,13 @@ public class DynamicProgramming : TSPAlgorithm
         return val != 0;
     }
 
+    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
+    {
+        throw new NotImplementedException();
+    }
 
+    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke)
+    {
+        throw new NotImplementedException();
+    }
 }

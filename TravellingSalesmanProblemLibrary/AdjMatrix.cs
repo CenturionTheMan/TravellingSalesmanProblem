@@ -183,7 +183,7 @@ public class AdjMatrix
 		{
 			for (int j = 0; j < size; j++)
 			{
-                object tmp = (matrix[i, j].HasValue) ? matrix[i, j].Value : nullVal;
+                object tmp = (matrix[i, j].HasValue) ? matrix[i, j]!.Value : nullVal;
                 string formated = String.Format("{0,-" + precision + "} ", tmp);
                 stringBuilder.Append(formated);
 			}

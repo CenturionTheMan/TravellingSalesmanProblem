@@ -3,18 +3,17 @@ using static TravellingSalesmanProblemLibrary.Utilites;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public class BranchAndBound : TSPAlgorithm
+public class BranchAndBound : ITSPAlgorithm
 {
     public SearchType SelectedSearchType { get { return searchType; } private set { searchType = value; } }
-    public override string AlgorithmName => "BranchAndBound_" + searchType;
+    public string AlgorithmName => "BranchAndBound_" + searchType;
 
     private const int BEGIN_VERTEX = 0;
     private SearchType searchType = SearchType.LOW_COST;
 
 
-    public BranchAndBound() : base() { }
 
-    public BranchAndBound(SearchType searchType) : base()
+    public BranchAndBound(SearchType searchType = SearchType.LOW_COST)
     {
         this.searchType = searchType;
     }
@@ -29,7 +28,7 @@ public class BranchAndBound : TSPAlgorithm
     /// A tuple containing the best path as an array of vertex indices and the total cost,
     /// or null if the operation is canceled due to a cancellation request or impossible to solve matrix.
     /// </returns>
-    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
+    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         List<Node> nodes = new();
         List<int>? bestPath = null;
@@ -126,6 +125,11 @@ public class BranchAndBound : TSPAlgorithm
         if (bestPath != null) bestPath.Add(BEGIN_VERTEX);
 
         return bestPath == null? null : (bestPath.ToArray(), upperBound);
+    }
+
+    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    {
+        return CalculateBestPath(matrix, new CancellationToken());
     }
 
     /// <summary>
@@ -276,16 +280,14 @@ public class BranchAndBound : TSPAlgorithm
         return min;
     }
 
-    public enum SearchType
+    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
     {
-        [Description("Low cost search")]
-        LOW_COST,
+        throw new NotImplementedException();
+    }
 
-        [Description("Deep for search")]
-        DEEP,
-
-        [Description("Breadth for search")]
-        BREADTH,
+    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke)
+    {
+        throw new NotImplementedException();
     }
 
 

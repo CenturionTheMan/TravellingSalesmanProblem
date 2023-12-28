@@ -4,56 +4,52 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static TravellingSalesmanProblemLibrary.GeneticAlgorithm;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public class GeneticAlgorithm : TSPAlgorithm, ISolutionImprover
+public class GeneticAlgorithm : ITSPAlgorithm
 {
-    public override string AlgorithmName => "GeneticAlgorithm";
+    public string AlgorithmName => "GeneticAlgorithm";
     public readonly int PopulationSize;
     public readonly double CrossChance;
     public readonly double MutationChance;
+    public readonly MutationType @MutationType;
+    public readonly CrossoverType @CrossoverType;
+    public readonly int CostRepAmountWithoutImprovementUntilBreak;
 
-
-    private (int[]? path, int cost)? allTimeBest = null;
+    private int? bestCostYet = null;
     
     private readonly Random random = new();
     private TimeSpan intervalLength;
     private Action<int?, long>? onIntervalShowCurrentSolution;
 
 
-    public GeneticAlgorithm(int populationSize, double crossChance, double mutationChance)
+    public GeneticAlgorithm(int populationSize, CrossoverType crossoverType, double crossChance, MutationType mutationType, double mutationChance, int costRepAmountWithoutImprovementUntilBreak)
     {
+        populationSize = Math.Clamp(populationSize, 2, int.MaxValue);
+        crossChance = Math.Clamp(crossChance, 0, 1);
+        mutationChance = Math.Clamp(mutationChance, 0, 1);
+
         this.PopulationSize = populationSize;
         this.CrossChance = crossChance;
-        MutationChance = mutationChance;
+        this.MutationChance = mutationChance;
+        this.MutationType = mutationType;
+        this.CrossoverType = crossoverType;
+        this.CostRepAmountWithoutImprovementUntilBreak = costRepAmountWithoutImprovementUntilBreak;
 
     }
 
-    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken CancellationToken)
-    {
-        return RunAlgorithm(matrix, CancellationToken);
-    }
+    #region SHOW INFO IN ITERVALS
 
-    /// <summary>
-     /// Sets up a periodic interval for showing the current solution during the algorithm execution.
-     /// </summary>
-     /// <param name="intervalLength">The interval length for displaying the current solution.</param>
-     /// <param name="toInvoke">The action to invoke for displaying the current solution.</param>
     public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
     {
         this.intervalLength = intervalLength;
         onIntervalShowCurrentSolution += toInvoke;
     }
 
-    /// <summary>
-    /// Unsubscribes an action from the event handler for showing the current solution in intervals.
-    /// </summary>
-    /// <param name="toInvoke">The action to unsubscribe.</param>
-    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke)
-    {
-        onIntervalShowCurrentSolution -= toInvoke;
-    }
+    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke) => onIntervalShowCurrentSolution -= toInvoke;
+
 
     /// <summary>
     /// Initiates the periodic display of the current solution in intervals using a separate task.
@@ -71,147 +67,68 @@ public class GeneticAlgorithm : TSPAlgorithm, ISolutionImprover
                     stopwatch.Stop();
                     return;
                 }
-                if(allTimeBest != null)
-                    onIntervalShowCurrentSolution?.Invoke(allTimeBest.Value.cost, stopwatch.ElapsedMilliseconds);
+                if(bestCostYet != null)
+                    onIntervalShowCurrentSolution?.Invoke(bestCostYet.Value, stopwatch.ElapsedMilliseconds);
                 await Task.Delay(intervalLength);
             }
         }, cancellationToken);
     }
 
+    #endregion
 
-    private (int[]? path, int cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken)
+    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken CancellationToken)
     {
-        var population = InitializePopulation(matrix);
+        return RunAlgorithm(matrix, CancellationToken);
+    }
+
+    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    {
+        return CalculateBestPath(matrix, CancellationToken.None);
+    }
+
+
+
+    private (int[] path, int cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken)
+    {
+        List<Individual> population = InitializePopulation(matrix);
+        Individual? tmp = population.MinBy(x => x.Cost);
+        if (tmp is null)
+            throw new Exception();
+
+        (int[] path, int cost) bestEver = (tmp.Path, tmp.Cost);
 
         int generationCounter = 1;
+        int costRepAmount = 0;
 
-        while (!cancellationToken.IsCancellationRequested)
+        while (!cancellationToken.IsCancellationRequested && costRepAmount < CostRepAmountWithoutImprovementUntilBreak)
         {
-            var best = population.MinBy(x => x.Cost);
-            if(allTimeBest.HasValue == false || allTimeBest.Value.cost > best.Cost)
+            var currentBest = population.MinBy(x => x.Cost);
+            if (currentBest is null) throw new Exception();
+
+            if (bestEver.cost > currentBest.Cost)
             {
-                allTimeBest = (best.Path, best.Cost);
-            }
-            
-            Console.WriteLine($"All time best: {allTimeBest.Value.cost} || Current best: {best.Cost} || Generation: {generationCounter}");
-
-            population = SelectionRoulette(population); //select best genes
-            population = CreateOffspring(matrix, population, CrossChance); //crossover
-            Mutate(matrix, ref population, MutationChance); //mutation
-
-            generationCounter++;
-        }
-        return allTimeBest;
-    }
-
-    private void Mutate(AdjMatrix matrix, ref List<Individual> population, double mutateChance)
-    {
-        mutateChance = Math.Clamp(mutateChance, 0, 1);
-
-        List<Individual> toRemove = new();
-        foreach (var item in population)
-        {
-            double prob = random.NextDouble();
-            if (prob <= mutateChance)
-            {
-                toRemove.Add(item);
-            }
-        }
-
-        foreach (var single in toRemove)
-        {
-            int first = random.Next(0, single.Path.Length);
-            int second = random.Next(0, single.Path.Length);
-            population.Remove(single);
-
-            var path = single.Path.SwapElements(first, second);
-            var cost = CalculatePathCost(matrix, path);
-            if (cost == null) continue;
-            Individual individual = new(path, cost.Value);
-            population.Add(individual);
-        }
-    }
-
-    //prob works
-    private List<Individual> SelectionRoulette(List<Individual> population)
-    {
-        List<(double min, double max, Individual individual)> scoreList = new();
-        
-        var max = population.Max(x => x.Cost);
-        double sum = population.Sum(x => max - x.Cost + 1);
-
-        double lower = 0;
-        foreach (var individual in population)
-        {
-            double percent = (max - individual.Cost + 1)/(double)sum;
-            double upper = lower + percent;
-
-            scoreList.Add((lower, upper, individual));
-            lower = upper;
-        }
-
-
-        List<Individual> newPopulation = new();
-        while (newPopulation.Count < PopulationSize)
-        {
-            double val = random.NextDouble();
-            var selected = scoreList.FirstOrDefault(x => x.min <= val && x.max > val);
-
-            newPopulation.Add(selected.individual);
-        }
-        return newPopulation;
-    }
-
-    private List<Individual> CreateOffspring(AdjMatrix matrix, List<Individual> parents, double crossChance)
-    {
-        crossChance = Math.Clamp(crossChance, 0, 1);
-
-        List<Individual> offspring = new();
-        while (offspring.Count < PopulationSize)
-        {
-            double prob = random.NextDouble();
-
-            Individual first = parents[random.Next(0, parents.Count)];
-            Individual second = parents[random.Next(0, parents.Count)];
-
-            if(prob <= crossChance)
-            {
-                offspring.Add(CreateChild(matrix, first, second));
-                offspring.Add(CreateChild(matrix, second, first));
+                bestEver = (currentBest.Path, currentBest.Cost);
+                costRepAmount = 0;
             }
             else
             {
-                offspring.Add(first);
-                offspring.Add(second);
+                costRepAmount++;
             }
+
+            Console.WriteLine($"All time best: {bestEver.cost} || Current avg: {population.Average(x => x.Cost).ToString("0.")} || Current best: {currentBest.Cost} || Generation: {generationCounter} || Cost break {((double)(100 * costRepAmount)/(double)CostRepAmountWithoutImprovementUntilBreak).ToString("0.00")}%");
+
+            //population = SelectionRoulette(population); //select best genes
+            population = SelectionTournament(population); //select best genes
+            population = CreateOffspring(matrix, population); //crossover
+            DoMutataions(matrix, population); //mutation
+
+            generationCounter++;
         }
 
-        return offspring;
+        CloseCycleInPath(ref bestEver.path);
+        return bestEver;
     }
 
-    private Individual CreateChild(AdjMatrix matrix, Individual first, Individual second)
-    {
-        Individual? individual = null;
-
-        do
-        {
-            int offest = random.Next(0, first.Path.Length);
-            List<int> tmp = first.Path.Take(offest).ToList();
-
-            foreach (var vertex in second.Path)
-            {
-                if (!tmp.Contains(vertex)) 
-                    tmp.Add(vertex);
-            }
-
-            int[] path = tmp.ToArray();
-            int? cost = CalculatePathCost(matrix, path);
-            if (cost == null) continue;
-            individual = new Individual(path, cost.Value);
-        } while (individual == null);
-
-        return individual.Value;
-    }
 
     private List<Individual> InitializePopulation(AdjMatrix matrix)
     {
@@ -229,7 +146,7 @@ public class GeneticAlgorithm : TSPAlgorithm, ISolutionImprover
 
             int[] path = allNumbers.ToArray();
             int? cost = CalculatePathCost(matrix, path);
-            if(cost == null)
+            if (cost == null)
             {
                 i--;
                 continue;
@@ -240,6 +157,231 @@ public class GeneticAlgorithm : TSPAlgorithm, ISolutionImprover
         }
 
         return population;
+    }
+
+
+
+    private List<Individual> SelectionTournament(List<Individual> population)
+    {
+        List<Individual> selection = new();
+
+        int tournamentSize = population.Count() / 20;
+        tournamentSize = Math.Clamp(tournamentSize, 2, population.Count());
+
+        while (selection.Count < population.Count())
+        {
+            List<Individual> tmp = new();
+
+            while (tmp.Count < tournamentSize)
+            {
+                tmp.Add(population[random.Next(0, population.Count)]);
+            }
+
+            var best = tmp.MinBy(x => x.Cost);
+            if (best is null)
+                throw new Exception("");
+            selection.Add(best);
+        }
+
+        return selection;
+    }
+
+
+
+    private List<Individual> CreateOffspring(AdjMatrix matrix, List<Individual> parents)
+    {
+        List<Individual> offspring = new();
+        while (offspring.Count < PopulationSize)
+        {
+            double prob = random.NextDouble();
+
+            Individual first = parents[random.Next(0, parents.Count)];
+            Individual second;
+            do
+            {
+                second = parents[random.Next(0, parents.Count)];
+            } while (second == first);
+
+            if (prob <= CrossChance)
+            {
+                Individual child1, child2;
+
+                switch (CrossoverType)
+                {
+                    case CrossoverType.ORDER:
+                        child1 = CreateChildOrder(matrix, first, second);
+                        child2 = CreateChildOrder(matrix, second, first);
+                        break;
+                    case CrossoverType.PARTIALLY_MAPPED:
+                        child1 = CreateChildPMX(matrix, first, second);
+                        child2 = CreateChildPMX(matrix, second, first);
+                        break;
+                    default:
+                        throw new ArgumentException();
+                }
+
+                offspring.Add(child1);
+                offspring.Add(child2);
+            }
+            else
+            {
+                offspring.Add(first);
+                offspring.Add(second);
+            }
+        }
+
+        return offspring;
+    }
+
+    private Individual CreateChildPMX(AdjMatrix matrix, Individual first, Individual second)
+    {
+        throw new NotImplementedException();
+    }
+
+
+    private Individual CreateChildOrder(AdjMatrix matrix, Individual first, Individual second)
+    {
+        Individual? individual = null;
+        do
+        {
+            int begin = random.Next(0, first.Path.Length - 1);
+            int end = random.Next(begin + 1, first.Path.Length);
+
+            List<int> childPath = first.Path.Skip(begin).Take(end - begin).ToList();
+
+            foreach (var vertex in second.Path)
+            {
+                if (childPath.Contains(vertex)) continue;
+                childPath.Add(vertex);
+            }
+
+            var resPath = childPath.ToArray();
+            int? cost = CalculatePathCost(matrix, resPath);
+            if (cost is null) continue;
+
+            individual = new(resPath, cost.Value);
+
+        } while (individual is null);
+
+        return individual;
+    }
+
+
+
+    private void DoMutataions(AdjMatrix matrix, List<Individual> population)
+    {
+        for (int i = 0; i < population.Count; i++)
+        {
+            double prob = random.NextDouble();
+            if (prob <= MutationChance)
+            {
+                switch (MutationType)
+                {
+                    case MutationType.INVERSION:
+                        MutateUsingInverse(matrix, population[i]);
+                        break;
+                    case MutationType.TRANSPOSITION:
+                        MutateUsingTranspostion(matrix, population[i]);
+                        break;
+                    case MutationType.INSERTION:
+                        MutateUsingInsertion(matrix, population[i]);
+                        break;
+                    default:
+                        throw new Exception();
+                }
+            }
+        }
+    }
+
+    private void MutateUsingTranspostion(AdjMatrix matrix, Individual individual)
+    {
+        int? newPathCost;
+        int[] newPath = new int[individual.Path.Length]; 
+        do
+        {
+            individual.Path.CopyTo(newPath, 0);
+            int first = random.Next(0, individual.Path.Length);
+            int second;
+            do
+            {
+                second = random.Next(0, individual.Path.Length);
+            } while (second == first);
+
+            Utilites.SwapArrayElementsAtIndex(newPath, first, second);
+            newPathCost = CalculatePathCost(matrix, newPath);
+        } while (newPathCost is null);
+
+        individual.Path = newPath;
+        individual.Cost = newPathCost.Value;
+    }
+
+    private void MutateUsingInverse(AdjMatrix matrix, Individual individual)
+    {
+        int[] newPath;
+        int? newPathCost;
+        do
+        {
+            int firstIndex = random.Next(0, individual.Path.Length - 1);
+            int secondIndex = random.Next(firstIndex + 1, individual.Path.Length);
+
+            newPath = new int[individual.Path.Length];
+
+            for (int i = 0; i < individual.Path.Length; i++)
+            {
+                if (i >= firstIndex && i <= secondIndex)
+                {
+                    newPath[i] = individual.Path[secondIndex - (i - firstIndex)];
+                }
+                else
+                {
+                    newPath[i] = individual.Path[i];
+                }
+            }
+
+            newPathCost = CalculatePathCost(matrix, newPath);
+        } while (newPathCost is null);
+
+        individual.Path = newPath;
+        individual.Cost = newPathCost.Value;
+    }    
+
+    private void MutateUsingInsertion(AdjMatrix matrix, Individual individual)
+    {
+        int? newCost;
+        List<int> newPath = new(individual.Path);
+
+        do
+        {
+            int fromPos = random.Next(0, newPath.Count());
+            int toPos;
+
+            int tmp = newPath[fromPos];
+            newPath.RemoveAt(fromPos);
+
+            do
+            {
+                toPos = random.Next(newPath.Count());
+            } while (toPos == fromPos);
+
+            newPath.Insert(toPos, tmp);
+
+            newCost = CalculatePathCost(matrix, newPath.ToArray());
+
+        } while (newCost is null);
+
+        individual.Path = newPath.ToArray();
+        individual.Cost = newCost.Value;
+    }
+
+
+    /// <summary>
+    /// Closes the cycle in the given path to create a Hamilton cycle.
+    /// </summary>
+    /// <param name="path">The path to close the cycle.</param>
+    private void CloseCycleInPath(ref int[] path)
+    {
+        Array.Resize(ref path, path.Length);
+        path[path.Length - 1] = path[0];
     }
 
     /// <summary>
@@ -265,11 +407,11 @@ public class GeneticAlgorithm : TSPAlgorithm, ISolutionImprover
 
 
 
-    internal struct Individual
+    internal class Individual
     {
         internal int[] Path = null!;
         internal int Cost;
-        internal double Fitness => 1.0 / ((double)Cost + 1);
+        //internal double Fitness => 1.0 / ((double)Cost + 1);
 
         public Individual(int[] path, int cost)
         {

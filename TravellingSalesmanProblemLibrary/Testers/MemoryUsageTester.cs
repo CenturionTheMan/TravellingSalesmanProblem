@@ -11,7 +11,7 @@ public class MemoryUsageTester : RandomTester
 {
     private int seed;
 
-    public MemoryUsageTester(TSPAlgorithm algorithm, int seed) : base(algorithm)
+    public MemoryUsageTester(ITSPAlgorithm algorithm, int seed) : base(algorithm)
     {
         this.seed = seed;
 

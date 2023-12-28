@@ -13,7 +13,7 @@ public class PercentFinishTester : RandomTester
 
     private int seed;
 
-    public PercentFinishTester(TSPAlgorithm algorithm, int seed) : base(algorithm)
+    public PercentFinishTester(ITSPAlgorithm algorithm, int seed) : base(algorithm)
     {
         minMatrixSize = 2;
         maxMatrixSize = 10;

@@ -1,8 +1,7 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 using TravellingSalesmanProblemLibrary;
-using TravellingSalesmanProblemLibrary.Algorithms;
-
+    
 namespace TravellingSalesmanProblemWF;
 
 public partial class MainForm : Form
@@ -14,7 +13,7 @@ public partial class MainForm : Form
     public readonly Color RESULT = Color.MediumSeaGreen;
 
 
-    public TSPAlgorithm? Algorithm = null;
+    public ITSPAlgorithm? Algorithm = null;
     private AdjMatrix? matrix = null;
     private Stopwatch stopwatch = new();
     private CancellationTokenSource? algorithmTaskCTS = null;

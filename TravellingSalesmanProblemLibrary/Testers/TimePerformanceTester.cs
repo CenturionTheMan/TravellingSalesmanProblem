@@ -18,7 +18,7 @@ public class TimePerformanceTester: RandomTester
     /// Initializes a new instance of the TimePerformanceTester class.
     /// </summary>
     /// <param name="algorithm">The TSP algorithm to test.</param>
-    public TimePerformanceTester(TSPAlgorithm algorithm, int seed) : base(algorithm)
+    public TimePerformanceTester(ITSPAlgorithm algorithm, int seed) : base(algorithm)
     {
         minMatrixSize = 2;
         maxMatrixSize = 10;

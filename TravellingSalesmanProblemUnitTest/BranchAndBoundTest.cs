@@ -22,7 +22,7 @@ namespace TravellingSalesmanProblemUnitTest
 
             map.SetDistance(2, 3, 30);
 
-            var bestPath = new BranchAndBound().CalculateBestPath(map);
+            var bestPath = new BranchAndBound(SearchType.LOW_COST).CalculateBestPath(map);
 
             Assert.NotNull(bestPath);
 

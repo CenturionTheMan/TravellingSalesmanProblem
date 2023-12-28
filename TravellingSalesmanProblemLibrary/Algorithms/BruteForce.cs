@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public class BruteForce : TSPAlgorithm
+public class BruteForce : ITSPAlgorithm
 {
-    public BruteForce() : base() { }
+    public string AlgorithmName => "BruteForce";
 
-    public override string AlgorithmName => "BruteForce";
+    public BruteForce()
+    {
 
+    }
 
     /// <summary>
     /// Calculates the best path cost using the brute-force algorithm for a given adjacency matrix.
@@ -22,12 +24,17 @@ public class BruteForce : TSPAlgorithm
     /// A tuple containing the best path as an array of vertex indices and the total cost of the path.
     /// Returns null if no valid path is found.
     /// </returns>
-    public override (int[]? path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
+    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         List<int[]> permutations = GenerateNumbersPermutations(0, matrix.GetMatrixSize - 1, cancellationToken);
         var best = FindBestPath(permutations, matrix, cancellationToken);
 
         return best;
+    }
+
+    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    {
+        return CalculateBestPath(matrix, CancellationToken.None);
     }
 
 
@@ -150,5 +157,15 @@ public class BruteForce : TSPAlgorithm
         }
     }
 
+    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
+    {
+        throw new NotImplementedException();
+    }
 
+    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke)
+    {
+        throw new NotImplementedException();
+    }
+
+    
 }

@@ -1,4 +1,4 @@
-using TravellingSalesmanProblemLibrary.Algorithms;
+using TravellingSalesmanProblemLibrary;
 
 namespace TravellingSalesmanProblemWF
 {
@@ -11,7 +11,7 @@ namespace TravellingSalesmanProblemWF
         private int maxRepPerNeighbourSearch;
         private int repAmountPerTemperature;
         private int initCostAmountRepUntilBreak;
-        private SimulatedAnnealing.CoolingFunction coolingFunction;
+        private CoolingFunction coolingFunction;
 
         public PopupSettingsForSAForm(MainForm parent, SimulatedAnnealing algorithm)
         {
@@ -21,7 +21,7 @@ namespace TravellingSalesmanProblemWF
             alpha = algorithm.Alpha;
             maxRepPerNeighbourSearch = algorithm.MaxRepPerNeighbourSearch;
             repAmountPerTemperature = algorithm.RepAmountPerTemperature;
-            initCostAmountRepUntilBreak = algorithm.InitCostAmountRepUntilBreak;
+            initCostAmountRepUntilBreak = algorithm.CostRepAmountUntilBreak;
 
             InitializeComponent();
 
@@ -34,7 +34,7 @@ namespace TravellingSalesmanProblemWF
 
             this.Text = algorithm.AlgorithmName;
 
-            CoolingTypeComboBox.DataSource = Enum.GetValues(typeof(SimulatedAnnealing.CoolingFunction));
+            CoolingTypeComboBox.DataSource = Enum.GetValues(typeof(CoolingFunction));
             CoolingTypeComboBox.SelectedItem = algorithm.ChoosenCoolingFunction;
             coolingFunction = algorithm.ChoosenCoolingFunction;
 
@@ -79,26 +79,26 @@ namespace TravellingSalesmanProblemWF
 
         private void CoolingTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            coolingFunction = (SimulatedAnnealing.CoolingFunction)CoolingTypeComboBox.SelectedItem;
+            coolingFunction = (CoolingFunction)CoolingTypeComboBox.SelectedItem;
 
             TemperatureNumericUpDown.Enabled = true;
 
             switch (coolingFunction)
             {
-                case SimulatedAnnealing.CoolingFunction.LINEAR:
+                case CoolingFunction.LINEAR:
                     AlphaNumericUpDown.DecimalPlaces = 2;
                     AlphaNumericUpDown.Maximum = 1000000;
                     AlphaNumericUpDown.Minimum = (decimal)0.01;
                     AlphaNumericUpDown.Increment = (decimal)0.01;
                     break;
-                case SimulatedAnnealing.CoolingFunction.LOGARITHMIC:
+                case CoolingFunction.LOGARITHMIC:
                     TemperatureNumericUpDown.Enabled = false;
                     AlphaNumericUpDown.DecimalPlaces = 1;
                     AlphaNumericUpDown.Maximum = 1000000;
                     AlphaNumericUpDown.Minimum = (decimal)0.1;
                     AlphaNumericUpDown.Increment = (decimal)0.1;
                     break;
-                case SimulatedAnnealing.CoolingFunction.GEOMETRIC:
+                case CoolingFunction.GEOMETRIC:
                     AlphaNumericUpDown.DecimalPlaces = 4;
                     AlphaNumericUpDown.Maximum = (decimal)0.9999;
                     AlphaNumericUpDown.Minimum = (decimal)0.0001;
