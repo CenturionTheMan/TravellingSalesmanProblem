@@ -56,5 +56,5 @@ public enum CrossoverType
     ORDER,
 
     [Description("Partially mapped crossover")]
-    PARTIALLY_MAPPED,
+    PMX,
 }

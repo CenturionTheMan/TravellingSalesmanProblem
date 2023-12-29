@@ -19,17 +19,23 @@ public class Program
 
     public static void Main()
     {
-        var tmp = new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.INSERTION, 0.2, 10000);
-
+        var tmp = new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.15, 10000);
         var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm403Matrix);
         //var matrix = new AdjMatrix(6, 10, 100);
 
         CancellationTokenSource cancellationTokenSource = new();
-        cancellationTokenSource.CancelAfter(new TimeSpan(0, 5, 0));
+        cancellationTokenSource.CancelAfter(new TimeSpan(0, 20, 0));
         var res = tmp.CalculateBestPath(matrix, cancellationTokenSource.Token);
         Console.WriteLine(res.ToStringCustom());
 
         Console.ReadKey();
+    }
+
+    public static void GeneticAlghTests()
+    {
+        // matrix 403 -> cost found 2469
+        //var mat403 = new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.15, 10000);
+        //var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm403Matrix)!;
     }
 
     public static void DefinedMatrixErrorTest()

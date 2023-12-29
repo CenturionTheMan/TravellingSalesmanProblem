@@ -212,7 +212,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
                         child1 = CreateChildOrder(matrix, first, second);
                         child2 = CreateChildOrder(matrix, second, first);
                         break;
-                    case CrossoverType.PARTIALLY_MAPPED:
+                    case CrossoverType.PMX:
                         child1 = CreateChildPMX(matrix, first, second);
                         child2 = CreateChildPMX(matrix, second, first);
                         break;
@@ -235,7 +235,50 @@ public class GeneticAlgorithm : ITSPAlgorithm
 
     private Individual CreateChildPMX(AdjMatrix matrix, Individual first, Individual second)
     {
-        throw new NotImplementedException();
+        int? newCost;
+        int[] newPath;
+
+        do
+        {
+            int begin = random.Next(0, first.Path.Length - 1);
+            int end = random.Next(begin + 1, first.Path.Length);
+
+
+            int?[] childPath = new int?[first.Path.Length];
+
+            for (int i = begin; i <= end; i++)
+            {
+                childPath[i] = first.Path[i];
+            }
+
+            for (int i = begin; i <= end; i++)
+            {
+                if (childPath.Contains(second.Path[i])) continue;
+
+                int numberToPlace = second.Path[i];
+                int currentIndex = i;
+
+                do
+                {
+                    currentIndex = Array.FindIndex(second.Path, x => x == first.Path[currentIndex]);
+                }
+                while (currentIndex >= begin && currentIndex <= end);
+
+                childPath[currentIndex] = numberToPlace;
+            }
+
+            for (int i = 0; i < first.Path.Length; i++)
+            {
+                if (childPath[i] is not null) continue;
+
+                childPath[i] = second.Path[i];
+            }
+
+            newPath = childPath.Select(x => x!.Value).ToArray();
+            newCost = CalculatePathCost(matrix, newPath);
+        } while (newCost is null);
+
+        return new Individual(newPath, newCost.Value);
     }
 
 
@@ -248,11 +291,12 @@ public class GeneticAlgorithm : ITSPAlgorithm
             int end = random.Next(begin + 1, first.Path.Length);
 
             List<int> childPath = first.Path.Skip(begin).Take(end - begin).ToList();
-
-            foreach (var vertex in second.Path)
+            for (int i = begin + 1; childPath.Count < second.Path.Length; i++)
             {
-                if (childPath.Contains(vertex)) continue;
-                childPath.Add(vertex);
+                if (i == second.Path.Length) i = 0;
+
+                if (childPath.Contains(second.Path[i])) continue;
+                childPath.Add(second.Path[i]);
             }
 
             var resPath = childPath.ToArray();
