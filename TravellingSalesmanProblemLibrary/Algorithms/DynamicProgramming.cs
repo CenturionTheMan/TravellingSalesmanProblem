@@ -10,6 +10,12 @@ namespace TravellingSalesmanProblemLibrary;
 
 public class DynamicProgramming : ITSPAlgorithm
 {
+    public string AlgorithmName => "Dynamic Programming";
+
+    public string AlgorithmDetailedName => AlgorithmName;
+
+
+
     private const int START_NODE = 0;
 
     private uint endMask;
@@ -19,10 +25,7 @@ public class DynamicProgramming : ITSPAlgorithm
     {
 
     }
-
-    public string AlgorithmName => "DynamicProgramming";
-
-
+    
     public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         if (matrix.GetMatrixSize > 32) return null;

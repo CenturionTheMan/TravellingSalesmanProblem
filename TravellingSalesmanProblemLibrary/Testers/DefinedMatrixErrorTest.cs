@@ -11,7 +11,7 @@ namespace TravellingSalesmanProblemLibrary.Testers;
 
 public class DefinedMatrixErrorTest : ITester
 {
-    private SimulatedAnnealing algorithm;
+    private ITSPAlgorithm algorithm;
     private AdjMatrix matrix;
 
     //private Stopwatch stopWatch = new Stopwatch();
@@ -26,7 +26,7 @@ public class DefinedMatrixErrorTest : ITester
 
     private (int cost, long timeInMs)? bestCost;
 
-    public DefinedMatrixErrorTest(SimulatedAnnealing algorithm, string matrixName, AdjMatrix matrix, int expectedCost)
+    public DefinedMatrixErrorTest(ITSPAlgorithm algorithm, string matrixName, AdjMatrix matrix, int expectedCost)
     {
         this.algorithm = algorithm;
         this.matrix = matrix;
@@ -34,7 +34,7 @@ public class DefinedMatrixErrorTest : ITester
         this.matrixName = matrixName;
     }
 
-    public DefinedMatrixErrorTest(SimulatedAnnealing algorithm, string matrixName, string filePath, int expectedCost)
+    public DefinedMatrixErrorTest(ITSPAlgorithm algorithm, string matrixName, string filePath, int expectedCost)
     {
         AdjMatrix? matrix = FilesHandler.LoadAdjMatrixFromFile(filePath);
         if(matrix == null) { throw new ArgumentException(); }
@@ -56,10 +56,10 @@ public class DefinedMatrixErrorTest : ITester
         return this;
     }
 
-    public void RunTest(string outputFileDir)
+    public void RunTest(string outputFileDir, string algorithmDesForOutput)
     {
         outputFileDir = outputFileDir.ChangeFileExtension("");
-        pathBest = outputFileDir + $"BestPathTest_{algorithm.AlgorithmName}_{matrixName}.csv";
+        pathBest = outputFileDir + $"BestPathTest_{algorithm.AlgorithmDetailedName}_{algorithmDesForOutput}_{matrixName}.csv";
 
         algorithm.OnShowCurrentSolutionInIntervals(new TimeSpan(0, 0, 0, 0, 100), OnDataReceived);
 
@@ -73,7 +73,7 @@ public class DefinedMatrixErrorTest : ITester
 
         for (int currentRep = 0; currentRep < repPerMatrix; currentRep++)
         {
-            pathError = outputFileDir + $"ErrorTest_{algorithm.AlgorithmName}_{matrixName}_{currentRep}.csv";
+            pathError = outputFileDir + $"ErrorTest_{algorithm.AlgorithmDetailedName}_{algorithmDesForOutput}_{matrixName}_{currentRep}.csv";
             List<object[]> tmp = new()
             {
                 new object[] { "Algorithm", "MatrixName", "TimeInMiliSeconds", "Error" }
@@ -95,15 +95,15 @@ public class DefinedMatrixErrorTest : ITester
                 var ratio = Math.Abs((expectedCost - bestCost.Value.cost) * 100 / (double)expectedCost);
                 List<object[]> line = new()
                 {
-                    new object[] { algorithm.AlgorithmName, currentRep, matrixName, bestCost.Value.timeInMs, bestCost.Value.cost, ratio}
+                    new object[] { algorithm.AlgorithmDetailedName, currentRep, matrixName, bestCost.Value.timeInMs, bestCost.Value.cost, ratio}
                 };
                 FilesHandler.CreateCsvFile(line, pathBest, false, ',');
             }
             bestCost = null;
         }
 
-        string createText = $"{result.Value.path.ArrayToPathString()}";
-        File.WriteAllText(outputFileDir + $"BestPathFound_{algorithm.AlgorithmName}_{matrixName}.txt", createText);
+        string createText = $"{result!.Value.path.ArrayToPathString()}";
+        File.WriteAllText(outputFileDir + $"BestPathFound_{algorithm.AlgorithmDetailedName}_{algorithmDesForOutput}_{matrixName}.txt", createText);
     }
 
 
@@ -118,7 +118,7 @@ public class DefinedMatrixErrorTest : ITester
 
         List<object[]> tmp = new()
         {
-            new object[] { algorithm.AlgorithmName, matrixName, time, Math.Abs((expectedCost - currentCost.Value)) * 100/ (double)expectedCost }
+            new object[] { algorithm.AlgorithmDetailedName, matrixName, time, Math.Abs((expectedCost - currentCost.Value)) * 100/ (double)expectedCost }
         };
         FilesHandler.CreateCsvFile(tmp, pathError, false, ',');
     }

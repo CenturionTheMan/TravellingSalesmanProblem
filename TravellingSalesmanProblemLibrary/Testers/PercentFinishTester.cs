@@ -40,7 +40,7 @@ public class PercentFinishTester : RandomTester
 
         fileDir = fileDir.ChangeFileExtension("");
 
-        string filePath = fileDir + $"PercentFinishedTest_{algorithm.AlgorithmName}.csv";
+        string filePath = fileDir + $"PercentFinishedTest_{algorithm.AlgorithmDetailedName}.csv";
 
         List<object[]> tmp = new();
         tmp.Add(new object[] { "Algorithm", "RepsPerSize", "MatrixSize", "PercentFinished" });
@@ -64,14 +64,14 @@ public class PercentFinishTester : RandomTester
                 }
 
                 if (repSize % 10 == 0 || repSize == 1)
-                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | FinishedAmount: {amountFinished}/{testsAmountPerSize}");
+                    Console.WriteLine($"{algorithm.AlgorithmDetailedName} | Size: {matrixSize} | RepPerSize: {repSize} | FinishedAmount: {amountFinished}/{testsAmountPerSize}");
             }
 
             double percent = (double)amountFinished / (double)testsAmountPerSize;
             percent = Math.Round(percent * 100, 2);
 
             List<object[]> data = new();
-            data.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, percent.ToString("0.##")});
+            data.Add(new object[] { algorithm.AlgorithmDetailedName, repPerSize, matrixSize, percent.ToString("0.##")});
             FilesHandler.CreateCsvFile(data, filePath, false, ',');
         }
     }

@@ -10,13 +10,16 @@ namespace TravellingSalesmanProblemLibrary;
 
 public class GeneticAlgorithm : ITSPAlgorithm
 {
-    public string AlgorithmName => "GeneticAlgorithm";
+    public string AlgorithmName => "Genetic Algorithm";
+
+    public string AlgorithmDetailedName => $"GeneticAlgorithm_{MutationType}_{CrossoverType}";
+
     public readonly int PopulationSize;
     public readonly double CrossChance;
     public readonly double MutationChance;
     public readonly MutationType @MutationType;
     public readonly CrossoverType @CrossoverType;
-    public readonly int CostRepAmountWithoutImprovementUntilBreak;
+    public readonly int? CostRepAmountWithoutImprovementUntilBreak;
 
     private int? bestCostYet = null;
     
@@ -25,7 +28,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
     private Action<int?, long>? onIntervalShowCurrentSolution;
 
 
-    public GeneticAlgorithm(int populationSize, CrossoverType crossoverType, double crossChance, MutationType mutationType, double mutationChance, int costRepAmountWithoutImprovementUntilBreak)
+    public GeneticAlgorithm(int populationSize, CrossoverType crossoverType, double crossChance, MutationType mutationType, double mutationChance, int? costRepAmountWithoutImprovementUntilBreak)
     {
         populationSize = Math.Clamp(populationSize, 2, int.MaxValue);
         crossChance = Math.Clamp(crossChance, 0, 1);
@@ -96,18 +99,27 @@ public class GeneticAlgorithm : ITSPAlgorithm
             throw new Exception();
 
         (int[] path, int cost) bestEver = (tmp.Path, tmp.Cost);
-
+        bestCostYet = bestEver.cost;
         int generationCounter = 1;
         int costRepAmount = 0;
 
-        while (!cancellationToken.IsCancellationRequested && costRepAmount < CostRepAmountWithoutImprovementUntilBreak)
+        CancellationTokenSource cancellationTokenSource = new();
+        if (onIntervalShowCurrentSolution != null) { CallShowSolutionInIntervals(cancellationTokenSource.Token); }
+
+        while (cancellationToken.IsCancellationRequested == false && 
+            (CostRepAmountWithoutImprovementUntilBreak.HasValue == false || costRepAmount < CostRepAmountWithoutImprovementUntilBreak.Value))
         {
+            population = SelectionTournament(population); //select best genes
+            population = CreateOffspring(matrix, population); //crossover
+            DoMutataions(matrix, population); //mutation
+
             var currentBest = population.MinBy(x => x.Cost);
             if (currentBest is null) throw new Exception();
 
             if (bestEver.cost > currentBest.Cost)
             {
                 bestEver = (currentBest.Path, currentBest.Cost);
+                bestCostYet = currentBest.Cost;
                 costRepAmount = 0;
             }
             else
@@ -115,16 +127,15 @@ public class GeneticAlgorithm : ITSPAlgorithm
                 costRepAmount++;
             }
 
-            Console.WriteLine($"All time best: {bestEver.cost} || Current avg: {population.Average(x => x.Cost).ToString("0.")} || Current best: {currentBest.Cost} || Generation: {generationCounter} || Cost break {((double)(100 * costRepAmount)/(double)CostRepAmountWithoutImprovementUntilBreak).ToString("0.00")}%");
+            string costBreakPerc = CostRepAmountWithoutImprovementUntilBreak is null? "-" : ((double)(100 * costRepAmount) / (double)CostRepAmountWithoutImprovementUntilBreak).ToString("0.00") + "%";
+            //Console.WriteLine($"All time best: {bestEver.cost} || Current avg: {population.Average(x => x.Cost).ToString("0.")} || Current best: {currentBest.Cost} || Generation: {generationCounter} || Cost break: {costBreakPerc}");
+            Console.WriteLine($"All time best: {bestEver.cost} || Current best: {currentBest.Cost} || Generation: {generationCounter} || Cost break: {costBreakPerc}");
 
-            //population = SelectionRoulette(population); //select best genes
-            population = SelectionTournament(population); //select best genes
-            population = CreateOffspring(matrix, population); //crossover
-            DoMutataions(matrix, population); //mutation
 
             generationCounter++;
         }
 
+        cancellationTokenSource.Cancel();
         CloseCycleInPath(ref bestEver.path);
         return bestEver;
     }

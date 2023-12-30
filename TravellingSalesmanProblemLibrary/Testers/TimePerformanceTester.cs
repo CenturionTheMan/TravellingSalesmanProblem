@@ -42,8 +42,8 @@ public class TimePerformanceTester: RandomTester
 
         Stopwatch stopWatch = new Stopwatch();
 
-        string detailedPath = fileDir + $"TimeTest_{algorithm.AlgorithmName}_{DETAILED_PATH_SUFFIX}.csv";
-        string meanPath = fileDir + $"TimeTest_{algorithm.AlgorithmName}_{MEAN_PATH_SUFFIX}.csv";
+        string detailedPath = fileDir + $"TimeTest_{algorithm.AlgorithmDetailedName}_{DETAILED_PATH_SUFFIX}.csv";
+        string meanPath = fileDir + $"TimeTest_{algorithm.AlgorithmDetailedName}_{MEAN_PATH_SUFFIX}.csv";
 
 
         List<object[]> tmp = new();
@@ -73,13 +73,13 @@ public class TimePerformanceTester: RandomTester
                 double singleTestTime = timePerMatrix / repPerMatrix;
                 timePerSize += singleTestTime;
 
-                dataForDetailed.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, singleTestTime });
+                dataForDetailed.Add(new object[] { algorithm.AlgorithmDetailedName, repPerSize, matrixSize, singleTestTime });
 
                 if (repSize % 10 == 0 || repSize == 1)
-                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | Time: {singleTestTime} [ms]");
+                    Console.WriteLine($"{algorithm.AlgorithmDetailedName} | Size: {matrixSize} | RepPerSize: {repSize} | Time: {singleTestTime} [ms]");
             }
             double meanTime = timePerSize / repPerSize;
-            dataForMean.Add(new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanTime });
+            dataForMean.Add(new object[] { algorithm.AlgorithmDetailedName, repPerSize, matrixSize, meanTime });
 
 
             FilesHandler.CreateCsvFile(dataForDetailed, detailedPath, false, ',');

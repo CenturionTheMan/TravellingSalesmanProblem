@@ -9,7 +9,9 @@ namespace TravellingSalesmanProblemLibrary;
 
 public class BruteForce : ITSPAlgorithm
 {
-    public string AlgorithmName => "BruteForce";
+    public string AlgorithmName => "Brute Force";
+
+    public string AlgorithmDetailedName => "BruteForce";
 
     public BruteForce()
     {

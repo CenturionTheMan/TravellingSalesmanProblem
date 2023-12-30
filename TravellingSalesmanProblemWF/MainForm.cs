@@ -182,7 +182,7 @@ public partial class MainForm : Form
         {
             AddTextToMessageLog("\n" + BREAK_LINE + "\n");
             AddTextToMessageLog($"Solving example using ");
-            AddTextToMessageLog($"{Algorithm.AlgorithmName}...\n", HIGHLIGHT);
+            AddTextToMessageLog($"{Algorithm.AlgorithmDetailedName}...\n", HIGHLIGHT);
 
             SolvaButton.Enabled = false;
             stopButton.Enabled = true;

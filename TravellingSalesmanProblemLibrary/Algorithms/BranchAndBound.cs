@@ -5,8 +5,11 @@ namespace TravellingSalesmanProblemLibrary;
 
 public class BranchAndBound : ITSPAlgorithm
 {
+    public string AlgorithmName => "Branch And Bound";
+    public string AlgorithmDetailedName => "BranchAndBound_" + searchType;
+
+
     public SearchType SelectedSearchType { get { return searchType; } private set { searchType = value; } }
-    public string AlgorithmName => "BranchAndBound_" + searchType;
 
     private const int BEGIN_VERTEX = 0;
     private SearchType searchType = SearchType.LOW_COST;

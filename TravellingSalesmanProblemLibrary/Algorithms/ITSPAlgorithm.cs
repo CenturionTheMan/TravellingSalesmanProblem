@@ -9,6 +9,7 @@ namespace TravellingSalesmanProblemLibrary;
 public interface ITSPAlgorithm
 {
     public string AlgorithmName { get; }
+    public string AlgorithmDetailedName { get; }
 
     /// <summary>
     /// Finds the best solution for Traveling Salesman Problem.

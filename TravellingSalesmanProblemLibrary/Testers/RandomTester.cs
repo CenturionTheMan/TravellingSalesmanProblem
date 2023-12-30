@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary.Testers
 {
-    public abstract class RandomTester : ITester
+    public abstract class RandomTester
     {
         protected ITSPAlgorithm algorithm;
 

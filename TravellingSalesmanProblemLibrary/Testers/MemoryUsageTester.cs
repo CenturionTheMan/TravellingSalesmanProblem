@@ -29,9 +29,9 @@ public class MemoryUsageTester : RandomTester
     public override void RunTest(string fileDir)
     {
         fileDir = fileDir.ChangeFileExtension("");
-        string pathMean = fileDir + $"MemoryTest_Avg_{algorithm.AlgorithmName}.csv";
-        string pathMax = fileDir + $"MemoryTest_Max_{algorithm.AlgorithmName}.csv";
-        string pathMedian = fileDir + $"MemoryTest_Median_{algorithm.AlgorithmName}.csv";
+        string pathMean = fileDir + $"MemoryTest_Avg_{algorithm.AlgorithmDetailedName}.csv";
+        string pathMax = fileDir + $"MemoryTest_Max_{algorithm.AlgorithmDetailedName}.csv";
+        string pathMedian = fileDir + $"MemoryTest_Median_{algorithm.AlgorithmDetailedName}.csv";
 
         List<object[]> tmp = new();
         tmp.Add(new object[] { "Algorithm", "RepsPerSize", "MatrixSize", "MemoryMB" });
@@ -74,7 +74,7 @@ public class MemoryUsageTester : RandomTester
                 }
 
                 if (repSize % 5 == 0 || repSize == 1)
-                    Console.WriteLine($"{algorithm.AlgorithmName} | Size: {matrixSize} | RepPerSize: {repSize} | MedianMemory: {perMatrixMeanRep.Average()} [MB]");
+                    Console.WriteLine($"{algorithm.AlgorithmDetailedName} | Size: {matrixSize} | RepPerSize: {repSize} | MedianMemory: {perMatrixMeanRep.Average()} [MB]");
 
                 meanRep.Add(perMatrixMeanRep.Average());
                 maxRep.Add(perMatrixMaxRep.Max());
@@ -85,9 +85,9 @@ public class MemoryUsageTester : RandomTester
             double maxVal = maxRep.Max();
             double medianVal = medianRep.Median();
 
-            List<object[]> meanRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, meanVal } };
-            List<object[]> maxRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, maxVal } };
-            List<object[]> medianRow = new List<object[]>() { new object[] { algorithm.AlgorithmName, repPerSize, matrixSize, medianVal } };
+            List<object[]> meanRow = new List<object[]>() { new object[] { algorithm.AlgorithmDetailedName, repPerSize, matrixSize, meanVal } };
+            List<object[]> maxRow = new List<object[]>() { new object[] { algorithm.AlgorithmDetailedName, repPerSize, matrixSize, maxVal } };
+            List<object[]> medianRow = new List<object[]>() { new object[] { algorithm.AlgorithmDetailedName, repPerSize, matrixSize, medianVal } };
             FilesHandler.CreateCsvFile(meanRow, pathMean, false);
             FilesHandler.CreateCsvFile(maxRow, pathMax, false);
             FilesHandler.CreateCsvFile(medianRow, pathMedian, false);

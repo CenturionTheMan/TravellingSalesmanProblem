@@ -8,6 +8,6 @@ namespace TravellingSalesmanProblemLibrary.Testers
 {
     public interface ITester
     {
-        public void RunTest(string outputFileDir);
+        public void RunTest(string outputFileDir, string algorithmDetailsForPath);
     }
 }

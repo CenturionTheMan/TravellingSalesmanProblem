@@ -32,7 +32,7 @@ namespace TravellingSalesmanProblemWF
             CostRepAmountNumericUpDown.Value = (decimal)initCostAmountRepUntilBreak;
 
 
-            this.Text = algorithm.AlgorithmName;
+            this.Text = algorithm.AlgorithmDetailedName;
 
             CoolingTypeComboBox.DataSource = Enum.GetValues(typeof(CoolingFunction));
             CoolingTypeComboBox.SelectedItem = algorithm.ChoosenCoolingFunction;

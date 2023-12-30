@@ -16,26 +16,281 @@ public class Program
 
     private static int SEED = 123;
 
+    /*  
+     *  ZAPYTAJ O TESTY
+     *  - czy test dla danych danych ma byc pwtarzany (ile razy) + jaka wartość ostateczna (średnia?)
+     *  - Jeżeli jeden test dla zestawu danych -> jaki czas działania? Iloraz czasu iteracji dla symulowanego wyżarzania?
+     *  - Czy trzeba się trzymać wartości początkowych z e-portalu
+     *  
+     */
+
 
     public static void Main()
     {
-        var tmp = new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.15, 10000);
-        var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm403Matrix);
-        //var matrix = new AdjMatrix(6, 10, 100);
+        //var tmp = new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.15, 100);
+        //var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm403Matrix);
+        ////var matrix = new AdjMatrix(6, 10, 100);
 
-        CancellationTokenSource cancellationTokenSource = new();
-        cancellationTokenSource.CancelAfter(new TimeSpan(0, 20, 0));
-        var res = tmp.CalculateBestPath(matrix, cancellationTokenSource.Token);
-        Console.WriteLine(res.ToStringCustom());
+        //CancellationTokenSource cancellationTokenSource = new();
+        //cancellationTokenSource.CancelAfter(new TimeSpan(0, 1, 0));
+        //var res = tmp.CalculateBestPath(matrix, cancellationTokenSource.Token);
+        //Console.WriteLine(res.ToStringCustom());
 
+
+        GeneticAlghTests();
+        Console.WriteLine("DONE!");
         Console.ReadKey();
     }
 
     public static void GeneticAlghTests()
     {
-        // matrix 403 -> cost found 2469
-        //var mat403 = new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.15, 10000);
-        //var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm403Matrix)!;
+        Test47();
+        Test170();
+        Test403();
+
+
+
+        void Test47()
+        {
+            //-----------------------------------------47
+
+            // PMX - TRANS
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(100, CrossoverType.PMX, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat47", pathForm47Matrix, 1776)
+                .SetRunTime(new TimeSpan(0, 2, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop100");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(200, CrossoverType.PMX, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat47", pathForm47Matrix, 1776)
+                .SetRunTime(new TimeSpan(0, 2, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop200");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(300, CrossoverType.PMX, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat47", pathForm47Matrix, 1776)
+                .SetRunTime(new TimeSpan(0, 2, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop300");
+
+
+            // PMX - INV
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(100, CrossoverType.PMX, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat47", pathForm47Matrix, 1776)
+                .SetRunTime(new TimeSpan(0, 2, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop100");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(200, CrossoverType.PMX, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat47", pathForm47Matrix, 1776)
+                .SetRunTime(new TimeSpan(0, 2, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop200");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(300, CrossoverType.PMX, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat47", pathForm47Matrix, 1776)
+                .SetRunTime(new TimeSpan(0, 2, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop300");
+
+
+            // ORDER - TRANS
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(100, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat47", pathForm47Matrix, 1776)
+                .SetRunTime(new TimeSpan(0, 2, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop100");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat47", pathForm47Matrix, 1776)
+                .SetRunTime(new TimeSpan(0, 2, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop200");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(300, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat47", pathForm47Matrix, 1776)
+                .SetRunTime(new TimeSpan(0, 2, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop300");
+
+
+            // PMX - INV
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(100, CrossoverType.ORDER, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat47", pathForm47Matrix, 1776)
+                .SetRunTime(new TimeSpan(0, 2, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop100");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat47", pathForm47Matrix, 1776)
+                .SetRunTime(new TimeSpan(0, 2, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop200");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(300, CrossoverType.ORDER, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat47", pathForm47Matrix, 1776)
+                .SetRunTime(new TimeSpan(0, 2, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop300");
+        }
+
+
+        void Test170()
+        {
+            //-----------------------------------------170
+
+            // PMX - TRANS
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(100, CrossoverType.PMX, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat170", pathForm170Matrix, 2755)
+                .SetRunTime(new TimeSpan(0, 4, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop100");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(200, CrossoverType.PMX, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat170", pathForm170Matrix, 2755)
+                .SetRunTime(new TimeSpan(0, 4, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop200");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(300, CrossoverType.PMX, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat170", pathForm170Matrix, 2755)
+                .SetRunTime(new TimeSpan(0, 4, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop300");
+
+
+            // PMX - INV
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(100, CrossoverType.PMX, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat170", pathForm170Matrix, 2755)
+                .SetRunTime(new TimeSpan(0, 4, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop100");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(200, CrossoverType.PMX, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat170", pathForm170Matrix, 2755)
+                .SetRunTime(new TimeSpan(0, 4, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop200");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(300, CrossoverType.PMX, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat170", pathForm170Matrix, 2755)
+                .SetRunTime(new TimeSpan(0, 4, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop300");
+
+
+            // ORDER - TRANS
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(100, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat170", pathForm170Matrix, 2755)
+                .SetRunTime(new TimeSpan(0, 4, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop100");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat170", pathForm170Matrix, 2755)
+                .SetRunTime(new TimeSpan(0, 4, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop200");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(300, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat170", pathForm170Matrix, 2755)
+                .SetRunTime(new TimeSpan(0, 4, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop300");
+
+
+            // PMX - INV
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(100, CrossoverType.ORDER, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat170", pathForm170Matrix, 2755)
+                .SetRunTime(new TimeSpan(0, 4, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop100");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat170", pathForm170Matrix, 2755)
+                .SetRunTime(new TimeSpan(0, 4, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop200");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(300, CrossoverType.ORDER, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat170", pathForm170Matrix, 2755)
+                .SetRunTime(new TimeSpan(0, 4, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop300");
+        }
+
+
+        void Test403()
+        {
+            //-----------------------------------------403
+
+            // PMX - TRANS
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(100, CrossoverType.PMX, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat403", pathForm403Matrix, 2465)
+                .SetRunTime(new TimeSpan(0, 6, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop100");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(200, CrossoverType.PMX, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat403", pathForm403Matrix, 2465)
+                .SetRunTime(new TimeSpan(0, 6, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop200");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(300, CrossoverType.PMX, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat403", pathForm403Matrix, 2465)
+                .SetRunTime(new TimeSpan(0, 6, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop300");
+
+
+            // PMX - INV
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(100, CrossoverType.PMX, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat403", pathForm403Matrix, 2465)
+                .SetRunTime(new TimeSpan(0, 6, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop100");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(200, CrossoverType.PMX, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat403", pathForm403Matrix, 2465)
+                .SetRunTime(new TimeSpan(0, 6, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop200");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(300, CrossoverType.PMX, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat403", pathForm403Matrix, 2465)
+                .SetRunTime(new TimeSpan(0, 6, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop300");
+
+
+            // ORDER - TRANS
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(100, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat403", pathForm403Matrix, 2465)
+                .SetRunTime(new TimeSpan(0, 6, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop100");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat403", pathForm403Matrix, 2465)
+                .SetRunTime(new TimeSpan(0, 6, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop200");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(300, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.01, 100001),
+                "mat403", pathForm403Matrix, 2465)
+                .SetRunTime(new TimeSpan(0, 6, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop300");
+
+
+            // PMX - INV
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(100, CrossoverType.ORDER, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat403", pathForm403Matrix, 2465)
+                .SetRunTime(new TimeSpan(0, 6, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop100");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat403", pathForm403Matrix, 2465)
+                .SetRunTime(new TimeSpan(0, 6, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop200");
+
+
+            new DefinedMatrixErrorTest(new GeneticAlgorithm(300, CrossoverType.ORDER, 0.8, MutationType.INVERSION, 0.01, 100001),
+                "mat403", pathForm403Matrix, 2465)
+                .SetRunTime(new TimeSpan(0, 6, 0))
+                .RunTest(TEST_RESULT_DIRECTORY, "pop300");
+        }
     }
 
     public static void DefinedMatrixErrorTest()
@@ -79,16 +334,16 @@ public class Program
         //    2465)
         //    .SetRunTime(new TimeSpan(0, 6, 0))
         //    .RunTest(TEST_RESULT_DIRECTORY);
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(15, 0.02, 1000, 10, 100000, CoolingFunction.LINEAR),
-            "rgb403", pathForm403Matrix,
-            2465)
-            .SetRunTime(new TimeSpan(0, 6, 0))
-            .RunTest(TEST_RESULT_DIRECTORY);
-        new DefinedMatrixErrorTest(new SimulatedAnnealing(15, 6.5, 1000, 1, 100000, CoolingFunction.LOGARITHMIC),
-            "rgb403", pathForm403Matrix,
-            2465)
-            .SetRunTime(new TimeSpan(0, 6, 0))
-            .RunTest(TEST_RESULT_DIRECTORY);
+        //new DefinedMatrixErrorTest(new SimulatedAnnealing(15, 0.02, 1000, 10, 100000, CoolingFunction.LINEAR),
+        //    "rgb403", pathForm403Matrix,
+        //    2465)
+        //    .SetRunTime(new TimeSpan(0, 6, 0))
+        //    .RunTest(TEST_RESULT_DIRECTORY);
+        //new DefinedMatrixErrorTest(new SimulatedAnnealing(15, 6.5, 1000, 1, 100000, CoolingFunction.LOGARITHMIC),
+        //    "rgb403", pathForm403Matrix,
+        //    2465)
+        //    .SetRunTime(new TimeSpan(0, 6, 0))
+        //    .RunTest(TEST_RESULT_DIRECTORY);
     }
 
     public static void TestTime()

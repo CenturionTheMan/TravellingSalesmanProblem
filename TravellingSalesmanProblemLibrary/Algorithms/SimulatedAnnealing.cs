@@ -8,8 +8,10 @@ namespace TravellingSalesmanProblemLibrary;
 /// </summary>
 public class SimulatedAnnealing : ITSPAlgorithm
 {
+    public string AlgorithmName => "Simulated Annealing";
+    public string AlgorithmDetailedName => "SimulatedAnnealing_" + ChoosenCoolingFunction;
+
     public Action<string>? OnAlgorithmShowInfo;
-    public string AlgorithmName => "SimulatedAnnealing_" + ChoosenCoolingFunction;
 
 
     public readonly double InitialTemperature;
