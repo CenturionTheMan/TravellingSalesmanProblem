@@ -70,10 +70,17 @@ public partial class MainForm : Form
     /// <param name="action"></param>
     private void RunMethodOnCurrentThread(Action action)
     {
-        this.Invoke(new MethodInvoker(() =>
+        try
         {
-            action();
-        }));
+            this.Invoke(new MethodInvoker(() =>
+            {
+                action();
+            }));
+        }
+        catch
+        {
+
+        }
     }
 
 
@@ -134,6 +141,16 @@ public partial class MainForm : Form
         var tmp = new SimulatedAnnealing(500, 0.99, 1000, 10, 1000000);
         this.Algorithm = tmp;
         popupSettingsForm = new PopupSettingsForSAForm(this, (SimulatedAnnealing)Algorithm);
+        tmp.OnAlgorithmShowInfo += PrintAlgorithMessage;
+
+        algorithmSettingsButton.Enabled = true;
+    }
+
+    private void GeneticAlgorithmRadioButton_CheckedChanged(object sender, EventArgs e)
+    {
+        var tmp = new GeneticAlgorithm(100, CrossoverType.PMX, 0.8, MutationType.TRANSPOSITION, 0.1, 100000);
+        this.Algorithm = tmp;
+        popupSettingsForm = new PopupSettingsForGAForm(this, (GeneticAlgorithm)Algorithm);
         tmp.OnAlgorithmShowInfo += PrintAlgorithMessage;
 
         algorithmSettingsButton.Enabled = true;
@@ -317,5 +334,8 @@ public partial class MainForm : Form
         popupSettingsForm.ShowDialog();
     }
 
-    
+    private void MainForm_Load(object sender, EventArgs e)
+    {
+
+    }
 }

@@ -39,10 +39,10 @@
             closeButton.FlatAppearance.BorderColor = Color.Black;
             closeButton.FlatStyle = FlatStyle.Flat;
             closeButton.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            closeButton.Location = new Point(81, 70);
+            closeButton.Location = new Point(101, 88);
             closeButton.Margin = new Padding(2);
             closeButton.Name = "closeButton";
-            closeButton.Size = new Size(134, 30);
+            closeButton.Size = new Size(168, 38);
             closeButton.TabIndex = 0;
             closeButton.Text = "Save and Close";
             closeButton.UseVisualStyleBackColor = false;
@@ -52,11 +52,11 @@
             // 
             searchTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             searchTypeComboBox.FormattingEnabled = true;
-            searchTypeComboBox.ItemHeight = 15;
-            searchTypeComboBox.Location = new Point(10, 32);
+            searchTypeComboBox.ItemHeight = 20;
+            searchTypeComboBox.Location = new Point(12, 40);
             searchTypeComboBox.Margin = new Padding(2);
             searchTypeComboBox.Name = "searchTypeComboBox";
-            searchTypeComboBox.Size = new Size(206, 23);
+            searchTypeComboBox.Size = new Size(256, 28);
             searchTypeComboBox.TabIndex = 1;
             searchTypeComboBox.DropDownClosed += searchTypeComboBox_DropDownClosed;
             // 
@@ -64,21 +64,21 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(10, 11);
+            label1.Location = new Point(12, 14);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(185, 19);
+            label1.Size = new Size(231, 23);
             label1.TabIndex = 2;
             label1.Text = "Select search type for BandB:";
             // 
             // PopupSettingsForBabForm
             // 
-            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleDimensions = new SizeF(120F, 120F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = Color.FromArgb(237, 220, 210);
-            ClientSize = new Size(225, 110);
+            ClientSize = new Size(281, 138);
             Controls.Add(label1);
             Controls.Add(searchTypeComboBox);
             Controls.Add(closeButton);
@@ -91,7 +91,7 @@
             ShowInTaskbar = false;
             SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterParent;
-            Text = "PopupSettingsForBabForm";
+            Text = "Settings for Branch And Bound";
             TopMost = true;
             FormClosing += PopupSettingsForBabForm_FormClosing;
             ResumeLayout(false);

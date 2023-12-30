@@ -29,8 +29,6 @@ namespace TravellingSalesmanProblemWF
 
             searchTypeComboBox.DataSource = Enum.GetValues(typeof(SearchType));
             searchTypeComboBox.SelectedItem = initSearchType;
-
-            this.Text = branchAndBound.AlgorithmDetailedName;
         }
 
         private void closeButton_Click(object sender, EventArgs e)

@@ -11,11 +11,12 @@ namespace TravellingSalesmanProblemLibrary;
 public class GeneticAlgorithm : ITSPAlgorithm
 {
     public string AlgorithmName => "Genetic Algorithm";
-
     public string AlgorithmDetailedName => $"GeneticAlgorithm_{MutationType}_{CrossoverType}";
 
+    public Action<string>? OnAlgorithmShowInfo;
+
     public readonly int PopulationSize;
-    public readonly double CrossChance;
+    public readonly double CrossoverChance;
     public readonly double MutationChance;
     public readonly MutationType @MutationType;
     public readonly CrossoverType @CrossoverType;
@@ -35,7 +36,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
         mutationChance = Math.Clamp(mutationChance, 0, 1);
 
         this.PopulationSize = populationSize;
-        this.CrossChance = crossChance;
+        this.CrossoverChance = crossChance;
         this.MutationChance = mutationChance;
         this.MutationType = mutationType;
         this.CrossoverType = crossoverType;
@@ -89,7 +90,11 @@ public class GeneticAlgorithm : ITSPAlgorithm
         return CalculateBestPath(matrix, CancellationToken.None);
     }
 
-
+    private void ShowMessage(string message)
+    {
+        Console.Write(message);
+        OnAlgorithmShowInfo?.Invoke(message);
+    }
 
     private (int[] path, int cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken)
     {
@@ -100,7 +105,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
 
         (int[] path, int cost) bestEver = (tmp.Path, tmp.Cost);
         bestCostYet = bestEver.cost;
-        int generationCounter = 1;
+        int generationCounter = 0;
         int costRepAmount = 0;
 
         CancellationTokenSource cancellationTokenSource = new();
@@ -127,12 +132,12 @@ public class GeneticAlgorithm : ITSPAlgorithm
                 costRepAmount++;
             }
 
+            generationCounter++;
+
+
             string costBreakPerc = CostRepAmountWithoutImprovementUntilBreak is null? "-" : ((double)(100 * costRepAmount) / (double)CostRepAmountWithoutImprovementUntilBreak).ToString("0.00") + "%";
             //Console.WriteLine($"All time best: {bestEver.cost} || Current avg: {population.Average(x => x.Cost).ToString("0.")} || Current best: {currentBest.Cost} || Generation: {generationCounter} || Cost break: {costBreakPerc}");
-            Console.WriteLine($"All time best: {bestEver.cost} || Current best: {currentBest.Cost} || Generation: {generationCounter} || Cost break: {costBreakPerc}");
-
-
-            generationCounter++;
+            ShowMessage($"Best: {bestEver.cost} || Current: {currentBest.Cost} || Generation: {generationCounter} || Cost break: {costBreakPerc}\n");
         }
 
         cancellationTokenSource.Cancel();
@@ -213,7 +218,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
                 second = parents[random.Next(0, parents.Count)];
             } while (second == first);
 
-            if (prob <= CrossChance)
+            if (prob <= CrossoverChance)
             {
                 Individual child1, child2;
 

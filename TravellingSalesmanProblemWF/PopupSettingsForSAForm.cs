@@ -32,12 +32,9 @@ namespace TravellingSalesmanProblemWF
             CostRepAmountNumericUpDown.Value = (decimal)initCostAmountRepUntilBreak;
 
 
-            this.Text = algorithm.AlgorithmDetailedName;
-
             CoolingTypeComboBox.DataSource = Enum.GetValues(typeof(CoolingFunction));
             CoolingTypeComboBox.SelectedItem = algorithm.ChoosenCoolingFunction;
             coolingFunction = algorithm.ChoosenCoolingFunction;
-
         }
 
         private void AlphaNumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -60,7 +57,7 @@ namespace TravellingSalesmanProblemWF
             initCostAmountRepUntilBreak = (int)CostRepAmountNumericUpDown.Value;
         }
 
-        private void PopupSettingsForSAForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void PopupSettingsForGAForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             var simulatedAnnealing = new SimulatedAnnealing(initialTemperature, alpha, repAmountPerTemperature, maxRepPerNeighbourSearch, initCostAmountRepUntilBreak, coolingFunction);
             parent.Algorithm = simulatedAnnealing;
