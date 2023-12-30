@@ -44,7 +44,7 @@
             closeButton.Name = "closeButton";
             closeButton.Size = new Size(168, 38);
             closeButton.TabIndex = 0;
-            closeButton.Text = "Save and Close";
+            closeButton.Text = "Close";
             closeButton.UseVisualStyleBackColor = false;
             closeButton.Click += closeButton_Click;
             // 

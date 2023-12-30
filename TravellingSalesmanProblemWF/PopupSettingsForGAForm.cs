@@ -46,6 +46,7 @@ namespace TravellingSalesmanProblemWF
             var algh = new GeneticAlgorithm(populationSize, crossoverType, crossoverChance, mutationType, mutationChance, costAmountRepUntilBreak);
             parent.Algorithm = algh;
             algh.OnAlgorithmShowInfo += parent.PrintAlgorithMessage;
+            parent.AddTextToMessageLog("Changes saved!\n");
         }
 
 

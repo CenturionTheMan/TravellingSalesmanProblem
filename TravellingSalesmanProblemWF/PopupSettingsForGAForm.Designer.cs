@@ -53,12 +53,12 @@
             closeButton.FlatAppearance.BorderColor = Color.Black;
             closeButton.FlatStyle = FlatStyle.Flat;
             closeButton.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            closeButton.Location = new Point(232, 258);
+            closeButton.Location = new Point(232, 236);
             closeButton.Margin = new Padding(2);
             closeButton.Name = "closeButton";
             closeButton.Size = new Size(168, 38);
             closeButton.TabIndex = 0;
-            closeButton.Text = "Save and Close";
+            closeButton.Text = "Close";
             closeButton.UseVisualStyleBackColor = false;
             closeButton.Click += closeButton_Click_1;
             // 
@@ -201,7 +201,7 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = Color.FromArgb(237, 220, 210);
-            ClientSize = new Size(434, 309);
+            ClientSize = new Size(434, 285);
             Controls.Add(MutationTypeComboBox);
             Controls.Add(label6);
             Controls.Add(CrossoverComboBox);

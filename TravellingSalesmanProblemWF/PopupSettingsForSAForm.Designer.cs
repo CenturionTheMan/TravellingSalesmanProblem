@@ -54,12 +54,12 @@
             closeButton.FlatAppearance.BorderColor = Color.Black;
             closeButton.FlatStyle = FlatStyle.Flat;
             closeButton.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            closeButton.Location = new Point(232, 258);
+            closeButton.Location = new Point(232, 236);
             closeButton.Margin = new Padding(2);
             closeButton.Name = "closeButton";
             closeButton.Size = new Size(168, 38);
             closeButton.TabIndex = 0;
-            closeButton.Text = "Save and Close";
+            closeButton.Text = "Close";
             closeButton.UseVisualStyleBackColor = false;
             closeButton.Click += closeButton_Click_1;
             // 
@@ -180,7 +180,7 @@
             CoolingTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             CoolingTypeComboBox.FormattingEnabled = true;
             CoolingTypeComboBox.Location = new Point(256, 49);
-            CoolingTypeComboBox.Margin = new Padding(4, 4, 4, 4);
+            CoolingTypeComboBox.Margin = new Padding(4);
             CoolingTypeComboBox.Name = "CoolingTypeComboBox";
             CoolingTypeComboBox.Size = new Size(143, 28);
             CoolingTypeComboBox.TabIndex = 12;
@@ -196,14 +196,14 @@
             label6.TabIndex = 13;
             label6.Text = "Cooling function:";
             // 
-            // PopupSettingsForGAForm
+            // PopupSettingsForSAForm
             // 
             AutoScaleDimensions = new SizeF(120F, 120F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = Color.FromArgb(237, 220, 210);
-            ClientSize = new Size(434, 309);
+            ClientSize = new Size(434, 285);
             Controls.Add(label6);
             Controls.Add(CoolingTypeComboBox);
             Controls.Add(RepInNeighbourhoodNumericUpDown);
@@ -221,7 +221,7 @@
             Margin = new Padding(2);
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "PopupSettingsForGAForm";
+            Name = "PopupSettingsForSAForm";
             ShowIcon = false;
             ShowInTaskbar = false;
             SizeGripStyle = SizeGripStyle.Hide;

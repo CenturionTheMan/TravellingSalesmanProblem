@@ -62,6 +62,8 @@ namespace TravellingSalesmanProblemWF
             var simulatedAnnealing = new SimulatedAnnealing(initialTemperature, alpha, repAmountPerTemperature, maxRepPerNeighbourSearch, initCostAmountRepUntilBreak, coolingFunction);
             parent.Algorithm = simulatedAnnealing;
             simulatedAnnealing.OnAlgorithmShowInfo += parent.PrintAlgorithMessage;
+
+            parent.AddTextToMessageLog("Changes saved!\n");
         }
 
         private void RepInNeighbourhoodNumericUpDown_ValueChanged(object sender, EventArgs e)
