@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static TravellingSalesmanProblemLibrary.Utilites;
+using static TravellingSalesmanProblemLibrary.Utilities;
 
 namespace TravellingSalesmanProblemLibrary.Testers;
 

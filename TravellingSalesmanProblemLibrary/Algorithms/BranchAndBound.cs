@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using static TravellingSalesmanProblemLibrary.Utilites;
+using static TravellingSalesmanProblemLibrary.Utilities;
 
 namespace TravellingSalesmanProblemLibrary;
 

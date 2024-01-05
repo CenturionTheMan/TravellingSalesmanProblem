@@ -22,7 +22,7 @@ namespace TravellingSalesmanProblemWF
             crossoverChance = algorithm.CrossoverChance;
             mutationType = algorithm.MutationType;
             mutationChance = algorithm.MutationChance;
-            costAmountRepUntilBreak = algorithm.CostRepAmountWithoutImprovementUntilBreak!.Value;
+            costAmountRepUntilBreak = algorithm.GenerationsWithoutImprovement!.Value;
 
             InitializeComponent();
 

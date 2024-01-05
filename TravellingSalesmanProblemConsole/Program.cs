@@ -27,17 +27,17 @@ public class Program
 
     public static void Main()
     {
-        //var tmp = new GeneticAlgorithm(200, CrossoverType.ORDER, 0.8, MutationType.TRANSPOSITION, 0.15, 100);
-        //var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm403Matrix);
+        var tmp = new GeneticAlgorithm(100, CrossoverType.PMX, 0.8, MutationType.INSERTION, 0.1, 100000);
+        var matrix = FilesHandler.LoadAdjMatrixFromFile(pathForm403Matrix);
         ////var matrix = new AdjMatrix(6, 10, 100);
 
-        //CancellationTokenSource cancellationTokenSource = new();
+        CancellationTokenSource cancellationTokenSource = new();
         //cancellationTokenSource.CancelAfter(new TimeSpan(0, 1, 0));
-        //var res = tmp.CalculateBestPath(matrix, cancellationTokenSource.Token);
-        //Console.WriteLine(res.ToStringCustom());
+        var res = tmp.CalculateBestPath(matrix, cancellationTokenSource.Token);
+        Console.WriteLine(res.ToStringCustom());
 
 
-        GeneticAlghTests();
+        //GeneticAlghTests();
         Console.WriteLine("DONE!");
         Console.ReadKey();
     }

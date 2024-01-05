@@ -20,7 +20,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
     public readonly double MutationChance;
     public readonly MutationType @MutationType;
     public readonly CrossoverType @CrossoverType;
-    public readonly int? CostRepAmountWithoutImprovementUntilBreak;
+    public readonly int? GenerationsWithoutImprovement;
 
     private int? bestCostYet = null;
     
@@ -29,7 +29,16 @@ public class GeneticAlgorithm : ITSPAlgorithm
     private Action<int?, long>? onIntervalShowCurrentSolution;
 
 
-    public GeneticAlgorithm(int populationSize, CrossoverType crossoverType, double crossChance, MutationType mutationType, double mutationChance, int? costRepAmountWithoutImprovementUntilBreak)
+    /// <summary>
+    /// Represents a genetic algorithm for solving the Travelling Salesman Problem.
+    /// </summary>
+    /// <param name="populationSize">The size of the population.</param>
+    /// <param name="crossoverType">The type of crossover used in the algorithm.</param>
+    /// <param name="crossChance">The probability of crossover occurring.</param>
+    /// <param name="mutationType">The type of mutation used in the algorithm.</param>
+    /// <param name="mutationChance">The probability of mutation occurring.</param>
+    /// <param name="generationsWithoutImprovement">The number of generations without improvement before stopping the algorithm.</param>
+    public GeneticAlgorithm(int populationSize, CrossoverType crossoverType, double crossChance, MutationType mutationType, double mutationChance, int? generationsWithoutImprovement)
     {
         populationSize = Math.Clamp(populationSize, 2, int.MaxValue);
         crossChance = Math.Clamp(crossChance, 0, 1);
@@ -40,20 +49,28 @@ public class GeneticAlgorithm : ITSPAlgorithm
         this.MutationChance = mutationChance;
         this.MutationType = mutationType;
         this.CrossoverType = crossoverType;
-        this.CostRepAmountWithoutImprovementUntilBreak = costRepAmountWithoutImprovementUntilBreak;
+        this.GenerationsWithoutImprovement = generationsWithoutImprovement;
 
     }
 
-    #region SHOW INFO IN ITERVALS
+    #region SHOW INFO IN INTERVALS
 
+    /// <summary>
+    /// Sets a callback function to be invoked at specified intervals to show the current solution.
+    /// </summary>
+    /// <param name="intervalLength">The length of the interval between invocations.</param>
+    /// <param name="toInvoke">The callback function to be invoked.</param>
     public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
     {
         this.intervalLength = intervalLength;
         onIntervalShowCurrentSolution += toInvoke;
     }
 
+    /// <summary>
+    /// Unsubscribes a method from the event that triggers the display of the current solution at specified intervals.
+    /// </summary>
+    /// <param name="toInvoke">The method to be unsubscribed.</param>
     public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke) => onIntervalShowCurrentSolution -= toInvoke;
-
 
     /// <summary>
     /// Initiates the periodic display of the current solution in intervals using a separate task.
@@ -80,46 +97,70 @@ public class GeneticAlgorithm : ITSPAlgorithm
 
     #endregion
 
+    /// <summary>
+    /// Calculates the best path using a genetic algorithm.
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the graph.</param>
+    /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
+    /// <returns>A tuple containing the best path and its cost, or null if the operation was unsuccessful.</returns>
     public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken CancellationToken)
     {
         return RunAlgorithm(matrix, CancellationToken);
     }
 
+    /// <summary>
+    /// Calculates the best path using a genetic algorithm.
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the graph.</param>
+    /// <returns>A tuple containing the best path and its cost, or null if the operation was unsuccessful.</returns>
     public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
     {
         return CalculateBestPath(matrix, CancellationToken.None);
     }
 
+    /// <summary>
+    /// Displays a message and invokes the OnAlgorithmShowInfo event.
+    /// </summary>
+    /// <param name="message">The message to be displayed.</param>
     private void ShowMessage(string message)
     {
         Console.Write(message);
         OnAlgorithmShowInfo?.Invoke(message);
     }
 
+
+    /// <summary>
+    /// Runs the genetic algorithm to find the optimal path for the traveling salesman problem.
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the distances between cities.</param>
+    /// <param name="cancellationToken">The cancellation token to stop the algorithm execution.</param>
+    /// <returns>
+    /// A tuple containing the optimal path and its cost if a solution is found, or null if no solution is found.
+    /// </returns>
     private (int[] path, int cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         List<Individual> population = InitializePopulation(matrix);
-        Individual? tmp = population.MinBy(x => x.Cost);
-        if (tmp is null)
-            throw new Exception();
+        Individual tmp = population.MinBy(x => x.Cost)!;
 
         (int[] path, int cost) bestEver = (tmp.Path, tmp.Cost);
+        
         bestCostYet = bestEver.cost;
+
         int generationCounter = 0;
         int costRepAmount = 0;
 
         CancellationTokenSource cancellationTokenSource = new();
-        if (onIntervalShowCurrentSolution != null) { CallShowSolutionInIntervals(cancellationTokenSource.Token); }
+        if (onIntervalShowCurrentSolution != null) 
+            CallShowSolutionInIntervals(cancellationTokenSource.Token);
 
         while (cancellationToken.IsCancellationRequested == false && 
-            (CostRepAmountWithoutImprovementUntilBreak.HasValue == false || costRepAmount < CostRepAmountWithoutImprovementUntilBreak.Value))
+            (GenerationsWithoutImprovement.HasValue == false || costRepAmount < GenerationsWithoutImprovement.Value))
         {
             population = SelectionTournament(population); //select best genes
             population = CreateOffspring(matrix, population); //crossover
-            DoMutataions(matrix, population); //mutation
+            DoMutations(matrix, population); //mutation
 
-            var currentBest = population.MinBy(x => x.Cost);
-            if (currentBest is null) throw new Exception();
+            var currentBest = population.MinBy(x => x.Cost)!;
 
             if (bestEver.cost > currentBest.Cost)
             {
@@ -135,9 +176,9 @@ public class GeneticAlgorithm : ITSPAlgorithm
             generationCounter++;
 
 
-            string costBreakPerc = CostRepAmountWithoutImprovementUntilBreak is null? "-" : ((double)(100 * costRepAmount) / (double)CostRepAmountWithoutImprovementUntilBreak).ToString("0.00") + "%";
-            //Console.WriteLine($"All time best: {bestEver.cost} || Current avg: {population.Average(x => x.Cost).ToString("0.")} || Current best: {currentBest.Cost} || Generation: {generationCounter} || Cost break: {costBreakPerc}");
-            ShowMessage($"Best: {bestEver.cost} || Current: {currentBest.Cost} || Generation: {generationCounter} || Cost break: {costBreakPerc}\n");
+            string costBreakPerc = GenerationsWithoutImprovement is null? "-" : ((double)(100 * costRepAmount) / (double)GenerationsWithoutImprovement).ToString("0.00") + "%";
+            Console.WriteLine($"All time best: {bestEver.cost} || Current avg: {population.Average(x => x.Cost).ToString("0.")} || Current best: {currentBest.Cost} || Generation: {generationCounter} || Cost break: {costBreakPerc}");
+            //ShowMessage($"Best: {bestEver.cost} || Current: {currentBest.Cost} || Generation: {generationCounter} || No improvement: {costBreakPerc}\n");
         }
 
         cancellationTokenSource.Cancel();
@@ -145,7 +186,11 @@ public class GeneticAlgorithm : ITSPAlgorithm
         return bestEver;
     }
 
-
+    /// <summary>
+    /// Initializes the population for the genetic algorithm.
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the problem.</param>
+    /// <returns>A list of individuals representing the initial population.</returns>
     private List<Individual> InitializePopulation(AdjMatrix matrix)
     {
         List<int> allNumbers = new();
@@ -156,18 +201,14 @@ public class GeneticAlgorithm : ITSPAlgorithm
 
         List<Individual> population = new();
 
-        for (int i = 0; i < PopulationSize; i++)
+        while (population.Count < PopulationSize)
         {
             allNumbers = allNumbers.OrderBy(x => random.Next()).ToList();
 
             int[] path = allNumbers.ToArray();
             int? cost = CalculatePathCost(matrix, path);
-            if (cost == null)
-            {
-                i--;
-                continue;
-            }
-
+            if (cost == null) continue;
+            
             Individual first = new(path, cost.Value);
             population.Add(first);
         }
@@ -175,8 +216,11 @@ public class GeneticAlgorithm : ITSPAlgorithm
         return population;
     }
 
-
-
+    /// <summary>
+    /// Performs tournament selection to select individuals from the population.
+    /// </summary>
+    /// <param name="population">The initial population.</param>
+    /// <returns>A list of selected individuals.</returns>
     private List<Individual> SelectionTournament(List<Individual> population)
     {
         List<Individual> selection = new();
@@ -193,17 +237,19 @@ public class GeneticAlgorithm : ITSPAlgorithm
                 tmp.Add(population[random.Next(0, population.Count)]);
             }
 
-            var best = tmp.MinBy(x => x.Cost);
-            if (best is null)
-                throw new Exception("");
+            var best = tmp.MinBy(x => x.Cost)!;
             selection.Add(best);
         }
 
         return selection;
     }
 
-
-
+    /// <summary>
+    /// Creates offspring
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the problem.</param>
+    /// <param name="parents">The list of parent individuals.</param>
+    /// <returns>A list of offspring individuals.</returns>
     private List<Individual> CreateOffspring(AdjMatrix matrix, List<Individual> parents)
     {
         List<Individual> offspring = new();
@@ -249,6 +295,13 @@ public class GeneticAlgorithm : ITSPAlgorithm
         return offspring;
     }
 
+    /// <summary>
+    /// Creates a child using the PMX crossover method.
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the problem.</param>
+    /// <param name="first">The first parent individual.</param>
+    /// <param name="second">The second parent individual.</param>
+    /// <returns>A new individual representing the child.</returns>
     private Individual CreateChildPMX(AdjMatrix matrix, Individual first, Individual second)
     {
         int? newCost;
@@ -258,7 +311,6 @@ public class GeneticAlgorithm : ITSPAlgorithm
         {
             int begin = random.Next(0, first.Path.Length - 1);
             int end = random.Next(begin + 1, first.Path.Length);
-
 
             int?[] childPath = new int?[first.Path.Length];
 
@@ -297,7 +349,13 @@ public class GeneticAlgorithm : ITSPAlgorithm
         return new Individual(newPath, newCost.Value);
     }
 
-
+    /// <summary>
+    /// Creates a child using OX crossover (Order Crossover) method.
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the graph.</param>
+    /// <param name="first">The first parent Individual.</param>
+    /// <param name="second">The second parent Individual.</param>
+    /// <returns>A new Individual representing the child.</returns>
     private Individual CreateChildOrder(AdjMatrix matrix, Individual first, Individual second)
     {
         Individual? individual = null;
@@ -312,6 +370,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
                 if (i == second.Path.Length) i = 0;
 
                 if (childPath.Contains(second.Path[i])) continue;
+
                 childPath.Add(second.Path[i]);
             }
 
@@ -327,8 +386,12 @@ public class GeneticAlgorithm : ITSPAlgorithm
     }
 
 
-
-    private void DoMutataions(AdjMatrix matrix, List<Individual> population)
+    /// <summary>
+    /// Performs mutations on the population based on the specified mutation type and chance.
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the problem instance.</param>
+    /// <param name="population">The list of individuals in the population.</param>
+    private void DoMutations(AdjMatrix matrix, List<Individual> population)
     {
         for (int i = 0; i < population.Count; i++)
         {
@@ -341,7 +404,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
                         MutateUsingInverse(matrix, population[i]);
                         break;
                     case MutationType.TRANSPOSITION:
-                        MutateUsingTranspostion(matrix, population[i]);
+                        MutateUsingTransposition(matrix, population[i]);
                         break;
                     case MutationType.INSERTION:
                         MutateUsingInsertion(matrix, population[i]);
@@ -353,7 +416,12 @@ public class GeneticAlgorithm : ITSPAlgorithm
         }
     }
 
-    private void MutateUsingTranspostion(AdjMatrix matrix, Individual individual)
+    /// <summary>
+    /// Mutates the individual using transposition mutation.
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the graph.</param>
+    /// <param name="individual">The individual to be mutated.</param>
+    private void MutateUsingTransposition(AdjMatrix matrix, Individual individual)
     {
         int? newPathCost;
         int[] newPath = new int[individual.Path.Length]; 
@@ -367,7 +435,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
                 second = random.Next(0, individual.Path.Length);
             } while (second == first);
 
-            Utilites.SwapArrayElementsAtIndex(newPath, first, second);
+            Utilities.SwapArrayElementsAtIndex(newPath, first, second);
             newPathCost = CalculatePathCost(matrix, newPath);
         } while (newPathCost is null);
 
@@ -375,6 +443,11 @@ public class GeneticAlgorithm : ITSPAlgorithm
         individual.Cost = newPathCost.Value;
     }
 
+    /// <summary>
+    /// Mutates the individual using the inverse mutation operator.
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the problem.</param>
+    /// <param name="individual">The individual to be mutated.</param>
     private void MutateUsingInverse(AdjMatrix matrix, Individual individual)
     {
         int[] newPath;
@@ -405,6 +478,11 @@ public class GeneticAlgorithm : ITSPAlgorithm
         individual.Cost = newPathCost.Value;
     }    
 
+    /// <summary>
+    /// Mutates the individual using the insertion mutation operator.
+    /// </summary>
+    /// <param name="matrix">The adjacency matrix representing the problem.</param>
+    /// <param name="individual">The individual to be mutated.</param>
     private void MutateUsingInsertion(AdjMatrix matrix, Individual individual)
     {
         int? newCost;
@@ -432,7 +510,6 @@ public class GeneticAlgorithm : ITSPAlgorithm
         individual.Path = newPath.ToArray();
         individual.Cost = newCost.Value;
     }
-
 
     /// <summary>
     /// Closes the cycle in the given path to create a Hamilton cycle.
@@ -465,13 +542,13 @@ public class GeneticAlgorithm : ITSPAlgorithm
         return sum;
     }
 
-
-
+    /// <summary>
+    /// Represents an individual in the genetic algorithm population.
+    /// </summary>
     internal class Individual
     {
         internal int[] Path = null!;
         internal int Cost;
-        //internal double Fitness => 1.0 / ((double)Cost + 1);
 
         public Individual(int[] path, int cost)
         {

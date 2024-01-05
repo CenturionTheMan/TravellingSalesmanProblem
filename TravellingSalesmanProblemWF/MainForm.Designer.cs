@@ -71,10 +71,9 @@
             // BruteForceRadioButton
             // 
             BruteForceRadioButton.AutoSize = true;
-            BruteForceRadioButton.Location = new Point(8, 28);
-            BruteForceRadioButton.Margin = new Padding(4);
+            BruteForceRadioButton.Location = new Point(6, 22);
             BruteForceRadioButton.Name = "BruteForceRadioButton";
-            BruteForceRadioButton.Size = new Size(105, 24);
+            BruteForceRadioButton.Size = new Size(85, 19);
             BruteForceRadioButton.TabIndex = 0;
             BruteForceRadioButton.TabStop = true;
             BruteForceRadioButton.Text = "Brute Force";
@@ -90,11 +89,9 @@
             groupBox1.Controls.Add(BranchAndBoundradioButton);
             groupBox1.Controls.Add(DynamicProgrammingRadioButton);
             groupBox1.Controls.Add(BruteForceRadioButton);
-            groupBox1.Location = new Point(8, 358);
-            groupBox1.Margin = new Padding(4);
+            groupBox1.Location = new Point(6, 286);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(4);
-            groupBox1.Size = new Size(519, 195);
+            groupBox1.Size = new Size(415, 156);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Select Algorithm";
@@ -102,10 +99,9 @@
             // GeneticAlgorithmRadioButton
             // 
             GeneticAlgorithmRadioButton.AutoSize = true;
-            GeneticAlgorithmRadioButton.Location = new Point(6, 153);
-            GeneticAlgorithmRadioButton.Margin = new Padding(4);
+            GeneticAlgorithmRadioButton.Location = new Point(5, 122);
             GeneticAlgorithmRadioButton.Name = "GeneticAlgorithmRadioButton";
-            GeneticAlgorithmRadioButton.Size = new Size(151, 24);
+            GeneticAlgorithmRadioButton.Size = new Size(122, 19);
             GeneticAlgorithmRadioButton.TabIndex = 11;
             GeneticAlgorithmRadioButton.TabStop = true;
             GeneticAlgorithmRadioButton.Text = "Genetic Algorithm";
@@ -115,10 +111,9 @@
             // SimulatedAnnealingRadioButton
             // 
             SimulatedAnnealingRadioButton.AutoSize = true;
-            SimulatedAnnealingRadioButton.Location = new Point(5, 121);
-            SimulatedAnnealingRadioButton.Margin = new Padding(4);
+            SimulatedAnnealingRadioButton.Location = new Point(4, 97);
             SimulatedAnnealingRadioButton.Name = "SimulatedAnnealingRadioButton";
-            SimulatedAnnealingRadioButton.Size = new Size(168, 24);
+            SimulatedAnnealingRadioButton.Size = new Size(135, 19);
             SimulatedAnnealingRadioButton.TabIndex = 10;
             SimulatedAnnealingRadioButton.TabStop = true;
             SimulatedAnnealingRadioButton.Text = "Simulated Annealing";
@@ -131,10 +126,9 @@
             algorithmSettingsButton.FlatAppearance.BorderColor = Color.White;
             algorithmSettingsButton.FlatStyle = FlatStyle.Flat;
             algorithmSettingsButton.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            algorithmSettingsButton.Location = new Point(350, 103);
-            algorithmSettingsButton.Margin = new Padding(4);
+            algorithmSettingsButton.Location = new Point(280, 82);
             algorithmSettingsButton.Name = "algorithmSettingsButton";
-            algorithmSettingsButton.Size = new Size(169, 74);
+            algorithmSettingsButton.Size = new Size(135, 59);
             algorithmSettingsButton.TabIndex = 9;
             algorithmSettingsButton.Text = "Algorithm Settings";
             algorithmSettingsButton.UseVisualStyleBackColor = false;
@@ -143,10 +137,9 @@
             // BranchAndBoundradioButton
             // 
             BranchAndBoundradioButton.AutoSize = true;
-            BranchAndBoundradioButton.Location = new Point(6, 90);
-            BranchAndBoundradioButton.Margin = new Padding(4);
+            BranchAndBoundradioButton.Location = new Point(5, 72);
             BranchAndBoundradioButton.Name = "BranchAndBoundradioButton";
-            BranchAndBoundradioButton.Size = new Size(153, 24);
+            BranchAndBoundradioButton.Size = new Size(125, 19);
             BranchAndBoundradioButton.TabIndex = 2;
             BranchAndBoundradioButton.TabStop = true;
             BranchAndBoundradioButton.Text = "Branch And Bound";
@@ -156,10 +149,9 @@
             // DynamicProgrammingRadioButton
             // 
             DynamicProgrammingRadioButton.AutoSize = true;
-            DynamicProgrammingRadioButton.Location = new Point(8, 59);
-            DynamicProgrammingRadioButton.Margin = new Padding(4);
+            DynamicProgrammingRadioButton.Location = new Point(6, 47);
             DynamicProgrammingRadioButton.Name = "DynamicProgrammingRadioButton";
-            DynamicProgrammingRadioButton.Size = new Size(183, 24);
+            DynamicProgrammingRadioButton.Size = new Size(149, 19);
             DynamicProgrammingRadioButton.TabIndex = 1;
             DynamicProgrammingRadioButton.TabStop = true;
             DynamicProgrammingRadioButton.Text = "Dynamic Programming";
@@ -173,11 +165,10 @@
             // fileNameTextBox
             // 
             fileNameTextBox.BackColor = Color.FromArgb(255, 241, 230);
-            fileNameTextBox.Location = new Point(164, 28);
-            fileNameTextBox.Margin = new Padding(4);
+            fileNameTextBox.Location = new Point(131, 22);
             fileNameTextBox.Multiline = true;
             fileNameTextBox.Name = "fileNameTextBox";
-            fileNameTextBox.Size = new Size(354, 87);
+            fileNameTextBox.Size = new Size(284, 70);
             fileNameTextBox.TabIndex = 4;
             // 
             // groupBox2
@@ -189,11 +180,9 @@
             groupBox2.Controls.Add(label2);
             groupBox2.Controls.Add(loadFileButton);
             groupBox2.Controls.Add(fileNameTextBox);
-            groupBox2.Location = new Point(9, 15);
-            groupBox2.Margin = new Padding(4);
+            groupBox2.Location = new Point(7, 12);
             groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(4);
-            groupBox2.Size = new Size(526, 335);
+            groupBox2.Size = new Size(421, 268);
             groupBox2.TabIndex = 5;
             groupBox2.TabStop = false;
             groupBox2.Text = "Matrix";
@@ -207,11 +196,11 @@
             groupBox3.Controls.Add(vertexAmountNumeric);
             groupBox3.Controls.Add(label4);
             groupBox3.Controls.Add(minDistanceNumeric);
-            groupBox3.Location = new Point(5, 136);
-            groupBox3.Margin = new Padding(4, 2, 4, 2);
+            groupBox3.Location = new Point(4, 109);
+            groupBox3.Margin = new Padding(3, 2, 3, 2);
             groupBox3.Name = "groupBox3";
-            groupBox3.Padding = new Padding(4, 2, 4, 2);
-            groupBox3.Size = new Size(321, 190);
+            groupBox3.Padding = new Padding(3, 2, 3, 2);
+            groupBox3.Size = new Size(257, 152);
             groupBox3.TabIndex = 11;
             groupBox3.TabStop = false;
             groupBox3.Text = "Random Matrix";
@@ -222,10 +211,10 @@
             generateRandomMatrixButton.FlatAppearance.BorderColor = Color.White;
             generateRandomMatrixButton.FlatStyle = FlatStyle.Flat;
             generateRandomMatrixButton.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
-            generateRandomMatrixButton.Location = new Point(176, 88);
-            generateRandomMatrixButton.Margin = new Padding(4, 2, 4, 2);
+            generateRandomMatrixButton.Location = new Point(141, 70);
+            generateRandomMatrixButton.Margin = new Padding(3, 2, 3, 2);
             generateRandomMatrixButton.Name = "generateRandomMatrixButton";
-            generateRandomMatrixButton.Size = new Size(145, 101);
+            generateRandomMatrixButton.Size = new Size(116, 81);
             generateRandomMatrixButton.TabIndex = 10;
             generateRandomMatrixButton.Text = "Generate Random Matrix";
             generateRandomMatrixButton.UseVisualStyleBackColor = false;
@@ -234,63 +223,60 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(0, 88);
-            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Location = new Point(0, 70);
             label6.Name = "label6";
-            label6.Size = new Size(95, 20);
+            label6.Size = new Size(76, 15);
             label6.TabIndex = 16;
             label6.Text = "Min Distance";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(0, 138);
-            label5.Margin = new Padding(4, 0, 4, 0);
+            label5.Location = new Point(0, 110);
             label5.Name = "label5";
-            label5.Size = new Size(98, 20);
+            label5.Size = new Size(78, 15);
             label5.TabIndex = 15;
             label5.Text = "Max Distance";
             // 
             // maxDistanceNumeric
             // 
             maxDistanceNumeric.BackColor = Color.FromArgb(255, 241, 230);
-            maxDistanceNumeric.Location = new Point(0, 159);
-            maxDistanceNumeric.Margin = new Padding(4, 2, 4, 2);
+            maxDistanceNumeric.Location = new Point(0, 127);
+            maxDistanceNumeric.Margin = new Padding(3, 2, 3, 2);
             maxDistanceNumeric.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             maxDistanceNumeric.Name = "maxDistanceNumeric";
-            maxDistanceNumeric.Size = new Size(164, 27);
+            maxDistanceNumeric.Size = new Size(131, 23);
             maxDistanceNumeric.TabIndex = 14;
             maxDistanceNumeric.Value = new decimal(new int[] { 100, 0, 0, 0 });
             // 
             // vertexAmountNumeric
             // 
             vertexAmountNumeric.BackColor = Color.FromArgb(255, 241, 230);
-            vertexAmountNumeric.Location = new Point(1, 56);
-            vertexAmountNumeric.Margin = new Padding(4, 2, 4, 2);
+            vertexAmountNumeric.Location = new Point(1, 45);
+            vertexAmountNumeric.Margin = new Padding(3, 2, 3, 2);
             vertexAmountNumeric.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             vertexAmountNumeric.Name = "vertexAmountNumeric";
-            vertexAmountNumeric.Size = new Size(164, 27);
+            vertexAmountNumeric.Size = new Size(131, 23);
             vertexAmountNumeric.TabIndex = 13;
             vertexAmountNumeric.Value = new decimal(new int[] { 4, 0, 0, 0 });
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(1, 35);
-            label4.Margin = new Padding(4, 0, 4, 0);
+            label4.Location = new Point(1, 28);
             label4.Name = "label4";
-            label4.Size = new Size(107, 20);
+            label4.Size = new Size(86, 15);
             label4.TabIndex = 12;
             label4.Text = "Vertex Amount";
             // 
             // minDistanceNumeric
             // 
             minDistanceNumeric.BackColor = Color.FromArgb(255, 241, 230);
-            minDistanceNumeric.Location = new Point(0, 109);
-            minDistanceNumeric.Margin = new Padding(4, 2, 4, 2);
+            minDistanceNumeric.Location = new Point(0, 87);
+            minDistanceNumeric.Margin = new Padding(3, 2, 3, 2);
             minDistanceNumeric.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             minDistanceNumeric.Name = "minDistanceNumeric";
-            minDistanceNumeric.Size = new Size(164, 27);
+            minDistanceNumeric.Size = new Size(131, 23);
             minDistanceNumeric.TabIndex = 11;
             minDistanceNumeric.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
@@ -300,10 +286,10 @@
             showMatrixButton.FlatAppearance.BorderColor = Color.White;
             showMatrixButton.FlatStyle = FlatStyle.Flat;
             showMatrixButton.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            showMatrixButton.Location = new Point(350, 195);
-            showMatrixButton.Margin = new Padding(4, 2, 4, 2);
+            showMatrixButton.Location = new Point(280, 156);
+            showMatrixButton.Margin = new Padding(3, 2, 3, 2);
             showMatrixButton.Name = "showMatrixButton";
-            showMatrixButton.Size = new Size(169, 130);
+            showMatrixButton.Size = new Size(135, 104);
             showMatrixButton.TabIndex = 9;
             showMatrixButton.Text = "Show Matrix";
             showMatrixButton.UseVisualStyleBackColor = false;
@@ -315,10 +301,9 @@
             SelectFileFromDiscButton.FlatAppearance.BorderColor = Color.White;
             SelectFileFromDiscButton.FlatStyle = FlatStyle.Flat;
             SelectFileFromDiscButton.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point);
-            SelectFileFromDiscButton.Location = new Point(0, 28);
-            SelectFileFromDiscButton.Margin = new Padding(4);
+            SelectFileFromDiscButton.Location = new Point(0, 22);
             SelectFileFromDiscButton.Name = "SelectFileFromDiscButton";
-            SelectFileFromDiscButton.Size = new Size(110, 87);
+            SelectFileFromDiscButton.Size = new Size(88, 70);
             SelectFileFromDiscButton.TabIndex = 8;
             SelectFileFromDiscButton.Text = "Select file from disc";
             SelectFileFromDiscButton.UseVisualStyleBackColor = false;
@@ -328,20 +313,18 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.Location = new Point(118, 70);
-            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Location = new Point(94, 56);
             label3.Name = "label3";
-            label3.Size = new Size(39, 28);
+            label3.Size = new Size(32, 21);
             label3.TabIndex = 7;
             label3.Text = "OR";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(164, 0);
-            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Location = new Point(131, 0);
             label2.Name = "label2";
-            label2.Size = new Size(107, 20);
+            label2.Size = new Size(85, 15);
             label2.TabIndex = 6;
             label2.Text = "Insert file path:";
             // 
@@ -350,10 +333,9 @@
             loadFileButton.BackColor = Color.FromArgb(203, 153, 126);
             loadFileButton.FlatAppearance.BorderColor = Color.White;
             loadFileButton.FlatStyle = FlatStyle.Flat;
-            loadFileButton.Location = new Point(350, 136);
-            loadFileButton.Margin = new Padding(4);
+            loadFileButton.Location = new Point(280, 109);
             loadFileButton.Name = "loadFileButton";
-            loadFileButton.Size = new Size(169, 39);
+            loadFileButton.Size = new Size(135, 31);
             loadFileButton.TabIndex = 5;
             loadFileButton.Text = "Load File From Path";
             loadFileButton.UseVisualStyleBackColor = false;
@@ -366,13 +348,12 @@
             messageLogTextBox.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
             messageLogTextBox.ForeColor = SystemColors.WindowText;
             messageLogTextBox.HideSelection = false;
-            messageLogTextBox.Location = new Point(542, 15);
-            messageLogTextBox.Margin = new Padding(4);
+            messageLogTextBox.Location = new Point(434, 12);
             messageLogTextBox.Name = "messageLogTextBox";
             messageLogTextBox.ReadOnly = true;
             messageLogTextBox.ScrollBars = RichTextBoxScrollBars.Vertical;
             messageLogTextBox.ShortcutsEnabled = false;
-            messageLogTextBox.Size = new Size(629, 518);
+            messageLogTextBox.Size = new Size(504, 415);
             messageLogTextBox.TabIndex = 6;
             messageLogTextBox.Text = "";
             messageLogTextBox.VisibleChanged += messageLogTextBox_VisibleChanged;
@@ -382,10 +363,9 @@
             SolvaButton.BackColor = Color.FromArgb(165, 165, 141);
             SolvaButton.FlatStyle = FlatStyle.Flat;
             SolvaButton.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
-            SolvaButton.Location = new Point(702, 541);
-            SolvaButton.Margin = new Padding(4);
+            SolvaButton.Location = new Point(562, 433);
             SolvaButton.Name = "SolvaButton";
-            SolvaButton.Size = new Size(470, 61);
+            SolvaButton.Size = new Size(376, 49);
             SolvaButton.TabIndex = 7;
             SolvaButton.Text = "SOLVE EXAMPLE";
             SolvaButton.UseVisualStyleBackColor = false;
@@ -397,10 +377,9 @@
             stopButton.Enabled = false;
             stopButton.FlatStyle = FlatStyle.Flat;
             stopButton.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            stopButton.Location = new Point(542, 542);
-            stopButton.Margin = new Padding(4);
+            stopButton.Location = new Point(434, 434);
             stopButton.Name = "stopButton";
-            stopButton.Size = new Size(152, 60);
+            stopButton.Size = new Size(122, 48);
             stopButton.TabIndex = 8;
             stopButton.Text = "STOP";
             stopButton.UseVisualStyleBackColor = false;
@@ -408,17 +387,16 @@
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(120F, 120F);
+            AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.FromArgb(237, 220, 210);
-            ClientSize = new Size(1186, 616);
+            ClientSize = new Size(949, 493);
             Controls.Add(groupBox1);
             Controls.Add(stopButton);
             Controls.Add(SolvaButton);
             Controls.Add(messageLogTextBox);
             Controls.Add(groupBox2);
             FormBorderStyle = FormBorderStyle.Fixed3D;
-            Margin = new Padding(4);
             MaximizeBox = false;
             Name = "MainForm";
             ShowIcon = false;

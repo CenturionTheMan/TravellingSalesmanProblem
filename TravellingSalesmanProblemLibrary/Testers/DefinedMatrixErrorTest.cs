@@ -17,7 +17,7 @@ public class DefinedMatrixErrorTest : ITester
     //private Stopwatch stopWatch = new Stopwatch();
 
     private TimeSpan runTime = new TimeSpan(0,2,0);
-    private int repPerMatrix = 10;
+    private int repPerMatrix = 2;
     private int expectedCost;
     private string matrixName;
 

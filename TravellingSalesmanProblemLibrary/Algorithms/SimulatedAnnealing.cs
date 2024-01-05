@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using static TravellingSalesmanProblemLibrary.Utilites;
+using static TravellingSalesmanProblemLibrary.Utilities;
 
 namespace TravellingSalesmanProblemLibrary;
 

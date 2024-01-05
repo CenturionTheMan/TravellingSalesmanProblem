@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmanProblemLibrary;
 
-public static class Utilites
+public static class Utilities
 {
     /// <summary>
     /// Swaps elements at the specified indexes in the given array.
