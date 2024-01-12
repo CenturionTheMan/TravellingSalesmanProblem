@@ -14,5 +14,9 @@ This repository contains an implementation of a few algorithms for the Travellin
   - Simulated Annealing
   - Genetic Algorithm
 
+ ## Loading files
+Application can create random adjeancy matrix or load one from [TSPLIB](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/index.html) (.xml, .atsp).
+
+
 ## License
 This project is licensed under the MIT License. You are free to use, modify, and distribute the code as per the terms of the license.
