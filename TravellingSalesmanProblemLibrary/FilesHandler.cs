@@ -23,6 +23,10 @@ namespace TravellingSalesmanProblemLibrary
             {
                 return LoadAdjMatrixFromATSPFile(fileCon);
             }
+            else if(fileCon.Contains("<graph>"))
+            {
+                return LoadAdjMatrixFromXmlFile(fileCon);
+            }
             else
             {
                 return LoadAdjMatrixFromTxtFile(fileCon);
@@ -31,9 +35,42 @@ namespace TravellingSalesmanProblemLibrary
 
         private static AdjMatrix? LoadAdjMatrixFromXmlFile(string fileCon)
         {
+            XmlDocument doc = new XmlDocument();
+
+            try
+            {
+                doc.LoadXml(fileCon);
+            }
+            catch
+            {
+                return null;
+            }
 
 
-            return null;
+            XmlNodeList vertices = doc.GetElementsByTagName("vertex");
+
+            AdjMatrix adjMatrix = new(vertices!.Count);
+
+            int fromVertex = 0;
+
+            foreach (XmlNode vertex in vertices)
+            {
+                foreach (XmlNode edge in vertex)
+                {
+                    try
+                    {
+                        int toVertex = int.Parse(edge.InnerText);
+                        double cost = double.Parse(edge.Attributes!["cost"]!.InnerText);
+                        adjMatrix.SetDistance(fromVertex, toVertex, cost, false);
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+                fromVertex++;
+            }
+            return adjMatrix;
         }
 
         /// <summary>
