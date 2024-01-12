@@ -22,9 +22,9 @@ public class SimulatedAnnealing : ITSPAlgorithm
     public readonly CoolingFunction ChoosenCoolingFunction;
 
     private TimeSpan intervalLength;
-    private int? currentBestCost;
+    private double? currentBestCost;
     private Random random = new();
-    private Action<int?, long>? onIntervalShowCurrentSolution;
+    private Action<double?, long>? onIntervalShowCurrentSolution;
 
     /// <summary>
     /// Initializes a new instance of the SimulatedAnnealing class.
@@ -51,18 +51,18 @@ public class SimulatedAnnealing : ITSPAlgorithm
     /// <param name="matrix">The adjacency matrix representing the problem.</param>
     /// <param name="cancellationToken">The cancellation token to stop the calculation.</param>
     /// <returns>The best path and its cost, or null if a valid path could not be created.</returns>
-    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
+    public (int[] path, double cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         return RunAlgorithm(matrix, cancellationToken);
     }
 
     
-    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
+    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<double?, long> toInvoke)
     {
         this.intervalLength = intervalLength;
         onIntervalShowCurrentSolution += toInvoke;
     }
-    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke) => onIntervalShowCurrentSolution -= toInvoke;
+    public void UnSubscribeShowCurrentSolutionInIntervals(Action<double?, long> toInvoke) => onIntervalShowCurrentSolution -= toInvoke;
     
 
     /// <summary>
@@ -94,17 +94,17 @@ public class SimulatedAnnealing : ITSPAlgorithm
     /// <param name="matrix">The adjacency matrix representing the problem.</param>
     /// <param name="cancellationToken">The cancellation token to stop the algorithm.</param>
     /// <returns>The best path and its cost, or null if the algorithm could not find a valid path.</returns>
-    private (int[] path, int cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken) 
+    private (int[] path, double cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken) 
     {
         double temperature = this.InitialTemperature;
         int repSameCostAmount = 0;
 
         int tempChangedCounter = 1;
 
-        (int[] path, int cost)? initSolution = GetInitPath(matrix);
+        (int[] path, double cost)? initSolution = GetInitPath(matrix);
         if (initSolution == null) return null;
-        (int[] path, int cost) currentSolution = initSolution.Value;
-        (int[] path, int cost) bestSolution = currentSolution;
+        (int[] path, double cost) currentSolution = initSolution.Value;
+        (int[] path, double cost) bestSolution = currentSolution;
         
         currentBestCost = bestSolution.cost;
 
@@ -188,7 +188,7 @@ public class SimulatedAnnealing : ITSPAlgorithm
         return bestSolution;
     }
 
-    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    public (int[] path, double cost)? CalculateBestPath(AdjMatrix matrix)
     {
         return CalculateBestPath(matrix, CancellationToken.None);
     }
@@ -256,17 +256,17 @@ public class SimulatedAnnealing : ITSPAlgorithm
     /// <param name="matrix">The adjacency matrix representing the problem.</param>
     /// <param name="cancellationToken">The cancellation token to interrupt the operation.</param>
     /// <returns>The neighboring solution and its cost, or null if the operation was canceled.</returns>
-    private (int[] path, int cost)? CreateSolutionNeighbour((int[] path, int cost) solution, AdjMatrix matrix, CancellationToken cancellationToken)
+    private (int[] path, double cost)? CreateSolutionNeighbour((int[] path, double cost) solution, AdjMatrix matrix, CancellationToken cancellationToken)
     {
         int[] currentPath = (int[])solution.path.Clone();
 
         int[] bestPath = new int[0];
-        int bestCost = int.MaxValue;
+        double bestCost = double.MaxValue;
 
         for (int i = 0; i < this.MaxRepPerNeighbourSearch; i++)
         {
             if (cancellationToken.IsCancellationRequested) return null;
-            int? cost;
+            double? cost;
             do
             {
                 if (cancellationToken.IsCancellationRequested) return null;
@@ -299,17 +299,17 @@ public class SimulatedAnnealing : ITSPAlgorithm
     /// <param name="path">The path to calculate the cost for.</param>
     /// <param name="matrix">The adjacency matrix representing the problem.</param>
     /// <returns>The cost of the path, or null if the cost could not be calculated.</returns>
-    private int? CalculatePathCost(int[] path, AdjMatrix matrix)
+    private double? CalculatePathCost(int[] path, AdjMatrix matrix)
     {
-        int sum = 0;
+        double sum = 0;
         for (int i = 0; i < path.Length - 1; i++)
         {
             int from = path[i];
             int to = path[i + 1];
-            if (matrix.TryGetDistance(from, to, out int dis) == false) return null;
+            if (matrix.TryGetDistance(from, to, out double dis) == false) return null;
             sum += dis;
         }
-        if (matrix.TryGetDistance(path[path.Length - 1], path[0], out int lastDis) == false) return null;
+        if (matrix.TryGetDistance(path[path.Length - 1], path[0], out double lastDis) == false) return null;
         sum += lastDis;
         return sum;
     }
@@ -320,12 +320,12 @@ public class SimulatedAnnealing : ITSPAlgorithm
     /// </summary>
     /// <param name="adjMatrix">The adjacency matrix representing the problem.</param>
     /// <returns>Path and its cost or null if could not created valid path</returns>
-    private (int[] path, int cost)? GetInitPath(AdjMatrix adjMatrix)
+    private (int[] path, double cost)? GetInitPath(AdjMatrix adjMatrix)
     {
         int beginVertex = random.Next(0, adjMatrix.GetMatrixSize);
 
         List<int> path = new();
-        int sumCost = 0;
+        double sumCost = 0;
         int fromVertex = beginVertex;
         path.Add(beginVertex);
 
@@ -338,20 +338,20 @@ public class SimulatedAnnealing : ITSPAlgorithm
             sumCost += next.Value.cost;
             fromVertex = next.Value.vertex;
         }
-        if (adjMatrix.TryGetDistance(path[path.Count - 1], beginVertex, out int last) == false) return null;
+        if (adjMatrix.TryGetDistance(path[path.Count - 1], beginVertex, out double last) == false) return null;
         sumCost += last;
         return (path.ToArray(), sumCost);
 
 
-        (int cost, int vertex)? FindClosestNeigh()
+        (double cost, int vertex)? FindClosestNeigh()
         {
-            int? minCost = null;
+            double? minCost = null;
             int vertex = -1;
             for (int j = 0; j < adjMatrix.GetMatrixSize; j++)
             {
                 if (path.Contains(j)) continue;
 
-                if (adjMatrix.TryGetDistance(fromVertex, j, out int dis) == false) continue;
+                if (adjMatrix.TryGetDistance(fromVertex, j, out double dis) == false) continue;
 
                 if (minCost == null || dis < minCost)
                 {

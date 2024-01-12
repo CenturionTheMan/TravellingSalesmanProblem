@@ -22,11 +22,11 @@ public class GeneticAlgorithm : ITSPAlgorithm
     public readonly CrossoverType @CrossoverType;
     public readonly int? GenerationsWithoutImprovement;
 
-    private int? bestCostYet = null;
+    private double? bestCostYet = null;
     
     private readonly Random random = new();
     private TimeSpan intervalLength;
-    private Action<int?, long>? onIntervalShowCurrentSolution;
+    private Action<double?, long>? onIntervalShowCurrentSolution;
 
 
     /// <summary>
@@ -60,7 +60,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
     /// </summary>
     /// <param name="intervalLength">The length of the interval between invocations.</param>
     /// <param name="toInvoke">The callback function to be invoked.</param>
-    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
+    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<double?, long> toInvoke)
     {
         this.intervalLength = intervalLength;
         onIntervalShowCurrentSolution += toInvoke;
@@ -70,7 +70,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
     /// Unsubscribes a method from the event that triggers the display of the current solution at specified intervals.
     /// </summary>
     /// <param name="toInvoke">The method to be unsubscribed.</param>
-    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke) => onIntervalShowCurrentSolution -= toInvoke;
+    public void UnSubscribeShowCurrentSolutionInIntervals(Action<double?, long> toInvoke) => onIntervalShowCurrentSolution -= toInvoke;
 
     /// <summary>
     /// Initiates the periodic display of the current solution in intervals using a separate task.
@@ -103,9 +103,9 @@ public class GeneticAlgorithm : ITSPAlgorithm
     /// <param name="matrix">The adjacency matrix representing the graph.</param>
     /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
     /// <returns>A tuple containing the best path and its cost, or null if the operation was unsuccessful.</returns>
-    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken CancellationToken)
+    public (int[] path, double cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
-        return RunAlgorithm(matrix, CancellationToken);
+        return RunAlgorithm(matrix, cancellationToken);
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
     /// </summary>
     /// <param name="matrix">The adjacency matrix representing the graph.</param>
     /// <returns>A tuple containing the best path and its cost, or null if the operation was unsuccessful.</returns>
-    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    public (int[] path, double cost)? CalculateBestPath(AdjMatrix matrix)
     {
         return CalculateBestPath(matrix, CancellationToken.None);
     }
@@ -124,7 +124,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
     /// <param name="message">The message to be displayed.</param>
     private void ShowMessage(string message)
     {
-        Console.Write(message);
+        //Console.Write(message);
         OnAlgorithmShowInfo?.Invoke(message);
     }
 
@@ -137,12 +137,12 @@ public class GeneticAlgorithm : ITSPAlgorithm
     /// <returns>
     /// A tuple containing the optimal path and its cost if a solution is found, or null if no solution is found.
     /// </returns>
-    private (int[] path, int cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken)
+    private (int[] path, double cost)? RunAlgorithm(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         List<Individual> population = InitializePopulation(matrix);
         Individual tmp = population.MinBy(x => x.Cost)!;
 
-        (int[] path, int cost) bestEver = (tmp.Path, tmp.Cost);
+        (int[] path, double cost) bestEver = (tmp.Path, tmp.Cost);
         
         bestCostYet = bestEver.cost;
 
@@ -177,8 +177,8 @@ public class GeneticAlgorithm : ITSPAlgorithm
 
 
             string costBreakPerc = GenerationsWithoutImprovement is null? "-" : ((double)(100 * costRepAmount) / (double)GenerationsWithoutImprovement).ToString("0.00") + "%";
-            Console.WriteLine($"All time best: {bestEver.cost} || Current avg: {population.Average(x => x.Cost).ToString("0.")} || Current best: {currentBest.Cost} || Generation: {generationCounter} || Cost break: {costBreakPerc}");
-            //ShowMessage($"Best: {bestEver.cost} || Current: {currentBest.Cost} || Generation: {generationCounter} || No improvement: {costBreakPerc}\n");
+            //Console.WriteLine($"All time best: {bestEver.cost} || Current avg: {population.Average(x => x.Cost).ToString("0.")} || Current best: {currentBest.Cost} || Generation: {generationCounter} || Cost break: {costBreakPerc}");
+            ShowMessage($"Best: {bestEver.cost} || Current: {currentBest.Cost} || Generation: {generationCounter} || No improvement: {costBreakPerc}\n");
         }
 
         cancellationTokenSource.Cancel();
@@ -206,7 +206,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
             allNumbers = allNumbers.OrderBy(x => random.Next()).ToList();
 
             int[] path = allNumbers.ToArray();
-            int? cost = CalculatePathCost(matrix, path);
+            double? cost = CalculatePathCost(matrix, path);
             if (cost == null) continue;
             
             Individual first = new(path, cost.Value);
@@ -304,47 +304,43 @@ public class GeneticAlgorithm : ITSPAlgorithm
     /// <returns>A new individual representing the child.</returns>
     private Individual CreateChildPMX(AdjMatrix matrix, Individual first, Individual second)
     {
-        int? newCost;
-        int[] newPath;
+        int begin = random.Next(0, first.Path.Length - 1);
+        int end = random.Next(begin + 1, first.Path.Length);
 
-        do
+        int?[] childPath = new int?[first.Path.Length];
+
+        for (int i = begin; i <= end; i++)
         {
-            int begin = random.Next(0, first.Path.Length - 1);
-            int end = random.Next(begin + 1, first.Path.Length);
+            childPath[i] = first.Path[i];
+        }
 
-            int?[] childPath = new int?[first.Path.Length];
+        for (int i = begin; i <= end; i++)
+        {
+            if (childPath.Contains(second.Path[i])) continue;
 
-            for (int i = begin; i <= end; i++)
+            int numberToPlace = second.Path[i];
+            int currentIndex = i;
+
+            do
             {
-                childPath[i] = first.Path[i];
+                currentIndex = Array.FindIndex(second.Path, x => x == first.Path[currentIndex]);
             }
+            while (currentIndex >= begin && currentIndex <= end);
 
-            for (int i = begin; i <= end; i++)
-            {
-                if (childPath.Contains(second.Path[i])) continue;
+            childPath[currentIndex] = numberToPlace;
+        }
 
-                int numberToPlace = second.Path[i];
-                int currentIndex = i;
+        for (int i = 0; i < first.Path.Length; i++)
+        {
+            if (childPath[i] is not null) continue;
 
-                do
-                {
-                    currentIndex = Array.FindIndex(second.Path, x => x == first.Path[currentIndex]);
-                }
-                while (currentIndex >= begin && currentIndex <= end);
+            childPath[i] = second.Path[i];
+        }
 
-                childPath[currentIndex] = numberToPlace;
-            }
-
-            for (int i = 0; i < first.Path.Length; i++)
-            {
-                if (childPath[i] is not null) continue;
-
-                childPath[i] = second.Path[i];
-            }
-
-            newPath = childPath.Select(x => x!.Value).ToArray();
-            newCost = CalculatePathCost(matrix, newPath);
-        } while (newCost is null);
+        int[] newPath = childPath.Select(x => x!.Value).ToArray();
+        double? newCost = CalculatePathCost(matrix, newPath);
+        if (newCost == null) 
+            throw new Exception("Path cost could not be calculated!");
 
         return new Individual(newPath, newCost.Value);
     }
@@ -358,30 +354,25 @@ public class GeneticAlgorithm : ITSPAlgorithm
     /// <returns>A new Individual representing the child.</returns>
     private Individual CreateChildOrder(AdjMatrix matrix, Individual first, Individual second)
     {
-        Individual? individual = null;
-        do
+        int begin = random.Next(0, first.Path.Length - 1);
+        int end = random.Next(begin + 1, first.Path.Length);
+
+        List<int> childPath = first.Path.Skip(begin).Take(end - begin).ToList();
+        for (int i = begin + 1; childPath.Count < second.Path.Length; i++)
         {
-            int begin = random.Next(0, first.Path.Length - 1);
-            int end = random.Next(begin + 1, first.Path.Length);
+            if (i == second.Path.Length) i = 0;
 
-            List<int> childPath = first.Path.Skip(begin).Take(end - begin).ToList();
-            for (int i = begin + 1; childPath.Count < second.Path.Length; i++)
-            {
-                if (i == second.Path.Length) i = 0;
+            if (childPath.Contains(second.Path[i])) continue;
 
-                if (childPath.Contains(second.Path[i])) continue;
+            childPath.Add(second.Path[i]);
+        }
 
-                childPath.Add(second.Path[i]);
-            }
+        var resPath = childPath.ToArray();
+        double? cost = CalculatePathCost(matrix, resPath);
+        if (cost is null) 
+            throw new Exception("Path cost could not be calculated!");
 
-            var resPath = childPath.ToArray();
-            int? cost = CalculatePathCost(matrix, resPath);
-            if (cost is null) continue;
-
-            individual = new(resPath, cost.Value);
-
-        } while (individual is null);
-
+        Individual individual = new(resPath, cost.Value);
         return individual;
     }
 
@@ -423,7 +414,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
     /// <param name="individual">The individual to be mutated.</param>
     private void MutateUsingTransposition(AdjMatrix matrix, Individual individual)
     {
-        int? newPathCost;
+        double? newPathCost;
         int[] newPath = new int[individual.Path.Length]; 
         do
         {
@@ -451,7 +442,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
     private void MutateUsingInverse(AdjMatrix matrix, Individual individual)
     {
         int[] newPath;
-        int? newPathCost;
+        double? newPathCost;
         do
         {
             int firstIndex = random.Next(0, individual.Path.Length - 1);
@@ -485,7 +476,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
     /// <param name="individual">The individual to be mutated.</param>
     private void MutateUsingInsertion(AdjMatrix matrix, Individual individual)
     {
-        int? newCost;
+        double? newCost;
         List<int> newPath = new(individual.Path);
 
         do
@@ -527,17 +518,17 @@ public class GeneticAlgorithm : ITSPAlgorithm
     /// <param name="path">The path to calculate the cost for.</param>
     /// <param name="matrix">The adjacency matrix representing the problem.</param>
     /// <returns>The cost of the path, or null if the cost could not be calculated.</returns>
-    private int? CalculatePathCost(AdjMatrix matrix, int[] path)
+    private double? CalculatePathCost(AdjMatrix matrix, int[] path)
     {
-        int sum = 0;
+        double sum = 0;
         for (int i = 0; i < path.Length - 1; i++)
         {
             int from = path[i];
             int to = path[i + 1];
-            if (matrix.TryGetDistance(from, to, out int dis) == false) return null;
+            if (matrix.TryGetDistance(from, to, out double dis) == false) return null;
             sum += dis;
         }
-        if (matrix.TryGetDistance(path[path.Length - 1], path[0], out int lastDis) == false) return null;
+        if (matrix.TryGetDistance(path[path.Length - 1], path[0], out double lastDis) == false) return null;
         sum += lastDis;
         return sum;
     }
@@ -548,9 +539,9 @@ public class GeneticAlgorithm : ITSPAlgorithm
     internal class Individual
     {
         internal int[] Path = null!;
-        internal int Cost;
+        internal double Cost;
 
-        public Individual(int[] path, int cost)
+        public Individual(int[] path, double cost)
         {
             this.Path = path;
             this.Cost = cost;

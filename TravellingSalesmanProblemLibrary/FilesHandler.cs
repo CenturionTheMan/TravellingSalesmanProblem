@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace TravellingSalesmanProblemLibrary
 {
@@ -26,6 +27,13 @@ namespace TravellingSalesmanProblemLibrary
             {
                 return LoadAdjMatrixFromTxtFile(fileCon);
             }
+        }
+
+        private static AdjMatrix? LoadAdjMatrixFromXmlFile(string fileCon)
+        {
+
+
+            return null;
         }
 
         /// <summary>

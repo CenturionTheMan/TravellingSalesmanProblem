@@ -26,13 +26,13 @@ public class DynamicProgramming : ITSPAlgorithm
 
     }
     
-    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
+    public (int[] path, double cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         if (matrix.GetMatrixSize > 32) return null;
 
         var maxMask = (ulong)Math.Pow(2, matrix.GetMatrixSize);
 
-        var memoTable = new int?[matrix.GetMatrixSize, maxMask];
+        var memoTable = new double?[matrix.GetMatrixSize, maxMask];
         var parentTable = new int[matrix.GetMatrixSize, maxMask];
 
         endMask = (uint)(1 << matrix.GetMatrixSize) - 1;
@@ -44,7 +44,7 @@ public class DynamicProgramming : ITSPAlgorithm
         return (path, cost);
     }
 
-    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    public (int[] path, double cost)? CalculateBestPath(AdjMatrix matrix)
     {
         return CalculateBestPath(matrix, CancellationToken.None);
     }
@@ -89,11 +89,11 @@ public class DynamicProgramming : ITSPAlgorithm
     /// <param name="memoTable">A memoization table to store intermediate results.</param>
     /// <param name="parentTable">A memoization table to store path.</param>
     /// <returns>The shortest distance to complete the traveling salesman tour.</returns>
-    private int SolveReq(AdjMatrix map, uint mask, int fromVertex, int?[,] memoTable, int[,] parentTable, CancellationToken cancellationToken)
+    private double SolveReq(AdjMatrix map, uint mask, int fromVertex, double?[,] memoTable, int[,] parentTable, CancellationToken cancellationToken)
     {
         if (cancellationToken.IsCancellationRequested)
         {
-            return int.MaxValue;
+            return double.MaxValue;
         }
 
         //If mask idicates that all vertices were visited in current path, if so add cost for returning to start vertex  
@@ -108,18 +108,18 @@ public class DynamicProgramming : ITSPAlgorithm
             return memoTable[fromVertex, mask]!.Value;
         }
 
-        int res = int.MaxValue;
+        double res = double.MaxValue;
 
         for (int nextVertex = 0; nextVertex < map.GetMatrixSize; nextVertex++)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return int.MaxValue;
+                return double.MaxValue;
             }
 
             //check if given vertex was already visited in given path
             if (CheckIfGivenVertexWasVisitedInGivenMask(mask, nextVertex)) continue;
-            if (!map.TryGetDistance(fromVertex, nextVertex, out int tmpRes)) continue;
+            if (!map.TryGetDistance(fromVertex, nextVertex, out double tmpRes)) continue;
 
             //create new bitmask for path where nextVertex is included
             var tmpMask = SetBitInMask(mask, nextVertex);
@@ -160,12 +160,12 @@ public class DynamicProgramming : ITSPAlgorithm
         return val != 0;
     }
 
-    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
+    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<double?, long> toInvoke)
     {
         throw new NotImplementedException();
     }
 
-    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke)
+    public void UnSubscribeShowCurrentSolutionInIntervals(Action<double?, long> toInvoke)
     {
         throw new NotImplementedException();
     }

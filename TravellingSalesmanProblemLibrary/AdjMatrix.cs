@@ -7,13 +7,13 @@ namespace TravellingSalesmanProblemLibrary;
 public class AdjMatrix
 {
 	public int GetMatrixSize { get { return size; } }
-    public int?[,] Matrix { get { return (int?[,])matrix.Clone(); } }
+    public double?[,] Matrix { get { return (double?[,])matrix.Clone(); } }
 
 
-    private int?[,] matrix;
+    private double?[,] matrix;
 	private int size;
 
-    private int? maxDistance;
+    private double? maxDistance;
 
     /// <summary>
     /// Initializes a new instance of the AdjMatrix class with the specified number of vertices.
@@ -23,7 +23,7 @@ public class AdjMatrix
     {
         if (verticesAmount < 1)
             throw new ArgumentException("Matrix size must be greater or equal to 1");
-        matrix = new int?[verticesAmount, verticesAmount];
+        matrix = new double?[verticesAmount, verticesAmount];
         size = verticesAmount;
         maxDistance = null;
     }
@@ -46,7 +46,7 @@ public class AdjMatrix
     /// </summary>
     /// <param name="matrix">Values to fill matrix with</param>
     /// <exception cref="ArgumentException">Dimentions of array must be equal</exception>
-    public AdjMatrix(int?[,] matrix)
+    public AdjMatrix(double?[,] matrix)
     {
         if (matrix.GetLength(0) != matrix.GetLength(1))
             throw new ArgumentException("Both dimensions must be equal in lenght!");
@@ -104,7 +104,7 @@ public class AdjMatrix
     /// <param name="value">The distance value between the two vertices.</param>
     /// <param name="isDoubleDirection">Indicates whether the distance should be set in both directions (from begin to end and from end to begin).</param>
     /// <returns>True if the distance is successfully set, false otherwise.</returns>
-    public bool SetDistance(int begin, int end, int value, bool isDoubleDirection = true)
+    public bool SetDistance(int begin, int end, double value, bool isDoubleDirection = true)
 	{
 		if(CheckIndexes(begin, end))
 		{
@@ -133,7 +133,7 @@ public class AdjMatrix
     /// <returns>The distance between the two vertices</returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public int GetDistance(int begin, int end)
+    public double GetDistance(int begin, int end)
     {
         if (CheckIndexes(begin, end) == false) throw new ArgumentOutOfRangeException();
         var tmp = matrix[begin, end];
@@ -148,7 +148,7 @@ public class AdjMatrix
     /// <param name="end">The index of the ending vertex.</param>
     /// <param name="distance">The distance between the two vertices.</param>
     /// <returns>True if the distance is successfully retrieved, false otherwise.</returns>
-    public bool TryGetDistance(int begin, int end, out int distance)
+    public bool TryGetDistance(int begin, int end, out double distance)
 	{
 		distance = 0;
 		if(CheckIndexes(begin, end))

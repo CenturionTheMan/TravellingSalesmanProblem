@@ -42,7 +42,7 @@ public static class Utilities
     /// </summary>
     /// <param name="result">The tuple containing the path and cost.</param>
     /// <returns>A formatted string representation of the path and its cost.</returns>
-    public static string ToStringCustom(this (int[] path, int cost)? result)
+    public static string ToStringCustom(this (int[] path, double cost)? result)
     {
         if(result.HasValue == false)
         {
@@ -56,7 +56,7 @@ public static class Utilities
         {
             stringBuilder.Append(item + " ");
         }
-        stringBuilder.AppendLine($"\nCost: {result.Value.cost}");
+        stringBuilder.AppendLine($"\nCost: {result.Value.cost.ToString("0.0")}");
 
         return stringBuilder.ToString();
     }

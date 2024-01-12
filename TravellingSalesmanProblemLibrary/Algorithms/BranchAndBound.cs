@@ -31,12 +31,12 @@ public class BranchAndBound : ITSPAlgorithm
     /// A tuple containing the best path as an array of vertex indices and the total cost,
     /// or null if the operation is canceled due to a cancellation request or impossible to solve matrix.
     /// </returns>
-    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
+    public (int[] path, double cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         List<Node> nodes = new();
         List<int>? bestPath = null;
-        int upperBound = int.MaxValue;
-        int?[,] cMatrix = matrix.Matrix;
+        double upperBound = double.MaxValue;
+        double?[,] cMatrix = matrix.Matrix;
         int vertexFrom = BEGIN_VERTEX;
 
         //calculate initial upper bound value using closest-neighbour selection
@@ -48,7 +48,7 @@ public class BranchAndBound : ITSPAlgorithm
         }
 
         //reduce initial matrix
-        int cost = ReduceMatrix(ref cMatrix);
+        double cost = ReduceMatrix(ref cMatrix);
 
         //add initial node to queue
         Node initNode = new Node(cMatrix, cost, vertexFrom);
@@ -110,14 +110,14 @@ public class BranchAndBound : ITSPAlgorithm
                 if (node.path.Contains(vertexTo)) continue;
 
                 //get cost from vertex to next vertex
-                int? edgeCost = node.matrix[vertexFrom, vertexTo];
+                double? edgeCost = node.matrix[vertexFrom, vertexTo];
                 if (edgeCost == null) continue;
 
                 //remove colun and row from matrix at choosen vertices (set as null)
-                int?[,] wMatrix = SetRowColumnToNull(node.matrix, vertexFrom, vertexTo);
+                double?[,] wMatrix = SetRowColumnToNull(node.matrix, vertexFrom, vertexTo);
 
                 //reduce matrix
-                int wCost = ReduceMatrix(ref wMatrix) + edgeCost.Value + node.cost;
+                double wCost = ReduceMatrix(ref wMatrix) + edgeCost.Value + node.cost;
 
                 //add new sub-node to state space tree
                 Node tmp = new Node(wMatrix, wCost, node.path, vertexTo);
@@ -130,7 +130,7 @@ public class BranchAndBound : ITSPAlgorithm
         return bestPath == null? null : (bestPath.ToArray(), upperBound);
     }
 
-    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    public (int[] path, double cost)? CalculateBestPath(AdjMatrix matrix)
     {
         return CalculateBestPath(matrix, new CancellationToken());
     }
@@ -141,10 +141,10 @@ public class BranchAndBound : ITSPAlgorithm
     /// </summary>
     /// <param name="adjMatrix">The adjacency matrix representing the problem.</param>
     /// <returns>Initial upper bound value with path or null if could not created valid path</returns>
-    private (int initCost, List<int> initPath)? GetInitUpperBound(AdjMatrix adjMatrix)
+    private (double initCost, List<int> initPath)? GetInitUpperBound(AdjMatrix adjMatrix)
     {
         List<int> path = new();
-        int sumCost = 0;
+        double sumCost = 0;
         int fromVertex = BEGIN_VERTEX;
         path.Add(BEGIN_VERTEX);
 
@@ -157,20 +157,20 @@ public class BranchAndBound : ITSPAlgorithm
             sumCost += next.Value.cost;
             fromVertex = next.Value.vertex;
         }
-        if (adjMatrix.TryGetDistance(path[path.Count - 1], BEGIN_VERTEX, out int last) == false) return null;
+        if (adjMatrix.TryGetDistance(path[path.Count - 1], BEGIN_VERTEX, out double last) == false) return null;
         sumCost += last;
         return (sumCost, path);
 
 
-        (int cost, int vertex)? FindClosestNeigh()
+        (double cost, int vertex)? FindClosestNeigh()
         {
-            int? minCost = null;
+            double? minCost = null;
             int vertex = -1;
             for (int j = 0; j < adjMatrix.GetMatrixSize; j++)
             {
                 if (path.Contains(j)) continue;
 
-                if (adjMatrix.TryGetDistance(fromVertex, j, out int dis) == false) continue;
+                if (adjMatrix.TryGetDistance(fromVertex, j, out double dis) == false) continue;
 
                 if(minCost == null || dis < minCost)
                 {
@@ -190,9 +190,9 @@ public class BranchAndBound : ITSPAlgorithm
     /// <param name="rowIndex">The index of the row to set to null.</param>
     /// <param name="columnIndex">The index of the column to set to null.</param>
     /// <returns>A modified matrix with the specified row and column set to null.</returns>
-    private int?[,] SetRowColumnToNull(int?[,] matrix, int rowIndex, int columnIndex)
+    private double?[,] SetRowColumnToNull(double?[,] matrix, int rowIndex, int columnIndex)
     {
-        int?[,] workingMatrix = (int?[,])matrix.Clone();
+        double?[,] workingMatrix = (double?[,])matrix.Clone();
 
         for (int i = 0; i < matrix.GetLength(0); i++)
         {
@@ -208,9 +208,9 @@ public class BranchAndBound : ITSPAlgorithm
     /// </summary>
     /// <param name="matrix"></param>
     /// <returns></returns>
-    private int ReduceMatrix(ref int?[,] matrix)
+    private double ReduceMatrix(ref double?[,] matrix)
     {
-        int reductionElemSum = 0;
+        double reductionElemSum = 0;
         //reduce row
         for (int i = 0; i < matrix.GetLength(0); i++)
         {
@@ -240,7 +240,7 @@ public class BranchAndBound : ITSPAlgorithm
     /// </summary>
     /// <param name="matrix">The matrix to reduce, which is modified in place.</param>
     /// <returns>The total reduction value obtained by subtracting minimum elements from rows and columns.</returns>
-    private int?[,] ReduceMatrix(ref int?[,] matrix, int value, bool isColumn, int index)
+    private double?[,] ReduceMatrix(ref double?[,] matrix, double value, bool isColumn, int index)
     {
         if(isColumn)
         {
@@ -269,9 +269,9 @@ public class BranchAndBound : ITSPAlgorithm
     /// <param name="isColumn">A flag indicating whether to search in a column (true) or a row (false).</param>
     /// <param name="index">The index of the column or row to search for the minimum value.</param>
     /// <returns>The minimum value found in the specified row or column, or null if no values are present.</returns>
-    private int? Min(int?[,] matrix, bool isColumn, int index)
+    private double? Min(double?[,] matrix, bool isColumn, int index)
     {
-        int? min = null;
+        double? min = null;
 
         for (int i = 0; i < matrix.GetLength(0); i++)
         {
@@ -283,12 +283,12 @@ public class BranchAndBound : ITSPAlgorithm
         return min;
     }
 
-    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
+    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<double?, long> toInvoke)
     {
         throw new NotImplementedException();
     }
 
-    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke)
+    public void UnSubscribeShowCurrentSolutionInIntervals(Action<double?, long> toInvoke)
     {
         throw new NotImplementedException();
     }
@@ -299,11 +299,11 @@ public class BranchAndBound : ITSPAlgorithm
     /// </summary>
     private struct Node
     {
-        public int?[,] matrix;
+        public double?[,] matrix;
         public List<int> path;
-        public int cost;
+        public double cost;
 
-        public Node(int?[,] matrix, int cost, int vertex)
+        public Node(double?[,] matrix, double cost, int vertex)
         {
             this.matrix = matrix;
             this.cost = cost;
@@ -311,7 +311,7 @@ public class BranchAndBound : ITSPAlgorithm
             path.Add(vertex);
         }
 
-        public Node(int?[,] matrix, int cost, List<int> path, int vertex)
+        public Node(double?[,] matrix, double cost, List<int> path, int vertex)
         {
             this.matrix = matrix;
             this.cost = cost;

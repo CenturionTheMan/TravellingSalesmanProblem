@@ -26,7 +26,7 @@ public class BruteForce : ITSPAlgorithm
     /// A tuple containing the best path as an array of vertex indices and the total cost of the path.
     /// Returns null if no valid path is found.
     /// </returns>
-    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
+    public (int[] path, double cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken cancellationToken)
     {
         List<int[]> permutations = GenerateNumbersPermutations(0, matrix.GetMatrixSize - 1, cancellationToken);
         var best = FindBestPath(permutations, matrix, cancellationToken);
@@ -34,7 +34,7 @@ public class BruteForce : ITSPAlgorithm
         return best;
     }
 
-    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix)
+    public (int[] path, double cost)? CalculateBestPath(AdjMatrix matrix)
     {
         return CalculateBestPath(matrix, CancellationToken.None);
     }
@@ -71,9 +71,9 @@ public class BruteForce : ITSPAlgorithm
     /// A tuple containing the best path (as an array of vertex indices) and its cost.
     /// If no valid path is found, returns null.
     /// </returns>
-    private (int[] path, int cost)? FindBestPath(List<int[]> paths, AdjMatrix map, CancellationToken cancellationToken)
+    private (int[] path, double cost)? FindBestPath(List<int[]> paths, AdjMatrix map, CancellationToken cancellationToken)
     {
-        int bestCost = int.MaxValue;
+        double bestCost = double.MaxValue;
         int[]? bestPath = null;
 
         foreach (var path in paths)
@@ -102,14 +102,14 @@ public class BruteForce : ITSPAlgorithm
     /// <returns>
     /// The total cost of the path if it's valid, or null if the path contains invalid vertex index.
     /// </returns>
-    private int? CalculatePathCost(int[] path, AdjMatrix map)
+    private double? CalculatePathCost(int[] path, AdjMatrix map)
     {
-        int sum = 0;
+        double sum = 0;
         for (int i = 0; i < path.Length - 1; i++)
         {
             int endIndex = i + 1;
 
-            if (map.TryGetDistance(path[i], path[endIndex], out int dis))
+            if (map.TryGetDistance(path[i], path[endIndex], out double dis))
             {
                 sum += dis;
             }
@@ -159,12 +159,12 @@ public class BruteForce : ITSPAlgorithm
         }
     }
 
-    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke)
+    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<double?, long> toInvoke)
     {
         throw new NotImplementedException();
     }
 
-    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke)
+    public void UnSubscribeShowCurrentSolutionInIntervals(Action<double?, long> toInvoke)
     {
         throw new NotImplementedException();
     }

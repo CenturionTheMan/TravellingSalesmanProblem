@@ -17,14 +17,14 @@ public class DefinedMatrixErrorTest : ITester
     //private Stopwatch stopWatch = new Stopwatch();
 
     private TimeSpan runTime = new TimeSpan(0,2,0);
-    private int repPerMatrix = 2;
+    private int repPerMatrix = 1;
     private int expectedCost;
     private string matrixName;
 
     private string pathError = "";
     private string pathBest = "";
 
-    private (int cost, long timeInMs)? bestCost;
+    private (double cost, long timeInMs)? bestCost;
 
     public DefinedMatrixErrorTest(ITSPAlgorithm algorithm, string matrixName, AdjMatrix matrix, int expectedCost)
     {
@@ -69,7 +69,7 @@ public class DefinedMatrixErrorTest : ITester
         };
         FilesHandler.CreateCsvFile(tmp2, pathBest, true, ',');
 
-        (int[]? path, int cost)? result = null; //save it to file!!
+        (int[]? path, double cost)? result = null; //save it to file!!
 
         for (int currentRep = 0; currentRep < repPerMatrix; currentRep++)
         {
@@ -84,8 +84,10 @@ public class DefinedMatrixErrorTest : ITester
             cancellationTokenSource.CancelAfter(runTime);
             
             var res = algorithm.CalculateBestPath(matrix,cancellationTokenSource.Token);
+            algorithm.UnSubscribeShowCurrentSolutionInIntervals(OnDataReceived); //not tested
 
-            if(res.HasValue && (result == null || res.Value.cost < result.Value.cost))
+
+            if (res.HasValue && (result == null || res.Value.cost < result.Value.cost))
             {
                 result = res;
             }
@@ -104,10 +106,11 @@ public class DefinedMatrixErrorTest : ITester
 
         string createText = $"{result!.Value.path.ArrayToPathString()}";
         File.WriteAllText(outputFileDir + $"BestPathFound_{algorithm.AlgorithmDetailedName}_{algorithmDesForOutput}_{matrixName}.txt", createText);
+
     }
 
 
-    private void OnDataReceived(int? currentCost, long time)
+    private void OnDataReceived(double? currentCost, long time)
     {
         if (currentCost == null) return;
 

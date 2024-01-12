@@ -19,7 +19,7 @@ public interface ITSPAlgorithm
     /// <returns>
     /// Returns best path and cost, or null if no valid path is found.
     /// </returns>
-    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken CancellationToken);
+    public (int[] path, double cost)? CalculateBestPath(AdjMatrix matrix, CancellationToken CancellationToken);
 
     /// Finds the best solution for Traveling Salesman Problem.
     /// </summary>
@@ -27,18 +27,18 @@ public interface ITSPAlgorithm
     /// <returns>
     /// Returns best path and cost, or null if no valid path is found.
     /// </returns>
-    public (int[] path, int cost)? CalculateBestPath(AdjMatrix matrix);
+    public (int[] path, double cost)? CalculateBestPath(AdjMatrix matrix);
 
     /// <summary>
     /// Sets up a periodic interval for showing the current solution during the algorithm execution.
     /// </summary>
     /// <param name="intervalLength">The interval length for displaying the current solution.</param>
     /// <param name="toInvoke">The action to invoke for displaying the current solution.</param>
-    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<int?, long> toInvoke);
+    public void OnShowCurrentSolutionInIntervals(TimeSpan intervalLength, Action<double?, long> toInvoke);
 
     /// <summary>
     /// Unsubscribes an action from the event handler for showing the current solution in intervals.
     /// </summary>
     /// <param name="toInvoke">The action to unsubscribe.</param>
-    public void UnSubscribeShowCurrentSolutionInIntervals(Action<int?, long> toInvoke);
+    public void UnSubscribeShowCurrentSolutionInIntervals(Action<double?, long> toInvoke);
 }
