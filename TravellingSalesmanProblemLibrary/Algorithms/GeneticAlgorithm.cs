@@ -177,7 +177,6 @@ public class GeneticAlgorithm : ITSPAlgorithm
 
 
             string costBreakPerc = GenerationsWithoutImprovement is null? "-" : ((double)(100 * costRepAmount) / (double)GenerationsWithoutImprovement).ToString("0.00") + "%";
-            //Console.WriteLine($"All time best: {bestEver.cost} || Current avg: {population.Average(x => x.Cost).ToString("0.")} || Current best: {currentBest.Cost} || Generation: {generationCounter} || Cost break: {costBreakPerc}");
             ShowMessage($"Best: {bestEver.cost} || Current: {currentBest.Cost} || Generation: {generationCounter} || No improvement: {costBreakPerc}\n");
         }
 
@@ -358,7 +357,7 @@ public class GeneticAlgorithm : ITSPAlgorithm
         int end = random.Next(begin + 1, first.Path.Length);
 
         List<int> childPath = first.Path.Skip(begin).Take(end - begin).ToList();
-        for (int i = begin + 1; childPath.Count < second.Path.Length; i++)
+        for (int i = end + 1; childPath.Count < second.Path.Length; i++)
         {
             if (i == second.Path.Length) i = 0;
 
